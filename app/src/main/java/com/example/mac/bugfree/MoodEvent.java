@@ -18,24 +18,24 @@ public class MoodEvent {
     public static final int surpriseMagenta = -65281;
 
     //Fixed icons
-    public static final String angerIcon = "Anger.png";
-    public static final String confusionIcon = "Confusion.png";
-    public static final String disgustIcon =  "Disgust.png";
-    public static final String fearIcon = "Fear.png";
-    public static final String happyIcon = "Happy.png";
-    public static final String sadIcon = "Sad.png";
-    public static final String shameIcon = "Shame.png";
-    public static final String surpriseIcon = "Surprise.png";
+    public static final String angerIcon = "anger.png";
+    public static final String confusionIcon = "confusion.png";
+    public static final String disgustIcon =  "disgust.png";
+    public static final String fearIcon = "fear.png";
+    public static final String happyIcon = "happy.png";
+    public static final String sadIcon = "sad.png";
+    public static final String shameIcon = "shame.png";
+    public static final String surpriseIcon = "surprise.png";
 
     //Fixed strings for emotion states
-    public static final String angerStr = "Anger";
-    public static final String confusionStr = "Confusion";
-    public static final String disgustStr =  "Disgust";
-    public static final String fearStr = "Fear";
-    public static final String happyStr = "Happy";
-    public static final String sadStr = "Sad";
-    public static final String shameStr = "Shame";
-    public static final String surpriseStr = "Surprise";
+    public static final String angerStr = "anger";
+    public static final String confusionStr = "confusion";
+    public static final String disgustStr =  "disgust";
+    public static final String fearStr = "fear";
+    public static final String happyStr = "happy";
+    public static final String sadStr = "sad";
+    public static final String shameStr = "shame";
+    public static final String surpriseStr = "surprise";
 
 //    //Fixed type of social situations
 //    public static final String alone ="Alone";

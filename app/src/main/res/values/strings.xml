@@ -2,6 +2,8 @@
     <string name="app_name">BugFree</string>
 
 
+    <string name="title_activity_filter">Filter Mood</string>
+
     <string name="activity_filter">Filter</string>
     <string name="activity_map">Map</string>
     <string name="emotional_state">Emotional State</string>
