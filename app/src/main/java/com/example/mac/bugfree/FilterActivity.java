@@ -19,6 +19,10 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
     private CheckBox myDisplayAllCheckbox;
+    private Spinner foEmotionalStateSpinner;
+    private CheckBox foMostRecentWeekCheckbox;
+    private EditText foReasonEditText;
+    private CheckBox foDisplayAllCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
