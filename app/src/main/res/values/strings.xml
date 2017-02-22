@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">BugFree</string>
+
+
+
+
+    <string name="activity_filter">Filter</string>
+    <string name="emotional_state">Emotional State</string>
+    <string name="recent_week">The most recent week</string>
+    <string name="reason">Reason</string>
+    <string name="display_all">Display All</string>
+
+
+
+
 </resources>
