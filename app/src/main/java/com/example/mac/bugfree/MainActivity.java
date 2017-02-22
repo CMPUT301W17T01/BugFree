@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void TestCardView(ArrayList<MoodEvent> List) {
-        MoodEvent event1 = new MoodEvent();
-        MoodEvent event2 = new MoodEvent();
+        MoodEvent event1 = new MoodEvent("");
+        MoodEvent event2 = new MoodEvent("");
         List.add(event1);
         List.add(event2);
 
