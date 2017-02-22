@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class CreateEditMoodActivity extends AppCompatActivity {
 
+    //Test
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
