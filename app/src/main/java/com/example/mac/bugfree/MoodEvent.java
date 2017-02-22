@@ -1,7 +1,5 @@
 package com.example.mac.bugfree;
 
-import java.util.Calendar;
-
 /**
  * Created by mac on 2017-02-21.
  */
@@ -151,4 +149,5 @@ public class MoodEvent {
     public void setDateOfRecord(Calendar dateOfRecord) {
         this.dateOfRecord = dateOfRecord;
     }
+
 }

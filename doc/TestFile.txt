@@ -21,4 +21,8 @@ Version Xinlei
 
 Version Heyue
 
+<<<<<<< HEAD
 xixi
+=======
+xixi
+>>>>>>> master
