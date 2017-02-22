@@ -45,7 +45,7 @@ public class MoodEvent {
 
     //Other details
     private String moodState;
-    private String moodColor;
+    private Integer moodColor;
     private String moodIcon;
     private Calendar dateOfRecord;
     private String triggerText;
@@ -55,9 +55,38 @@ public class MoodEvent {
     private String belongsTo;
 
     public MoodEvent(String MoodState) {
+        setMoodState(MoodState);
         setColorIcon();
     }
-
+//Set Color and Icon together
+    public void setColorIcon() {
+        String MoodState = this.moodState;
+        if (MoodState.equals("Anger")){
+            this.moodColor = this.angerRed;
+            this.moodIcon = this.angerIcon;
+        }else if (MoodState.equals("Confusion")){
+            this.moodColor = this.confusionCyan;
+            this.moodIcon = this.confusionIcon;
+        }else if (MoodState.equals("Disgust")){
+            this.moodColor = this.disgustGray;
+            this.moodIcon = this.disgustIcon;
+        }else if (MoodState.equals("Fear")){
+            this.moodColor = this.fearBlack;
+            this.moodIcon = this.fearIcon;
+        }else if (MoodState.equals("Happy")){
+            this.moodColor = this.happyYellow;
+            this.moodIcon = this.happyIcon;
+        }else if (MoodState.equals("Sad")){
+            this.moodColor = this.sadBlue;
+            this.moodIcon = this.sadIcon;
+        }else if (MoodState.equals("Shame")){
+            this.moodColor = this.shameGreen;
+            this.moodIcon = this.shameIcon;
+        }else if (MoodState.equals("Surprise")){
+            this.moodColor = this.surpriseMagenta;
+            this.moodIcon = this.surpriseIcon;
+        }
+    }
     public String getMoodState() {
         return moodState;
     }
@@ -66,41 +95,8 @@ public class MoodEvent {
         this.moodState = moodState;
     }
 
-    public String getMoodColor() {
+    public Integer getMoodColor() {
         return moodColor;
-    }
-    //Set Color and Icon together
-    public void setColorIcon() {
-        String MoodState = this.moodState
-        Integer moodColor;
-        String moodIcon;
-        if (MoodState.equals("Anger")){
-            moodColor = this.angerRed;
-            moodIcon = this.angerIcon;
-        }else if (MoodState.equals("Confusion")){
-            moodColor = this.confusionCyan;
-            moodIcon = this.confusionIcon;
-        }else if (MoodState.equals("Disgust")){
-            moodColor = this.disgustGray;
-            moodIcon = this.disgustIcon;
-        }else if (MoodState.equals("Fear")){
-            moodColor = this.fearBlack;
-            moodIcon = this.fearIcon;
-        }else if (MoodState.equals("Happy")){
-            moodColor = this.happyYellow;
-            moodIcon = this.happyIcon;
-        }else if (MoodState.equals("Sad")){
-            moodColor = this.sadBlue;
-            moodIcon = this.sadIcon;
-        }else if (MoodState.equals("Shame")){
-            moodColor = this.shameGreen;
-            moodIcon = this.shameIcon;
-        }else if (MoodState.equals("Surprise")){
-            moodColor = this.surpriseMagenta;
-            moodIcon = this.surpriseIcon;
-        }
-        this.moodColor = moodColor;
-        this.moodIcon = moodIcon;
     }
 
     public String getMoodIcon() {
