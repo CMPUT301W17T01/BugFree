@@ -1,7 +1,9 @@
 package com.example.mac.bugfree;
 
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -60,6 +62,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
             }
         });
 
+        vh.eventHandleImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = vh.getAdapterPosition();
+                showPopupMenu(vh.eventHandleImage, position);
+            }
+        });
+
         return vh;
     }
 
@@ -76,6 +86,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.picImage.setImageResource(R.drawable.picture_text);
         holder.reasonText.setText("Reason");
         holder.dateText.setText("Date");
+        holder.eventHandleImage.setImageResource(R.drawable.point);
     }
 
     // Return the size of your list
@@ -83,5 +94,14 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     @Override
     public int getItemCount() {
         return mmoodEventArrayList.size();
+    }
+
+    private void showPopupMenu(View view, int position) {
+        // inflate menu
+        PopupMenu popup = new PopupMenu(view.getContext(), view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.mood_event_popup_menu_user, popup.getMenu());
+        popup.setOnMenuItemClickListener(new MoodEventPopupClickListener(position));
+        popup.show();
     }
 }
