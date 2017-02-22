@@ -3,6 +3,7 @@
 
 
     <string name="activity_filter">Filter</string>
+    <string name="activity_map">Map</string>
     <string name="emotional_state">Emotional State</string>
     <string name="recent_week">The most recent week</string>
     <string name="reason">Reason</string>
