@@ -6,8 +6,8 @@ package com.example.mac.bugfree;
 import java.util.ArrayList;
 public class User {
     private String usr;
-    private int uniqueID;
-    private int usrID;
+    private static Integer uniqueID;
+    private Integer usrID;
     private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
     private ArrayList<Integer> pendingPermission= new ArrayList<Integer>();
