@@ -151,4 +151,5 @@ public class MoodEvent {
     public void setDateOfRecord(Calendar dateOfRecord) {
         this.dateOfRecord = dateOfRecord;
     }
+
 }
