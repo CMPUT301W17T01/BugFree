@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_filter"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.mac.bugfree.FilterActivity"
-    android:text="@string/activity_filter">
+    tools:context="com.example.mac.bugfree.FilterActivity">
 
     <TabHost
         android:layout_width="match_parent"
@@ -18,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/tabHost">
+        android:id="@+id/filter_tabHost">
 
 
         <LinearLayout
@@ -37,7 +31,7 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/Myself"
+                    android:id="@+id/myself"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -51,7 +45,7 @@
 
                         <TextView
                             android:textSize="16sp"
-                            android:id="@+id/emotional_state"
+                            android:id="@+id/emotional_state_myself"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
                             android:layout_alignParentTop="true"
@@ -61,7 +55,7 @@
                             android:text="@string/emotional_state" />
 
                         <Spinner
-                            android:id="@+id/spinner1"
+                            android:id="@+id/spinner_myself"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -81,7 +75,7 @@
 
                         <TextView
                             android:textSize="16sp"
-                            android:id="@+id/recent_week"
+                            android:id="@+id/recent_week_myself"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -90,7 +84,7 @@
                             android:text="@string/recent_week"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_recent"
+                            android:id="@+id/checkbox_recent_myself"
                             android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -104,7 +98,8 @@
                         android:layout_height="wrap_content"
                         app:counterEnabled="true"
                         app:counterMaxLength="20"
-                        app:counterOverflowTextAppearance="@style/counterOverride">
+                        app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
+
                         <EditText
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -129,7 +124,7 @@
 
                         <TextView
                             android:textSize="16sp"
-                            android:id="@+id/display_all"
+                            android:id="@+id/display_all_myself"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -138,7 +133,7 @@
                             android:text="@string/display_all"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_display"
+                            android:id="@+id/checkbox_display_myself"
                             android:layout_marginLeft="180dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -149,7 +144,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/Following"
+                    android:id="@+id/following"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -216,8 +211,9 @@
                         android:layout_height="wrap_content"
                         app:counterEnabled="true"
                         app:counterMaxLength="20"
-                        app:counterOverflowTextAppearance="@style/counterOverride">
-                        <EditText
+                        app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
+
+                    <EditText
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -268,4 +264,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>
