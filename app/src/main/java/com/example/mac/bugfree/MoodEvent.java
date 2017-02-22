@@ -18,14 +18,14 @@ public class MoodEvent {
     public static final int surpriseMagenta = -65281;
 
     //Fixed icons
-    public static final String angerIcon = "";
-    public static final String confusionIcon = "";
-    public static final String disgustIcon =  "";
-    public static final String fearIcon = "";
-    public static final String happyIcon = "";
-    public static final String sadIcon = "";
-    public static final String shameIcon = "";
-    public static final String surpriseIcon = "";
+    public static final String angerIcon = "Anger.png";
+    public static final String confusionIcon = "Confusion.png";
+    public static final String disgustIcon =  "Disgust.png";
+    public static final String fearIcon = "Fear.png";
+    public static final String happyIcon = "Happy.png";
+    public static final String sadIcon = "Sad.png";
+    public static final String shameIcon = "Shame.png";
+    public static final String surpriseIcon = "Surprise.png";
 
     //Fixed strings for emotion states
     public static final String angerStr = "Anger";
@@ -36,6 +36,12 @@ public class MoodEvent {
     public static final String sadStr = "Sad";
     public static final String shameStr = "Shame";
     public static final String surpriseStr = "Surprise";
+
+//    //Fixed type of social situations
+//    public static final String alone ="Alone";
+//    public static final String withOne = "With one other person";
+//    public static final String moreThanTwo = "Two to several people";
+//    public static final String crowd = "With a crowd";
 
     //Other details
     private String moodState;
@@ -48,8 +54,8 @@ public class MoodEvent {
     //private Loaction location;
     private String belongsTo;
 
-    public MoodEvent() {
-
+    public MoodEvent(String MoodState) {
+        setColorIcon();
     }
 
     public String getMoodState() {
@@ -63,17 +69,42 @@ public class MoodEvent {
     public String getMoodColor() {
         return moodColor;
     }
-
-    public void setMoodColor(String moodColor) {
+    //Set Color and Icon together
+    public void setColorIcon() {
+        String MoodState = this.moodState
+        Integer moodColor;
+        String moodIcon;
+        if (MoodState.equals("Anger")){
+            moodColor = this.angerRed;
+            moodIcon = this.angerIcon;
+        }else if (MoodState.equals("Confusion")){
+            moodColor = this.confusionCyan;
+            moodIcon = this.confusionIcon;
+        }else if (MoodState.equals("Disgust")){
+            moodColor = this.disgustGray;
+            moodIcon = this.disgustIcon;
+        }else if (MoodState.equals("Fear")){
+            moodColor = this.fearBlack;
+            moodIcon = this.fearIcon;
+        }else if (MoodState.equals("Happy")){
+            moodColor = this.happyYellow;
+            moodIcon = this.happyIcon;
+        }else if (MoodState.equals("Sad")){
+            moodColor = this.sadBlue;
+            moodIcon = this.sadIcon;
+        }else if (MoodState.equals("Shame")){
+            moodColor = this.shameGreen;
+            moodIcon = this.shameIcon;
+        }else if (MoodState.equals("Surprise")){
+            moodColor = this.surpriseMagenta;
+            moodIcon = this.surpriseIcon;
+        }
         this.moodColor = moodColor;
+        this.moodIcon = moodIcon;
     }
 
     public String getMoodIcon() {
         return moodIcon;
-    }
-
-    public void setMoodIcon(String moodIcon) {
-        this.moodIcon = moodIcon;
     }
 
     public String getBelongsTo() {
@@ -97,6 +128,15 @@ public class MoodEvent {
     }
 
     public void setSocialSituation(String socialSituation) {
+//        if (socialSituation.equals(alone)){
+//
+//        }else if(socialSituation.equals(withOne)){
+//
+//        }else if(socialSituation.equals(moreThanTwo)){
+//
+//        }else if(socialSituation.equals(crowd)){
+//
+//        }
         this.socialSituation = socialSituation;
     }
 
