@@ -111,4 +111,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
+        // load List to UI
+    }
+
+    public void followDialogue(String username) {
+        //
+    }
+
+    public void onitemDialogue() {
+        //
+    }
+
+
 }
