@@ -15,13 +15,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText2"
+                android:id="@+id/create_mood"
                 android:hint="Text Something(Reason)" />
+
             <Button
                 android:text="Send"
                 android:layout_width="191dp"
@@ -36,16 +38,16 @@
             <TextView
                 android:text="Mood State:"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/text1_mood"
                 android:layout_weight="1.65"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_height="match_parent" />
 
             <Spinner
-                android:layout_width="173dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/mood_state"
-                android:layout_weight="1.65" />
+                android:id="@+id/mood_state_spinner"
+                android:layout_weight="1.65"
+                android:layout_width="wrap_content" />
 
         </LinearLayout>
         <LinearLayout
@@ -56,17 +58,17 @@
             <TextView
                 android:text="Social Situation:"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/text2_social"
                 android:layout_weight="1.65"
                 android:textSize="18sp" />
 
 
             <Spinner
-                android:layout_width="173dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/social_situation"
-                android:layout_weight="1.65" />
+                android:layout_weight="1.65"
+                android:layout_width="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -78,7 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/text3_reason"
-                android:layout_weight="1.65" />
+                android:layout_weight="1.65"
+                android:textSize="18sp" />
 
             <EditText
                 android:layout_width="173dp"
@@ -97,7 +100,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text3_date"
-                    android:layout_weight="1.65" />
+                    android:layout_weight="1.65"
+                    android:textSize="18sp" />
 
                 <EditText
                     android:layout_width="173dp"

@@ -15,5 +15,16 @@
     <string name="action_edit">edit</string>
     <string name="action_add_current_contact">Add Contact</string>
 
+    <string-array name="mood_states_array">
+
+        <item>anger</item>
+        <item>confusion</item>
+        <item>fear</item>
+        <item>happiness</item>
+        <item>sadness</item>
+        <item>shame</item>
+        <item>surprise</item>
+    </string-array>
+
 
 </resources>
