@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+        startActivity(intent);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -110,5 +113,18 @@ public class MainActivity extends AppCompatActivity {
         List.add(event2);
 
     }
+
+    public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
+        // load List to UI
+    }
+
+    public void followDialogue(String username) {
+        //
+    }
+
+    public void onitemDialogue() {
+        //
+    }
+
 
 }

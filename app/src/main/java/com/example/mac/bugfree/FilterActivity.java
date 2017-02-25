@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -19,11 +20,18 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
     private CheckBox myDisplayAllCheckbox;
+    private Spinner foEmotionalStateSpinner;
+    private CheckBox foMostRecentWeekCheckbox;
+    private EditText foReasonEditText;
+    private CheckBox foDisplayAllCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
+        setSupportActionBar(toolbar);
 
         TabHost tabHost = (TabHost)findViewById(R.id.filter_tabHost);
 
