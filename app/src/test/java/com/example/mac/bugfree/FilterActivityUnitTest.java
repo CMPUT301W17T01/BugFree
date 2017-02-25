@@ -12,5 +12,9 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2 {
         super(FilterActivity.class);
     }
 
+    public void testFilterList(){
+        FilterActivity filterMoodList = new FilterActivity();
+        assertFalse(filterMoodList.filterList());
+    }
 
 }

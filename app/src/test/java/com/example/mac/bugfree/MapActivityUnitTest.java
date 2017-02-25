@@ -12,4 +12,14 @@ public class MapActivityUnitTest extends ActivityInstrumentationTestCase2 {
         super(MapActivity.class);
     }
 
+    public void testShowPin(){
+        MapActivity pin = new MapActivity();
+        assertFalse(pin.showPin());
+    }
+
+    public void testShowDetail(){
+        MapActivity detail = new MapActivity();
+        assertFalse(detail.showDetail());
+    }
+
  }

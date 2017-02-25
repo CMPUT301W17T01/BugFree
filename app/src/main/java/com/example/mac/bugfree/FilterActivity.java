@@ -24,6 +24,7 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
+//    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,10 @@ public class FilterActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean filterList(){
+        return true;
     }
 
 
