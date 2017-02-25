@@ -15,77 +15,82 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-            <ImageView
-                app:srcCompat="@android:drawable/editbox_dropdown_dark_frame"
-                android:id="@+id/imageView"
-                android:layout_marginTop="20dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="300dp"
-                android:layout_height="175dp" />
-            <LinearLayout
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText2"
+                android:hint="Text Something(Reason)" />
+            <Button
+                android:text="Send"
+                android:layout_width="191dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/send" />
 
-                <TextView
-                    android:text="Mood State:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text1_mood"
-                    android:layout_weight="1.65"
-                    android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-                <EditText
+            <TextView
+                android:text="Mood State:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text1_mood"
+                android:layout_weight="1.65"
+                android:textSize="18sp" />
+
+            <Spinner
                 android:layout_width="173dp"
                 android:layout_height="wrap_content"
-                    android:ems="10"
                 android:id="@+id/mood_state"
-                    android:inputType="text"
-                    android:hint="State" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_weight="1.65" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:text="Social Situation:"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:id="@+id/text2_social"
+                android:layout_weight="1.65"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:text="Social Situation:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text2_social"
-                    android:layout_weight="1.65"
-                    android:textSize="18sp" />
 
-                <EditText
-                    android:layout_width="173dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/social_situation"
-                    android:inputType="text" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Spinner
+                android:layout_width="173dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:id="@+id/social_situation"
+                android:layout_weight="1.65" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-                <TextView
-                    android:text="Reason:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/text3_reason"
-                    android:layout_weight="1.65" />
-
-                <EditText
-                    android:layout_width="173dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/reason"
-                    android:inputType="text" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:text="Reason:"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:id="@+id/text3_reason"
+                android:layout_weight="1.65" />
+
+            <EditText
+                android:layout_width="173dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/reason"
+                android:inputType="text" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
                 <TextView
                     android:text="Date:"
@@ -99,7 +104,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:id="@+id/date"
-                    android:inputType="date" />
+                    android:inputType="date"
+                    android:hint="DD/MM/YY" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
