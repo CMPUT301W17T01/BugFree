@@ -112,6 +112,7 @@
                         app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
 
                         <EditText
+                            android:id="@+id/edittext_reason_myself"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -179,7 +180,7 @@
                             android:text="@string/emotional_state" />
 
                         <Spinner
-                            android:id="@+id/spinner1"
+                            android:id="@+id/spinner_following"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -208,7 +209,7 @@
                             android:text="@string/recent_week"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_recent"
+                            android:id="@+id/checkbox_recent_following"
                             android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -224,7 +225,8 @@
                         app:counterMaxLength="20"
                         app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
 
-                    <EditText
+                        <EditText
+                            android:id="@+id/edittext_reason_following"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -257,7 +259,7 @@
                             android:text="@string/display_all"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_display"
+                            android:id="@+id/checkbox_display_following"
                             android:layout_marginLeft="180dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
