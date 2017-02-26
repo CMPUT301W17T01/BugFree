@@ -17,9 +17,9 @@ import java.util.List;
 
 public class FriendActivity extends AppCompatActivity {
 
-    List<User> Friends = new ArrayList<>();
+    ArrayList<User> Friends = new ArrayList<>();
 
-    List<User> Notifications = new ArrayList<>();
+    ArrayList<User> Notifications = new ArrayList<>();
 
     ListView friendListView;
     ListView notificationListView;
