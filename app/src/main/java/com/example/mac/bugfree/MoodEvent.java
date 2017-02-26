@@ -28,14 +28,14 @@ public class MoodEvent {
     public static final String surpriseIcon = "surprise.png";
 
     //Fixed strings for emotion states
-    public static final String angerStr = "anger";
-    public static final String confusionStr = "confusion";
-    public static final String disgustStr =  "disgust";
-    public static final String fearStr = "fear";
-    public static final String happyStr = "happy";
-    public static final String sadStr = "sad";
-    public static final String shameStr = "shame";
-    public static final String surpriseStr = "surprise";
+    public static final String angerStr = "Anger";
+    public static final String confusionStr = "Confusion";
+    public static final String disgustStr =  "Disgust";
+    public static final String fearStr = "Fear";
+    public static final String happyStr = "Happy";
+    public static final String sadStr = "Sad";
+    public static final String shameStr = "Shame";
+    public static final String surpriseStr = "Surprise";
 
 //    //Fixed type of social situations
 //    public static final String alone ="Alone";
@@ -52,11 +52,12 @@ public class MoodEvent {
     private String socialSituation;
     private String urlPic;
     //private Loaction location;
-    private String belongsTo;
+    private Integer belongsTo;
 
-    public MoodEvent(String MoodState) {
+    public MoodEvent(String MoodState,Integer belongsTo) {
         setMoodState(MoodState);
         setColorIcon();
+        setBelongsTo(belongsTo);
     }
 //Set Color and Icon together
     public void setColorIcon() {
@@ -103,11 +104,11 @@ public class MoodEvent {
         return moodIcon;
     }
 
-    public String getBelongsTo() {
+    public Integer getBelongsTo() {
         return belongsTo;
     }
 
-    public void setBelongsTo(String belongsTo) {
+    public void setBelongsTo(Integer belongsTo) {
         this.belongsTo = belongsTo;
     }
 

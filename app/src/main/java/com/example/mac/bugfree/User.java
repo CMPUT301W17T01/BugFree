@@ -6,7 +6,7 @@ package com.example.mac.bugfree;
 import java.util.ArrayList;
 public class User {
     private String usr;
-    private static Integer uniqueID;
+    private static Integer uniqueID = 0;
     private Integer usrID;
     private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
@@ -14,6 +14,7 @@ public class User {
     private ArrayList<MoodEvent> moodEventList= new ArrayList<MoodEvent>();
 
     public User() {
+        setUsrID(uniqueID);
     }
 
     public String getUsr() {
@@ -30,14 +31,16 @@ public class User {
 
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
+
     }
 
     public int getUsrID() {
         return usrID;
     }
 
-    public void setUsrID(int usrID) {
-        this.usrID = usrID;
+    public void setUsrID(int uniqueID) {
+        this.usrID = uniqueID;
+        setUniqueID(uniqueID+1);
     }
 
     public ArrayList<Integer> getFolloweeIDs() {
@@ -52,7 +55,7 @@ public class User {
         return followerIDs;
     }
 
-    public void setFollowerID(ArrayList<Integer> followerIDs) {
+    public void setFollowerIDs(ArrayList<Integer> followerIDs) {
         this.followerIDs = followerIDs;
     }
 

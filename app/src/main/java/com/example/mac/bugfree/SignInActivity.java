@@ -24,7 +24,7 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        final TextView view = (TextView)findViewById(R.id.link_signup);
+        TextView view = (TextView)findViewById(R.id.link_signup);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
