@@ -43,6 +43,19 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
+        if(myMostRecentWeekCheckbox.isChecked()){
+            myMostRecentWeekCheckbox.setChecked(false);
+        }
+        if(myDisplayAllCheckbox.isChecked()){
+            myDisplayAllCheckbox.setChecked(false);
+        }
+        if(foMostRecentWeekCheckbox.isChecked()){
+            foMostRecentWeekCheckbox.setChecked(false);
+        }
+        if(foDisplayAllCheckbox.isChecked()){
+            foDisplayAllCheckbox.setChecked(false);
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
 
@@ -61,8 +74,7 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
-
-
+        
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
