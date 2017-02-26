@@ -23,7 +23,7 @@ public class FriendActivityUnitTest extends ActivityInstrumentationTestCase2 {
             Friends.LoadList(currentFriend);
             fail();
         }catch(IllegalArgumentException e){}
-        assertTrue(Friends.hasFriend(currentFriend));
+        assertFalse(Friends.hasFriend(currentFriend));
     }
     public void testNotification(){
         FriendActivity Friends = new FriendActivity();
@@ -31,6 +31,6 @@ public class FriendActivityUnitTest extends ActivityInstrumentationTestCase2 {
         try {
             Friends.manageNotification(currentFriend);
         }catch(IllegalArgumentException e){}
-        assertTrue(Friends.hasNotification(currentFriend));
+        assertFalse(Friends.hasNotification(currentFriend));
     }
 }
