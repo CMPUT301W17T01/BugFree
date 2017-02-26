@@ -106,4 +106,19 @@ public class FriendActivity extends AppCompatActivity {
         ArrayAdapter<User> adapter2= new NotificationAdapter();
         notificationListView.setAdapter(adapter2);
     }
+
+    public void LoadList(User user){
+        Friends.add(user);
+    }
+
+    public void manageNotification(User user){
+        Notifications.add(user);
+    }
+
+    public boolean hasFriend(User user){
+        return true;
+    }
+    public boolean hasNotification(User user){
+        return true;
+    }
 }
