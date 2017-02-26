@@ -4,7 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.mac.bugfree.FilterActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_filter"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
 
     <TabHost
         android:layout_width="match_parent"
@@ -68,8 +79,6 @@
                         android:layout_marginTop="30dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="left"
                         android:orientation="horizontal" >
 
@@ -87,9 +96,7 @@
                             android:id="@+id/checkbox_recent_myself"
                             android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:clickable="false"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -101,6 +108,7 @@
                         app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
 
                         <EditText
+                            android:id="@+id/edittext_reason_myself"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -117,8 +125,6 @@
                         android:layout_marginTop="50dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="left"
                         android:orientation="horizontal" >
 
@@ -136,9 +142,7 @@
                             android:id="@+id/checkbox_display_myself"
                             android:layout_marginLeft="180dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:clickable="false"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -168,7 +172,7 @@
                             android:text="@string/emotional_state" />
 
                         <Spinner
-                            android:id="@+id/spinner1"
+                            android:id="@+id/spinner_following"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
@@ -181,8 +185,6 @@
                         android:layout_marginTop="30dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="left"
                         android:orientation="horizontal" >
 
@@ -197,12 +199,10 @@
                             android:text="@string/recent_week"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_recent"
+                            android:id="@+id/checkbox_recent_following"
                             android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:clickable="false"/>
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -213,7 +213,8 @@
                         app:counterMaxLength="20"
                         app:counterOverflowTextAppearance="@style/TextAppearance.Design.Counter">
 
-                    <EditText
+                        <EditText
+                            android:id="@+id/edittext_reason_following"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -230,8 +231,6 @@
                         android:layout_marginTop="50dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="left"
                         android:orientation="horizontal" >
 
@@ -246,12 +245,10 @@
                             android:text="@string/display_all"/>
 
                         <CheckBox
-                            android:id="@+id/checkbox_display"
+                            android:id="@+id/checkbox_display_following"
                             android:layout_marginLeft="180dp"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:clickable="false"/>
+                            android:layout_height="wrap_content"/>
                     </LinearLayout>
 
                 </LinearLayout>

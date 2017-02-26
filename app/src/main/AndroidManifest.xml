@@ -20,7 +20,9 @@
         <activity android:name=".CreateEditMoodActivity" />
         <activity android:name=".MapActivity" />
 
-        <activity android:name=".FilterActivity">
+        <activity
+            android:name=".FilterActivity"
+            android:label="@string/title_activity_filter">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

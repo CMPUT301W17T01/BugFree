@@ -10,4 +10,15 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
     }
+
+    public boolean showPin(){
+        return true;
+    }
+
+    public boolean showDetail(){
+        return true;
+    }
+
+
+
 }

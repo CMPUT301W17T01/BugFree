@@ -17,9 +17,9 @@ import java.util.List;
 
 public class FriendActivity extends AppCompatActivity {
 
-    List<User> Friends = new ArrayList<>();
+    ArrayList<User> Friends = new ArrayList<>();
 
-    List<User> Notifications = new ArrayList<>();
+    ArrayList<User> Notifications = new ArrayList<>();
 
     ListView friendListView;
     ListView notificationListView;
@@ -76,7 +76,7 @@ public class FriendActivity extends AppCompatActivity {
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
             User currentfriend = Friends.get(position);
             TextView friendName = (TextView) view.findViewById(R.id.friendName);
-            friendName.setText(currentfriend.getName());
+            friendName.setText(currentfriend.getUsr());
 
             return view;
         }
@@ -105,5 +105,20 @@ public class FriendActivity extends AppCompatActivity {
 
         ArrayAdapter<User> adapter2= new NotificationAdapter();
         notificationListView.setAdapter(adapter2);
+    }
+
+    public void LoadList(User user){
+        Friends.add(user);
+    }
+
+    public void manageNotification(User user){
+        Notifications.add(user);
+    }
+
+    public boolean hasFriend(User user){
+        return true;
+    }
+    public boolean hasNotification(User user){
+        return true;
     }
 }
