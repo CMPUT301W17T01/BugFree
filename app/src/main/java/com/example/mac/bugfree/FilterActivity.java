@@ -24,11 +24,37 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
+//    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        // content of tab Myself
+        myEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_myself);
+        myMostRecentWeekCheckbox = (CheckBox) findViewById(R.id.checkbox_recent_myself);
+        myReasonEditText = (EditText) findViewById(R.id.edittext_reason_myself);
+        myDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_myself);
+
+        // content of following
+        foEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_following);
+        foMostRecentWeekCheckbox = (CheckBox) findViewById(R.id.checkbox_recent_following);
+        foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
+        foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
+
+        if(myMostRecentWeekCheckbox.isChecked()){
+            myMostRecentWeekCheckbox.setChecked(false);
+        }
+        if(myDisplayAllCheckbox.isChecked()){
+            myDisplayAllCheckbox.setChecked(false);
+        }
+        if(foMostRecentWeekCheckbox.isChecked()){
+            foMostRecentWeekCheckbox.setChecked(false);
+        }
+        if(foDisplayAllCheckbox.isChecked()){
+            foDisplayAllCheckbox.setChecked(false);
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -37,24 +63,18 @@ public class FilterActivity extends AppCompatActivity {
 
         tabHost.setup();
 
-        TabHost.TabSpec tab1 = tabHost.newTabSpec("Myself");
-        TabHost.TabSpec tab2 = tabHost.newTabSpec("Following");
-
         //Tab Myself
+        TabHost.TabSpec tab1 = tabHost.newTabSpec("Myself");
         tab1.setIndicator("Myself");
         tab1.setContent(R.id.myself);
+        tabHost.addTab(tab1);
 
+        //Tab Following
+        TabHost.TabSpec tab2 = tabHost.newTabSpec("Following");
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
-        tabHost.addTab(tab1);
         tabHost.addTab(tab2);
-//        //Tab Following
-//        spec = host.newTabSpec("Following");
-//        spec.setContent(R.id.following);
-//        spec.setIndicator("Following");
-//        host.addTab(spec);
-
-
+        
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -77,6 +97,10 @@ public class FilterActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean filterList(){
+        return true;
     }
 
 
