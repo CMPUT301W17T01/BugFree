@@ -11,11 +11,10 @@ import static org.junit.Assert.assertTrue;
 
 public class FilterActivityUnitTest {
 
-
     @Test
     public void testFilterList(){
         FilterActivity filterMoodList = new FilterActivity();
-        assertTrue(filterMoodList.filterList());
+        assertFalse(filterMoodList.filterList());
     }
 
 }
