@@ -14,9 +14,9 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
         super(MainActivity.class);
     }
 
-    public void testAddMoodEvent() {
+    public void testAddMoodEvent() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Test MoodEvent_1");
+        MoodEvent moodEvent = new MoodEvent("Happy",1);
 
         moodEventList.addMoodEvent(moodEvent);
         assertTrue(moodEventList.hasMoodEvent(moodEvent));
@@ -29,18 +29,18 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
 
     }
 
-    public void testHasMoodEvent() {
+    public void testHasMoodEvent() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Test MoodEvent_2");
+        MoodEvent moodEvent = new MoodEvent("Anger",2);
 
         assertFalse(moodEventList.hasMoodEvent(moodEvent));
         moodEventList.addMoodEvent(moodEvent);
         assertTrue(moodEventList.hasMoodEvent(moodEvent));
     }
 
-    public void testDeleteMoodEvent() {
+    public void testDeleteMoodEvent() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Test MoodEvent_3");
+        MoodEvent moodEvent = new MoodEvent("Confusion",3);
 
         moodEventList.addMoodEvent(moodEvent);
         moodEventList.deleteMoodEvent(moodEvent);
@@ -48,9 +48,9 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
         assertFalse(moodEventList.hasMoodEvent(moodEvent));
     }
 
-    public void testGetMoodEvent() {
+    public void testGetMoodEvent() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Test MoodEvent_4");
+        MoodEvent moodEvent = new MoodEvent("Disgust",4);
 
         moodEventList.addMoodEvent(moodEvent);
         MoodEvent returnedMoodEvent = moodEventList.getMoodEvent(0);
@@ -58,10 +58,10 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
         assertEquals(returnedMoodEvent.getMoodState(), moodEvent.getMoodState());
     }
 
-    public void testGetCount() {
+    public void testGetCount() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
         assertEquals(moodEventList.getCount(), 0);
-        MoodEvent moodEvent = new MoodEvent("Test MoodEvent_5");
+        MoodEvent moodEvent = new MoodEvent("Fear",5);
 
         moodEventList.addMoodEvent(moodEvent);
         assertEquals(moodEventList.getCount(), 1);
@@ -71,13 +71,13 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
 
     }
 
-    public void testSortByDate() {
+    public void testSortByDate() throws MoodStateNotAvailableException{
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent1 = new MoodEvent("Test MoodEvent_6");
+        MoodEvent moodEvent1 = new MoodEvent("Surprise",6);
         moodEvent1.setDateOfRecord(new GregorianCalendar(2017,2,25));
-        MoodEvent moodEvent2 = new MoodEvent("Test MoodEvent_7");
+        MoodEvent moodEvent2 = new MoodEvent("Sad",7);
         moodEvent2.setDateOfRecord(new GregorianCalendar(2017,1,25));
-        MoodEvent moodEvent3 = new MoodEvent("Test MoodEvent_8");
+        MoodEvent moodEvent3 = new MoodEvent("Shame",8);
         moodEvent3.setDateOfRecord(new GregorianCalendar(2017,3,25));
 
         moodEventList.addMoodEvent(moodEvent1);

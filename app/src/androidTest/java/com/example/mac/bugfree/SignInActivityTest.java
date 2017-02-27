@@ -7,6 +7,6 @@ import android.test.ActivityInstrumentationTestCase2;
  */
 
 public class SignInActivityTest extends ActivityInstrumentationTestCase2 {
-    public SignInActivityTest(){ super(SignInActivity.class);}
+    public SignInActivityTest(){ super(MainActivity.class);}
 
 }

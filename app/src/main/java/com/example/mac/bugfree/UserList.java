@@ -8,19 +8,18 @@ import java.util.ArrayList;
 
 public class UserList {
     private static ArrayList<User> UserList= new ArrayList<User>();
-    private static Integer userListSize = 0;
-    public void UserList (){
+    public UserList() {
     }
 
     public Integer getUserListSize() {
-        return userListSize;
+        return this.UserList.size();
     }
     public void addUser(User user) {
         UserList.add(user);
-        this.userListSize++;
     }
 
     public User getUser(Integer userID) {
         return UserList.get(userID);
     }
+    public void cleanList(){UserList.clear();}
 }

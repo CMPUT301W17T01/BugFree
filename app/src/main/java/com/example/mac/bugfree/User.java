@@ -11,10 +11,12 @@ public class User {
     private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
     private ArrayList<Integer> pendingPermission= new ArrayList<Integer>();
-    private ArrayList<MoodEvent> moodEventList= new ArrayList<MoodEvent>();
+    private MoodEventList moodEventList= new MoodEventList();
+    private UserList usrList = new UserList();
 
     public User() {
         setUsrID(uniqueID);
+        usrList.addUser(this);
     }
 
     public String getUsr() {
@@ -31,7 +33,6 @@ public class User {
 
     public void setUniqueID(int uniqueID) {
         this.uniqueID = uniqueID;
-
     }
 
     public int getUsrID() {
@@ -67,11 +68,11 @@ public class User {
         this.pendingPermission = pendingPermission;
     }
 
-    public ArrayList<MoodEvent> getMoodEventList() {
+    public MoodEventList getMoodEventList() {
         return moodEventList;
     }
 
-    public void setMoodEventList(ArrayList<MoodEvent> moodEventList) {
+    public void setMoodEventList(MoodEventList moodEventList) {
         this.moodEventList = moodEventList;
     }
 }
