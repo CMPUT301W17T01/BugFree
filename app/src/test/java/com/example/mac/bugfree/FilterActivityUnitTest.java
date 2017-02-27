@@ -11,6 +11,11 @@ import static org.junit.Assert.assertTrue;
 
 public class FilterActivityUnitTest {
 
+    /**
+     * Test filterList() in FilterActivity
+     *
+     * Should fail
+     */
     @Test
     public void testFilterList(){
         FilterActivity filterMoodList = new FilterActivity();
