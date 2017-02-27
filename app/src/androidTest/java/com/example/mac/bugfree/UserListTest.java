@@ -3,7 +3,7 @@ package com.example.mac.bugfree;
 import android.test.ActivityInstrumentationTestCase2;
 
 /**
- * Created by Zhi Li on 2017/2/25.
+ * @author Zhi Li
  */
 
 public class UserListTest extends ActivityInstrumentationTestCase2 {
