@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Zhi Li on 2017/2/25.
+ * @author Zhi Li
  */
 
 public class UserTest extends ActivityInstrumentationTestCase2 {
