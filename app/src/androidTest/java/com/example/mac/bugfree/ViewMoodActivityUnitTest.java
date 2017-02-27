@@ -24,8 +24,8 @@ public class ViewMoodActivityUnitTest{
             new ActivityTestRule<>(ViewMoodActivity.class);
 
     @Test
-    public void test_load_mood_list(){
-        MoodEvent moodEvent = new MoodEvent("Test");
-        assertEquals(moodEvent.getMoodState(), "Test");
+    public void test_load_mood_list() throws MoodStateNotAvailableException{
+        MoodEvent moodEvent = new MoodEvent("Happy",1);
+        assertEquals(moodEvent.getMoodState(), "Happy",1);
     }
 }

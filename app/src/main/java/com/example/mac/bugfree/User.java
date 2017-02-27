@@ -6,14 +6,17 @@ package com.example.mac.bugfree;
 import java.util.ArrayList;
 public class User {
     private String usr;
-    private static Integer uniqueID;
+    private static Integer uniqueID = 0;
     private Integer usrID;
     private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
     private ArrayList<Integer> pendingPermission= new ArrayList<Integer>();
-    private ArrayList<MoodEvent> moodEventList= new ArrayList<MoodEvent>();
+    private MoodEventList moodEventList= new MoodEventList();
+    private UserList usrList = new UserList();
 
     public User() {
+        setUsrID(uniqueID);
+        usrList.addUser(this);
     }
 
     public String getUsr() {
@@ -36,8 +39,9 @@ public class User {
         return usrID;
     }
 
-    public void setUsrID(int usrID) {
-        this.usrID = usrID;
+    public void setUsrID(int uniqueID) {
+        this.usrID = uniqueID;
+        setUniqueID(uniqueID+1);
     }
 
     public ArrayList<Integer> getFolloweeIDs() {
@@ -52,7 +56,7 @@ public class User {
         return followerIDs;
     }
 
-    public void setFollowerID(ArrayList<Integer> followerIDs) {
+    public void setFollowerIDs(ArrayList<Integer> followerIDs) {
         this.followerIDs = followerIDs;
     }
 
@@ -64,11 +68,11 @@ public class User {
         this.pendingPermission = pendingPermission;
     }
 
-    public ArrayList<MoodEvent> getMoodEventList() {
+    public MoodEventList getMoodEventList() {
         return moodEventList;
     }
 
-    public void setMoodEventList(ArrayList<MoodEvent> moodEventList) {
+    public void setMoodEventList(MoodEventList moodEventList) {
         this.moodEventList = moodEventList;
     }
 }
