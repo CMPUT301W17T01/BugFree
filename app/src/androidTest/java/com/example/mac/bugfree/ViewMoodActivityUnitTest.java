@@ -1,20 +1,31 @@
 package com.example.mac.bugfree;
 
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
-import static junit.framework.Assert.assertFalse;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mengyangchen on 2017-02-23.
  */
 
-public class ViewMoodActivityUnitTest extends ActivityInstrumentationTestCase2 {
-    public ViewMoodActivityUnitTest(){
-        super(ViewMoodActivity.class);
-    }
-    public void test_load_mood_list(){
-        CreateEditMoodActivity mood= new CreateEditMoodActivity();
-        User new_mood = new User();
-        assertFalse(mood.load_mood_list());
+@RunWith(AndroidJUnit4.class)
+public class ViewMoodActivityUnitTest{
+
+    @Rule
+    public ActivityTestRule<ViewMoodActivity> mActivityRule =
+            new ActivityTestRule<>(ViewMoodActivity.class);
+
+    @Test
+    public void test_load_mood_list() throws MoodStateNotAvailableException{
+        MoodEvent moodEvent = new MoodEvent("Happy",1);
+        assertEquals(moodEvent.getMoodState(), "Happy",1);
     }
 }

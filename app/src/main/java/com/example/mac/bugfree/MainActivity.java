@@ -65,7 +65,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Test CardView
-        TestCardView(moodEventArrayList);
+        try{
+            TestCardView(moodEventArrayList);
+        }catch(MoodStateNotAvailableException e){
+            Toast.makeText(getApplicationContext(),
+                    "Invalid mood state tested.",
+                    Toast.LENGTH_SHORT).show();
+        };
+
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -106,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void TestCardView(ArrayList<MoodEvent> List) {
-        MoodEvent event1 = new MoodEvent("");
-        MoodEvent event2 = new MoodEvent("");
+    public void TestCardView(ArrayList<MoodEvent> List) throws MoodStateNotAvailableException{
+        MoodEvent event1 = new MoodEvent("Happy",2);
+        MoodEvent event2 = new MoodEvent("Happy",2);
         List.add(event1);
         List.add(event2);
 
