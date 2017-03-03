@@ -7,6 +7,6 @@
     <item
         android:id="@+id/activity_filter"
         android:title="@string/activity_filter"
-        android:icon="@drawable/ic_filter_tick"
+        android:icon="@drawable/ic_tick"
         app:showAsAction="always" />
 </menu>
