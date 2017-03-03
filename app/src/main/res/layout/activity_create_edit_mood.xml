@@ -8,10 +8,21 @@
     android:orientation="vertical"
     tools:context="com.example.mac.bugfree.CreateEditMoodActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_create_edit_mood"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
@@ -31,6 +42,7 @@
                 android:id="@+id/send" />
 
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -41,7 +53,10 @@
                 android:id="@+id/text1_mood"
                 android:layout_weight="1.65"
                 android:textSize="18sp"
-                android:layout_height="match_parent" />
+                android:layout_height="35dp"
+                android:textStyle="normal|bold"
+                android:fontFamily="serif"
+                android:layout_marginLeft="10dp" />
 
             <Spinner
                 android:layout_height="wrap_content"
@@ -51,6 +66,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -58,19 +74,23 @@
             <TextView
                 android:text="Social Situation:"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
                 android:id="@+id/text2_social"
                 android:layout_weight="1.65"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_height="35dp"
+                android:textStyle="normal|bold"
+                android:layout_marginLeft="10dp" />
 
 
             <Spinner
                 android:layout_height="wrap_content"
                 android:id="@+id/social_situation"
                 android:layout_weight="1.65"
-                android:layout_width="wrap_content" />
+                android:layout_width="wrap_content"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -78,10 +98,12 @@
             <TextView
                 android:text="Reason:"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:id="@+id/text3_reason"
                 android:layout_weight="1.65"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textStyle="normal|bold"
+                android:layout_marginLeft="10dp" />
 
             <EditText
                 android:layout_width="173dp"
@@ -91,6 +113,7 @@
                 android:inputType="text" />
         </LinearLayout>
         <LinearLayout
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -98,10 +121,12 @@
                 <TextView
                     android:text="Date:"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:id="@+id/text3_date"
                     android:layout_weight="1.65"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold"
+                    android:layout_marginLeft="10dp" />
 
                 <EditText
                     android:layout_width="173dp"
