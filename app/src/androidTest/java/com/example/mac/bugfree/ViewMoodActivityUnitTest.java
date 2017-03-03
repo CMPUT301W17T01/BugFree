@@ -15,6 +15,6 @@ public class ViewMoodActivityUnitTest extends ActivityInstrumentationTestCase2 {
     public void test_load_mood_list(){
         CreateEditMoodActivity mood= new CreateEditMoodActivity();
         User new_mood = new User();
-        assertFalse(mood.load_mood_list());
+        assertTrue(mood.load_mood_list());
     }
 }

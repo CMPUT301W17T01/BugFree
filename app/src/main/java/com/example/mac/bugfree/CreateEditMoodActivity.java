@@ -33,7 +33,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),adapterView.getItemIdAtPosition(i)+"is selected.",Toast.LENGTH_LONG);
+                Toast.makeText(getApplicationContext(),adapterView.getItemIdAtPosition(i)+"is selected.",Toast.LENGTH_LONG).show();
             }
 
             @Override
