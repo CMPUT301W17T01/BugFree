@@ -115,6 +115,7 @@
 
                         <EditText
                             android:id="@+id/edittext_reason_myself"
+                            android:maxLength="20"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -221,6 +222,7 @@
 
                         <EditText
                             android:id="@+id/edittext_reason_following"
+                            android:maxLength="20"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"

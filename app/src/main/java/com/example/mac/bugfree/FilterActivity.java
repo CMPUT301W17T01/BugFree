@@ -36,7 +36,14 @@ public class FilterActivity extends AppCompatActivity {
 //    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
     ArrayAdapter<CharSequence> adapter;
     private ArrayList<MoodEventList> moodList;
-
+    private String selectedMyMoodState;
+    private String selectedFoMoodState;
+    private String enteredMyReason;
+    private String enteredFoReason;
+    private Boolean checkedMyRecent = false;
+    private Boolean checkedFoRecent = false;
+    private Boolean checkedMyDisAll = false;
+    private Boolean checkedFoDisAll = false;
 
 
     @Override
@@ -56,6 +63,10 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
+        //Store the content of reason edittext
+        enteredMyReason = myReasonEditText.getText().toString();
+        enteredFoReason = foReasonEditText.getText().toString();
+
         // checkbox fo myself most recent week
         myMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +74,9 @@ public class FilterActivity extends AppCompatActivity {
                 if (myMostRecentWeekCheckbox.isChecked()) {
                     // test
                     myDisplayAllCheckbox.setChecked(false);
-                    filterByMyMostRece();
+                    checkedMyRecent = true;
+
+//                    filterByMyMostRece();
                 }
             }
         });
@@ -72,8 +85,12 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (myDisplayAllCheckbox.isChecked()) {
+                    //test
                     myMostRecentWeekCheckbox.setChecked(false);
-                    filterByMyDisplayAll();
+                    checkedMyDisAll = true;
+
+//                    filterByMyDisplayAll();
+
                 }
             }
         });
@@ -82,8 +99,11 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (foMostRecentWeekCheckbox.isChecked()) {
+                    //test
                     foDisplayAllCheckbox.setChecked(false);
-                    filterByFoMostRece();
+                    checkedFoRecent = true;
+
+//                    filterByFoMostRece();
                 }
             }
         });
@@ -92,8 +112,10 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (foDisplayAllCheckbox.isChecked()) {
+                    //test
                     foMostRecentWeekCheckbox.setChecked(false);
-                    filterByFoDisplayAll();
+                    checkedFoDisAll = true;
+//                    filterByFoDisplayAll();
                 }
             }
         });
@@ -105,8 +127,8 @@ public class FilterActivity extends AppCompatActivity {
         myEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
-                filterByMyMoodState(selectedMoodState);
+                selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+//                filterByMyMoodState(selectedMyMoodState);
             }
 
             @Override
@@ -122,15 +144,14 @@ public class FilterActivity extends AppCompatActivity {
         foEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String selectedMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
-                filterByFoMoodState(selectedMoodState);
+                selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
+//                filterByFoMoodState(selectedFoMoodState);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -167,6 +188,7 @@ public class FilterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.activity_filter:
+                checkWhichischoosen();
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
@@ -174,6 +196,9 @@ public class FilterActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void checkWhichischoosen(){
+
+    }
     public boolean filterList(){
         return true;
     }
