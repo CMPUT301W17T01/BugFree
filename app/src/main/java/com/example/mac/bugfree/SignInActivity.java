@@ -16,7 +16,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_signin);
         setSupportActionBar(toolbar);
 
         Button signInButton = (Button) findViewById(R.id.login_button);
