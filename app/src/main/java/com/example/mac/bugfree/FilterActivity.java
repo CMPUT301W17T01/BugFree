@@ -61,7 +61,9 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (myMostRecentWeekCheckbox.isChecked()) {
-                    filterByMostRece();
+                    // test
+                    myDisplayAllCheckbox.setChecked(false);
+                    filterByMyMostRece();
                 }
             }
         });
@@ -70,7 +72,28 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (myDisplayAllCheckbox.isChecked()) {
-                    filterByMostRece();
+                    myMostRecentWeekCheckbox.setChecked(false);
+                    filterByMyDisplayAll();
+                }
+            }
+        });
+        // checkbox fo following most recent week
+        foMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (foMostRecentWeekCheckbox.isChecked()) {
+                    foDisplayAllCheckbox.setChecked(false);
+                    filterByFoMostRece();
+                }
+            }
+        });
+        // checkbox fo following display all
+        foDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (foDisplayAllCheckbox.isChecked()) {
+                    foMostRecentWeekCheckbox.setChecked(false);
+                    filterByFoDisplayAll();
                 }
             }
         });
@@ -83,9 +106,7 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
-                filterByMoodState(selectedMoodState);
-                //test
-//                Toast.makeText(getApplicationContext(),adapterView.getItemAtPosition(i)+" is selected.",Toast.LENGTH_LONG).show();
+                filterByMyMoodState(selectedMoodState);
             }
 
             @Override
@@ -102,9 +123,7 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String selectedMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
-                filterByMoodState(selectedMoodState);
-//                Toast.makeText(getApplicationContext(),adapterView.getItemAtPosition(i)+" is selected.",Toast.LENGTH_LONG).show();
-//                // test the stored value
+                filterByFoMoodState(selectedMoodState);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -150,7 +169,6 @@ public class FilterActivity extends AppCompatActivity {
             case R.id.activity_filter:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-            //TODO change icon
 
         }
         return super.onOptionsItemSelected(item);
@@ -160,18 +178,40 @@ public class FilterActivity extends AppCompatActivity {
         return true;
     }
 
-    public void filterByMostRece(){
+    //TODO
+    public void filterByMyMostRece(){
         //test
-        Toast.makeText(this,"Most recent week",Toast.LENGTH_LONG).show();
-
-    }
-    public void filterByMoodState(String selectedMoodState){
-        //test
-        Toast.makeText(this,"Mood state",Toast.LENGTH_LONG).show();
-
-
+        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
     }
 
+    //TODO
+    public void filterByMyDisplayAll(){
+        //test
+        Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
+    }
+    //TODO
+    public void filterByFoMostRece(){
+        //test
+        Toast.makeText(this,"Following Most Recent Week",Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByFoDisplayAll(){
+        //test
+        Toast.makeText(this,"Following Display All",Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByMyMoodState(String selectedMoodState){
+        //test
+        Toast.makeText(this,"Myself Mood State",Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByFoMoodState(String selectedMoodState){
+        //test
+        Toast.makeText(this,"Following Mood State",Toast.LENGTH_LONG).show();
+    }
 
 
 }
