@@ -26,7 +26,40 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/home_tab_select"
+                />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:src="@drawable/add_tab"
+                />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/earth_tab"/>
+
+        </LinearLayout>
+
         </android.support.design.widget.AppBarLayout>
+
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/tab_text"-->
+            <!--android:src="@drawable/tabtext"/>-->
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -34,7 +67,7 @@
             android:id="@+id/recycler_view"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="60dp">
+            android:layout_marginTop="110dp">
 
         </android.support.v7.widget.RecyclerView>
 

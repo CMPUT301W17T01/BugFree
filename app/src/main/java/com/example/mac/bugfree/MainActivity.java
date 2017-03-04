@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,8 +31,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+//        startActivity(intent);
+
+        //
+//        ImageView tabText = (ImageView) findViewById(R.id.tab_text);
+//        tabText.setImageResource(R.drawable.tabtext);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
