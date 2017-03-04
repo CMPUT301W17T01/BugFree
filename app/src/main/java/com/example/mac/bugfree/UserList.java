@@ -3,10 +3,11 @@ package com.example.mac.bugfree;
 import java.util.ArrayList;
 
 /**
- * Created by Zhi Li on 2017/2/25.
+ * @author Zhi Li
  */
 
 public class UserList {
+    // A public arrayList, shared by all users, all users created are stored in this list.
     private static ArrayList<User> UserList= new ArrayList<User>();
     public UserList() {
     }

@@ -6,6 +6,10 @@ import java.util.Comparator;
 
 /**
  * Created by mac on 2017-02-25.
+ * An ArrayList Stores a series of moodEvents.
+ * A moodEvent can be add to, found from, delete from a MoodEventList(MEL)
+ * All moodEvents in current MEL can be sort by date using the sortByDate method.
+ * @author Xinlei Chen
  */
 
 public class MoodEventList {

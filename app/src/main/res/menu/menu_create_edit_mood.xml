@@ -5,16 +5,12 @@
     tools:context="com.example.mac.bugfree.CreateEditMoodActivity">
 
     <item
-        android:id="@+id/action_edit_mood"
-        android:icon="@drawable/edit"
-        android:title="edit"
+        android:id="@+id/action_add_tick"
+        android:icon="@drawable/ic_tick"
+        android:title="tick"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_delete_mood"
-        android:icon="@drawable/delete"
-        android:title="delete"
-        app:showAsAction="always" />
+
 
 
 </menu>

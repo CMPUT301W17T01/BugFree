@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 //    public void TestCardView(ArrayList<MoodEvent> List) throws MoodStateNotAvailableException{
+
 //        User user = new User();
 //        MoodEvent event1 = new MoodEvent("Happy",2);
 //        MoodEvent event2 = new MoodEvent("Happy",2);
