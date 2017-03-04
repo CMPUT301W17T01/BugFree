@@ -1,7 +1,11 @@
 package com.example.mac.bugfree;
 
 /**
- * Created by mac on 2017-02-21.
+ * This class stores all user related info, ID, follower ID followee ID ,and moodEventList.
+ * An user can construct without a name for testing purpose, it should normally construct with
+ * a name in String format.
+ * Users are distinguished by uniqueID, corresponding to position stored in User List.
+ * @author Zhi Li
  */
 import java.util.ArrayList;
 public class User {
@@ -18,7 +22,11 @@ public class User {
         setUsrID(uniqueID);
         usrList.addUser(this);
     }
-
+    public User(String name){
+        setUsrID(uniqueID);
+        usrList.addUser(this);
+        setUsr(name);
+    }
     public String getUsr() {
         return usr;
     }

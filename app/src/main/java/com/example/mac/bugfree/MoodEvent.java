@@ -8,7 +8,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by mac on 2017-02-21.
+ * This class stores all attributes about a MoodEvent.
+ * It will add itself to the corresponding user's MoodEvent List at construct.
+ * A moodState type have it's own fixed color and Icon.
+ * MoodState is a must, belongs to is also a must( for retrieval purpose.)
+ * All other attributes are optional depends on the user's need.
+ * @author Zhi Li
  */
 
 public class MoodEvent {
