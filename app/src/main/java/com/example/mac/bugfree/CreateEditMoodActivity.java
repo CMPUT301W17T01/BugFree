@@ -31,7 +31,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_mood);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         //ActionBar actionBar = getSupportActionBar();
 

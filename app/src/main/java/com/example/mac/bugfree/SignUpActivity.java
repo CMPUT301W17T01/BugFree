@@ -16,7 +16,7 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_signup);
         setSupportActionBar(toolbar);
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);

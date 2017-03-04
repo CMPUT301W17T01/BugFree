@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
+//        startActivity(intent);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -137,10 +137,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 //    public void TestCardView(ArrayList<MoodEvent> List) throws MoodStateNotAvailableException{
-
+//
 //        User user = new User();
 //        MoodEvent event1 = new MoodEvent("Happy",2);
 //        MoodEvent event2 = new MoodEvent("Happy",2);
+//
 //        List.add(event1);
 //        List.add(event2);
 //
