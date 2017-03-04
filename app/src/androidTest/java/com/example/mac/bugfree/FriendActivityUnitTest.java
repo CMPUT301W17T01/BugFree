@@ -26,22 +26,13 @@ public class FriendActivityUnitTest{
     @Test
     public void testLoadList(){
         FriendActivity Friends = new FriendActivity();
-        User currentFriend = new User();
-        try {
-            Friends.LoadList(currentFriend);
-            //fail();
-        }catch(IllegalArgumentException e){}
-        assertFalse(Friends.hasFriend(currentFriend));
+        assertTrue(Friends.LoadList());
     }
 
     @Test
     public void testNotification(){
         FriendActivity Friends = new FriendActivity();
-        User currentFriend = new User();
-        try {
-            Friends.manageNotification(currentFriend);
-        }catch(IllegalArgumentException e){}
-        assertFalse(Friends.hasNotification(currentFriend));
+        assertTrue(Friends.manageNotification());
     }
 
 }
