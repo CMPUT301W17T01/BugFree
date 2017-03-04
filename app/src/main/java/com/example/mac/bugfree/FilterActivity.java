@@ -9,10 +9,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
+
+import java.util.ArrayList;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -25,6 +34,10 @@ public class FilterActivity extends AppCompatActivity {
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
 //    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
+    ArrayAdapter<CharSequence> adapter;
+    private ArrayList<MoodEventList> moodList;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +56,62 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
-        if(myMostRecentWeekCheckbox.isChecked()){
-            myMostRecentWeekCheckbox.setChecked(false);
-        }
-        if(myDisplayAllCheckbox.isChecked()){
-            myDisplayAllCheckbox.setChecked(false);
-        }
-        if(foMostRecentWeekCheckbox.isChecked()){
-            foMostRecentWeekCheckbox.setChecked(false);
-        }
-        if(foDisplayAllCheckbox.isChecked()){
-            foDisplayAllCheckbox.setChecked(false);
-        }
+        // checkbox fo myself most recent week
+        myMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myMostRecentWeekCheckbox.isChecked()) {
+                    filterByMostRece();
+                }
+            }
+        });
+        // checkbox fo myself display all
+        myDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myDisplayAllCheckbox.isChecked()) {
+                    filterByMostRece();
+                }
+            }
+        });
+
+        //spinner for myself
+        adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        myEmotionalStateSpinner.setAdapter(adapter);
+        myEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+                filterByMoodState(selectedMoodState);
+                //test
+//                Toast.makeText(getApplicationContext(),adapterView.getItemAtPosition(i)+" is selected.",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        //spinner for following
+        adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        foEmotionalStateSpinner.setAdapter(adapter);
+        foEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
+                filterByMoodState(selectedMoodState);
+//                Toast.makeText(getApplicationContext(),adapterView.getItemAtPosition(i)+" is selected.",Toast.LENGTH_LONG).show();
+//                // test the stored value
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -102,6 +159,19 @@ public class FilterActivity extends AppCompatActivity {
     public boolean filterList(){
         return true;
     }
+
+    public void filterByMostRece(){
+        //test
+        Toast.makeText(this,"Most recent week",Toast.LENGTH_LONG).show();
+
+    }
+    public void filterByMoodState(String selectedMoodState){
+        //test
+        Toast.makeText(this,"Mood state",Toast.LENGTH_LONG).show();
+
+
+    }
+
 
 
 }

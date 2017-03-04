@@ -17,13 +17,13 @@
 
     <string-array name="mood_states_array">
 
-        <item>anger</item>
-        <item>confusion</item>
-        <item>fear</item>
-        <item>happiness</item>
-        <item>sadness</item>
-        <item>shame</item>
-        <item>surprise</item>
+        <item>Anger</item>
+        <item>Confusion</item>
+        <item>Fear</item>
+        <item>Happiness</item>
+        <item>Sadness</item>
+        <item>Shame</item>
+        <item>Surprise</item>
     </string-array>
 
 
