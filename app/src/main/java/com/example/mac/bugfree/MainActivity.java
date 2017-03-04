@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
         startActivity(intent);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +45,26 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
+
+        ImageView add_tab = (ImageView) findViewById(R.id.add_tab_home);
+        add_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
+
+//        ImageView earth_tab = (ImageView) findViewById(R.id.earth_tab_home);
+//        earth_tab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                startActivity(intent);
+//            }
+//        });
 
         //navigationView.setCheckedItem(R.id.drawer_filter);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -114,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 //    public void TestCardView(ArrayList<MoodEvent> List) throws MoodStateNotAvailableException{
+
+//        User user = new User();
 //        MoodEvent event1 = new MoodEvent("Happy",2);
 //        MoodEvent event2 = new MoodEvent("Happy",2);
 //        List.add(event1);
