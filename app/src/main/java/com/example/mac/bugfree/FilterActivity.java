@@ -40,11 +40,7 @@ public class FilterActivity extends AppCompatActivity {
     private String selectedFoMoodState;
     private String enteredMyReason;
     private String enteredFoReason;
-//    private Boolean checkedMyRecent = false;
-//    private Boolean checkedFoRecent = false;
-//    private Boolean checkedMyDisAll = false;
-//    private Boolean checkedFoDisAll = false;
-    private int flag = 0;
+    private int flag;
 
 
     @Override
@@ -64,51 +60,44 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
-
-        // checkbox fo myself most recent week
+        // checkbox for myself most recent week
         myMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (myMostRecentWeekCheckbox.isChecked()) {
-                    // test
                     myDisplayAllCheckbox.setChecked(false);
                     foMostRecentWeekCheckbox.setChecked(false);
                     foDisplayAllCheckbox.setChecked(false);
-
                 }
             }
         });
-        // checkbox fo myself display all
+        // checkbox for myself display all
         myDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (myDisplayAllCheckbox.isChecked()) {
-                    //test
                     myMostRecentWeekCheckbox.setChecked(false);
                     foMostRecentWeekCheckbox.setChecked(false);
                     foDisplayAllCheckbox.setChecked(false);
                 }
             }
         });
-        // checkbox fo following most recent week
+        // checkbox for following most recent week
         foMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (foMostRecentWeekCheckbox.isChecked()) {
-                    //test
                     myMostRecentWeekCheckbox.setChecked(false);
                     myDisplayAllCheckbox.setChecked(false);
                     foDisplayAllCheckbox.setChecked(false);
-
                 }
             }
         });
-        // checkbox fo following display all
+        // checkbox for following display all
         foDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (foDisplayAllCheckbox.isChecked()) {
-                    //test
                     myMostRecentWeekCheckbox.setChecked(false);
                     myDisplayAllCheckbox.setChecked(false);
                     foMostRecentWeekCheckbox.setChecked(false);
@@ -124,12 +113,10 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i>0) {
-
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
-                    selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+//                    selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
 //                    Toast.makeText(getApplicationContext(), "Stored value = " + selectedMyMoodState, Toast.LENGTH_LONG).show();
 
-//                filterByMyMoodState(selectedMyMoodState);
                 }
             }
 
@@ -149,10 +136,9 @@ public class FilterActivity extends AppCompatActivity {
                 if(i>0) {
 
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
-                    selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
+//                    selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
 //                    Toast.makeText(getApplicationContext(), "Stored value = " + selectedFoMoodState, Toast.LENGTH_LONG).show();
 
-//                filterByFoMoodState(selectedFoMoodState);
                 }
             }
             @Override
@@ -197,6 +183,15 @@ public class FilterActivity extends AppCompatActivity {
 
             case R.id.activity_filter:
                 checkWhichIsChoosen();
+                if(flag > 1){
+                    Toast.makeText(this,"Warning: More than one option is chosen" ,Toast.LENGTH_LONG).show();
+                    break;
+                }
+                if(flag == 0){
+                    Toast.makeText(this,"Warning: No option is chosen" ,Toast.LENGTH_LONG).show();
+                    break;
+                }
+
 //                Toast.makeText(this,"Weishenmebuxing",Toast.LENGTH_LONG).show();
 
 //                startActivity(new Intent(this, MainActivity.class));
@@ -207,47 +202,67 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void checkWhichIsChoosen(){
+        flag = 0;
         enteredMyReason = myReasonEditText.getText().toString();
         enteredFoReason = foReasonEditText.getText().toString();
+        selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+        selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
 
 //        Toast.makeText(this,"Fangzaizhelixingbuxing",Toast.LENGTH_LONG).show();
 
         if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
 //            Toast.makeText(this,"This is the selected Mood State of Myself " + selectedMyMoodState,Toast.LENGTH_LONG).show();
             filterByMyMoodState(selectedMyMoodState);
+            flag ++;
+
         }
         if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
 //            Toast.makeText(this,"This is the selected Mood State of Following " + selectedFoMoodState,Toast.LENGTH_LONG).show();
             filterByFoMoodState(selectedFoMoodState);
+            flag ++;
+
         }
 
         if (myMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByMyMostRece();
+            flag ++;
+
         }
         if (foMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByFoMostRece();
+            flag ++;
+
         }
 
         if (myDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Display All duile",Toast.LENGTH_LONG).show();
             filterByMyDisplayAll();
+            flag ++;
+
         }
         if (foDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Display All duile",Toast.LENGTH_LONG).show();
             filterByFoDisplayAll();
+            flag ++;
+
         }
 
         if(enteredMyReason != null && !enteredMyReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Myself: " + enteredMyReason,Toast.LENGTH_LONG).show();
             filterByMyReason(enteredMyReason);
+            flag ++;
+
         }
 
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Following: " + enteredFoReason,Toast.LENGTH_LONG).show();
             filterByFoReason(enteredFoReason);
+            flag ++;
+
         }
+
     }
     public boolean filterList(){
         return true;
