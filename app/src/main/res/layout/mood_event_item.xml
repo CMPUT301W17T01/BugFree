@@ -20,14 +20,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:id="@+id/mood_event_icon"
-                android:src="@drawable/drawer_id"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="10dp"/>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
                 android:id="@+id/event_handle"
                 android:src="@drawable/point"
                 android:layout_marginTop="25dp"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="90dp"/>
 
         </LinearLayout>
 
