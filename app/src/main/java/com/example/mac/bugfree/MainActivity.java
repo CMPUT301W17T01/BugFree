@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.drawer_friend:
                         mDrawerLayout.closeDrawers();
+                        Intent intent = new Intent(MainActivity.this, FriendActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.drawer_sign_out:

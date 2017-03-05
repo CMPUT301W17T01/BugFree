@@ -8,7 +8,7 @@
         android:text="TextView"
         android:layout_width="192dp"
         android:layout_height="wrap_content"
-        android:id="@+id/notificationName"
+        android:id="@+id/notificationID"
         android:layout_weight="0.07"
         android:layout_alignBottom="@+id/acceptBtn"
         android:layout_alignParentTop="true" />
@@ -21,8 +21,8 @@
         android:layout_marginLeft="50dp"
         android:layout_marginStart="50dp"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/notificationName"
-        android:layout_toEndOf="@+id/notificationName" />
+        android:layout_toRightOf="@+id/notificationID"
+        android:layout_toEndOf="@+id/notificationID" />
 
     <Button
         android:text="Button"

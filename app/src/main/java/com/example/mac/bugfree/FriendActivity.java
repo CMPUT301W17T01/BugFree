@@ -1,28 +1,28 @@
 package com.example.mac.bugfree;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FriendActivity extends AppCompatActivity {
 
-    UserList userlist;
+    UserList userlist = new UserList();
+    User user1 = new User();
     User currentUser = userlist.getUser(0);
-    List followList = currentUser.getFolloweeIDs();
-    List followerList = currentUser.getFollowerIDs();
-    List notificationList = currentUser.getPendingPermission();
+    ArrayList followList = currentUser.getFolloweeIDs();
+    ArrayList followerList = currentUser.getFollowerIDs();
+    ArrayList notificationList = currentUser.getPendingPermission();
     ListView followListView;
 
 
@@ -31,9 +31,10 @@ public class FriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
 
+        ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
+
         followListView = (ListView) findViewById(R.id.followList);
 
-        ArrayAdapter<User> adapter= new FollowListAdapter();
         followListView.setAdapter(adapter);
 
 
@@ -78,46 +79,76 @@ public class FriendActivity extends AppCompatActivity {
 
 
     private class FollowListAdapter extends ArrayAdapter<User> {
-        public FollowListAdapter() {
-            super(FriendActivity.this, R.layout.list_friend_item, followList);
+        public FollowListAdapter(Context context, ArrayList followList) {
+            super(context, R.layout.list_friend_item, followList);
         }
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
+            String singleFollowee = getItem(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
-            friendName.setText("MengyangChen");
-            return view;
+            friendName.setText(singleFollowee);
+
+        return view;
         }
     }
 
     private class FollowerListAdapter extends ArrayAdapter<User> {
-        public FollowerListAdapter() {
-            super(FriendActivity.this, R.layout.list_friend_item, followerList);
+        public FollowerListAdapter(Context context, ArrayList followerList) {
+            super(context, R.layout.list_friend_item, followerList);
         }
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
+
+            String singleFollower = getItem(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
-            friendName.setText("MengyangChen");
+            friendName.setText(singleFollower);
             return view;
         }
     }
 
     private class NotificationListAdapter extends ArrayAdapter<User> {
-        public NotificationListAdapter() {
-            super(FriendActivity.this, R.layout.list_notification_item, notificationList);
+        public NotificationListAdapter(Context context, ArrayList notificationList) {
+            super(context, R.layout.list_notification_item, notificationList);
         }
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_notification_item, parent, false);
-            TextView friendName = (TextView) view.findViewById(R.id.notificationName);
-            friendName.setText("MengyangChen");
+
+            String singleNotification = getItem(position).toString();
+            TextView notificationName = (TextView) view.findViewById(R.id.notificationID);
+            notificationName.setText(singleNotification);
+            Button acceptBtn = (Button) findViewById(R.id.acceptBtn);
+            Button declineBtn = (Button) findViewById(R.id.declineBtn);
+            acceptBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"xxx has been accepted", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            declineBtn.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"xxx has been declined", Toast.LENGTH_SHORT).show();
+                }
+            });
             return view;
         }
+    }
+
+    protected void onStart(){
+        super.onStart();
+
+        ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
+        followListView = (ListView) findViewById(R.id.followList);
+
+        followListView.setAdapter(adapter);
     }
 
 }
