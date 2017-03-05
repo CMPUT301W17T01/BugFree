@@ -14,9 +14,10 @@ public class User {
     private Integer usrID;
     private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
-    private ArrayList<Integer> pendingPermission= new ArrayList<Integer>();
+    private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
     private MoodEventList moodEventList= new MoodEventList();
     private UserList usrList = new UserList();
+    public static Integer currentUserID;
 
     public User() {
         setUsrID(uniqueID);
@@ -59,6 +60,9 @@ public class User {
     public void setFolloweeIDs(ArrayList<Integer> followeeIDs) {
         this.followeeIDs.add(uniqueID);
     }
+    public void setFolloweeID(Integer followeeID) {
+        this.followeeIDs.add(followeeID);
+    }
 
     public ArrayList<Integer> getFollowerIDs() {
         return followerIDs;
@@ -68,12 +72,18 @@ public class User {
         this.followerIDs.add(uniqueID);
     }
 
+    public void setFollowerID(Integer followerID) {
+        this.followerIDs.add(followerID);
+    }
     public ArrayList<Integer> getPendingPermission() {
-        return pendingPermission;
+        return pendingPermissions;
     }
 
-    public void setPendingPermission(ArrayList<Integer> pendingPermission) {
-        this.pendingPermission = pendingPermission;
+    public void setPendingPermissions(ArrayList<Integer> pendingPermissions) {
+        this.pendingPermissions = pendingPermissions;
+    }
+    public void setPendingPermission(Integer pendingPermission) {
+        this.pendingPermissions.add(pendingPermission);
     }
 
     public MoodEventList getMoodEventList() {
@@ -82,5 +92,13 @@ public class User {
 
     public void setMoodEventList(MoodEventList moodEventList) {
         this.moodEventList = moodEventList;
+    }
+
+    public static Integer getCurrentUserID() {
+        return currentUserID;
+    }
+
+    public static void setCurrentUserID(Integer currentUserID) {
+        User.currentUserID = currentUserID;
     }
 }
