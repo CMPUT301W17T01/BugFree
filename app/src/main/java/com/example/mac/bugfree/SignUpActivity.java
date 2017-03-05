@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
@@ -20,6 +21,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signUpName = signUpText.getText().toString();
+                Toast.makeText(getApplicationContext(),
+                    "clicked",
+                    Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
