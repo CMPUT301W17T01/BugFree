@@ -29,11 +29,11 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        TextView view = (TextView)findViewById(R.id.link_signup);
-        view.setOnClickListener(new View.OnClickListener() {
+        Button signUpButton = (Button) findViewById(R.id.link_signup);
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO unstable clickable
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
