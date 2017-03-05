@@ -17,6 +17,7 @@
 
     <string-array name="mood_states_array">
 
+        <item></item>
         <item>Anger</item>
         <item>Confusion</item>
         <item>Fear</item>
