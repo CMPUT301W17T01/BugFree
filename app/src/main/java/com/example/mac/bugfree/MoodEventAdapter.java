@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

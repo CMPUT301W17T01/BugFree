@@ -1,5 +1,8 @@
 package com.example.mac.bugfree;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,12 +16,10 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
 
     private int position;
     private MoodEvent moodEvent;
-    private MoodEventAdapter moodEventAdapter;
 
     public MoodEventPopupClickListener(int position, MoodEvent moodEvent) {
         this.position = position;
         this.moodEvent = moodEvent;
-        this.moodEventAdapter = moodEventAdapter;
     }
 
     @Override
@@ -32,6 +33,7 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
             case R.id.delete_card:
                 // content here
                 Integer userId2 = this.moodEvent.getBelongsTo();
+
                 // get user list from gson file
                 break;
 
