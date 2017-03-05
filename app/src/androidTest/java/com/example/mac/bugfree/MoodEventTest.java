@@ -1,6 +1,7 @@
 package com.example.mac.bugfree;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.GregorianCalendar;

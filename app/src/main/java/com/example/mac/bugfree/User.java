@@ -57,7 +57,7 @@ public class User {
     }
 
     public void setFolloweeIDs(ArrayList<Integer> followeeIDs) {
-        this.followeeIDs = followeeIDs;
+        this.followeeIDs.add(uniqueID);
     }
 
     public ArrayList<Integer> getFollowerIDs() {
@@ -65,7 +65,7 @@ public class User {
     }
 
     public void setFollowerIDs(ArrayList<Integer> followerIDs) {
-        this.followerIDs = followerIDs;
+        this.followerIDs.add(uniqueID);
     }
 
     public ArrayList<Integer> getPendingPermission() {

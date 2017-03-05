@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -28,14 +29,14 @@ public class MoodEvent {
     public static final int surpriseMagenta = -65281;
 
     //Fixed icons
-    public static final String angerIcon = "anger.png";
-    public static final String confusionIcon = "confusion.png";
-    public static final String disgustIcon =  "disgust.png";
-    public static final String fearIcon = "fear.png";
-    public static final String happyIcon = "happy.png";
-    public static final String sadIcon = "sad.png";
-    public static final String shameIcon = "shame.png";
-    public static final String surpriseIcon = "surprise.png";
+    public static final int angerIcon = R.drawable.anger;
+    public static final int confusionIcon = R.drawable.confusion;
+    public static final int disgustIcon =  R.drawable.disgust;
+    public static final int fearIcon = R.drawable.fear;
+    public static final int happyIcon = R.drawable.happy;
+    public static final int sadIcon = R.drawable.sad;
+    public static final int shameIcon = R.drawable.shame;
+    public static final int surpriseIcon = R.drawable.surprise;
 
     //Fixed strings for emotion states
     public static final String angerStr = "Anger";
@@ -56,7 +57,7 @@ public class MoodEvent {
     //Other details
     private String moodState;
     private Integer moodColor;
-    private String moodIcon;
+    private Integer moodIcon;
     private GregorianCalendar dateOfRecord;
     private String triggerText;
     private String socialSituation;
@@ -90,29 +91,29 @@ public class MoodEvent {
     public void setColorIcon() throws MoodStateNotAvailableException{
         String MoodState = this.moodState;
         if (MoodState.equals("Anger")){
-            this.moodColor = this.angerRed;
-            this.moodIcon = this.angerIcon;
+            this.moodColor = angerRed;
+            this.moodIcon = angerIcon;
         }else if (MoodState.equals("Confusion")){
-            this.moodColor = this.confusionCyan;
-            this.moodIcon = this.confusionIcon;
+            this.moodColor = confusionCyan;
+            this.moodIcon = confusionIcon;
         }else if (MoodState.equals("Disgust")){
-            this.moodColor = this.disgustGray;
-            this.moodIcon = this.disgustIcon;
+            this.moodColor = disgustGray;
+            this.moodIcon = disgustIcon;
         }else if (MoodState.equals("Fear")){
-            this.moodColor = this.fearBlack;
-            this.moodIcon = this.fearIcon;
+            this.moodColor = fearBlack;
+            this.moodIcon = fearIcon;
         }else if (MoodState.equals("Happy")){
-            this.moodColor = this.happyYellow;
-            this.moodIcon = this.happyIcon;
+            this.moodColor = happyYellow;
+            this.moodIcon = happyIcon;
         }else if (MoodState.equals("Sad")){
-            this.moodColor = this.sadBlue;
-            this.moodIcon = this.sadIcon;
+            this.moodColor = sadBlue;
+            this.moodIcon = sadIcon;
         }else if (MoodState.equals("Shame")){
-            this.moodColor = this.shameGreen;
-            this.moodIcon = this.shameIcon;
+            this.moodColor = shameGreen;
+            this.moodIcon = shameIcon;
         }else if (MoodState.equals("Surprise")){
-            this.moodColor = this.surpriseMagenta;
-            this.moodIcon = this.surpriseIcon;
+            this.moodColor = surpriseMagenta;
+            this.moodIcon = surpriseIcon;
         }else{
             throw new MoodStateNotAvailableException();
         }
@@ -130,7 +131,7 @@ public class MoodEvent {
         return moodColor;
     }
 
-    public String getMoodIcon() {
+    public Integer getMoodIcon() {
         return moodIcon;
     }
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
     // Test CardView
-    private ArrayList<MoodEvent> moodEventArrayList = new ArrayList<>();
+    private MoodEventList moodEventArrayList = new MoodEventList();
 
 
     @Override
@@ -71,15 +72,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.drawer_filter:
-                        mDrawerLayout.closeDrawers();
+                        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.drawer_friend:
-                        mDrawerLayout.closeDrawers();
+                        intent = new Intent(MainActivity.this, FriendActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.drawer_sign_out:
-                        mDrawerLayout.closeDrawers();
+                        intent = new Intent(MainActivity.this, SignInActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return true;
@@ -87,13 +91,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Test CardView
-//        try{
-//            TestCardView(moodEventArrayList);
-//        }catch(MoodStateNotAvailableException e){
-//            Toast.makeText(getApplicationContext(),
-//                    "Invalid mood state tested.",
-//                    Toast.LENGTH_SHORT).show();
-//        };
+        try{
+            TestCardView(moodEventArrayList);
+        }catch(MoodStateNotAvailableException e){
+            Toast.makeText(getApplicationContext(),
+                    "Invalid mood state tested.",
+                    Toast.LENGTH_SHORT).show();
+        };
 
 
         // use this setting to improve performance if you know that changes
@@ -135,16 +139,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    public void TestCardView(ArrayList<MoodEvent> List) throws MoodStateNotAvailableException{
-//
-//        User user = new User();
-//        MoodEvent event1 = new MoodEvent("Happy",2);
-//        MoodEvent event2 = new MoodEvent("Happy",2);
-//
-//        List.add(event1);
-//        List.add(event2);
-//
-//    }
+    public void TestCardView(MoodEventList List) throws MoodStateNotAvailableException{
+
+        User user1 = new User();
+        Log.d("user1 id", Integer.toString(user1.getUsrID()));
+        MoodEvent moodEvent1 = new MoodEvent("Anger", user1.getUsrID());
+        MoodEvent moodEvent2 = new MoodEvent("Happy", user1.getUsrID());
+
+        moodEventArrayList = user1.getMoodEventList();
+
+    }
+
 
     public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
         // load List to UI
