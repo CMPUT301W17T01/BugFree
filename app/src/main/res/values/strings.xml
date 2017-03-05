@@ -27,5 +27,13 @@
         <item>Surprise</item>
     </string-array>
 
+    <string-array name="social_situation_array">
+        <item></item>
+        <item>alone</item>
+        <item>with one other person</item>
+        <item>with two to several people</item>
+        <item>with a crowd</item>
+    </string-array>
+
 
 </resources>

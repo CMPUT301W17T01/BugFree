@@ -58,10 +58,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <EditText
                 android:layout_width="match_parent"
@@ -71,41 +72,48 @@
                 android:id="@+id/create_mood"
                 android:hint="Text Something(Reason)" />
 
-            <Button
-                android:text="Send"
-                android:layout_width="191dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/send" />
+            <ImageView
+                android:src="@drawable/ic_add_pic"
+                android:id="@+id/add_picture"
+                android:layout_height="50dp"
+                android:adjustViewBounds="true"
+                android:maxWidth="50dp"
+                android:maxHeight="50dp"
+                android:scaleType="fitCenter"
+                android:layout_weight="0.16"
+                android:layout_width="50dp" />
 
-        <LinearLayout
+            <LinearLayout
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
-            <TextView
-                android:text="Mood State:"
-                android:layout_width="wrap_content"
-                android:id="@+id/text1_mood"
-                android:layout_weight="1.65"
-                android:textSize="18sp"
-                android:layout_height="35dp"
-                android:textStyle="normal|bold"
-                android:fontFamily="serif"
-                android:layout_marginLeft="10dp" />
+                <TextView
+                    android:text="Mood State:"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/text1_mood"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal|bold"
+                    android:fontFamily="serif"
+                    android:layout_marginLeft="10dp" />
 
-            <Spinner
+                <Spinner
                 android:layout_height="wrap_content"
                 android:id="@+id/mood_state_spinner"
                 android:layout_weight="1.65"
-                android:layout_width="wrap_content" />
+                android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp" />
 
         </LinearLayout>
-        <LinearLayout
+
+            <LinearLayout
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
             <TextView
                 android:text="Social Situation:"
@@ -113,9 +121,10 @@
                 android:id="@+id/text2_social"
                 android:layout_weight="1.65"
                 android:textSize="18sp"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:textStyle="normal|bold"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif" />
 
 
             <Spinner
@@ -123,18 +132,20 @@
                 android:id="@+id/social_situation"
                 android:layout_weight="1.65"
                 android:layout_width="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                android:dropDownWidth="match_parent"
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="vertical" >
 
             <TextView
                 android:text="Reason:"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/text3_reason"
                 android:layout_weight="1.65"
                 android:textSize="18sp"
@@ -142,11 +153,12 @@
                 android:layout_marginLeft="10dp" />
 
             <EditText
-                android:layout_width="173dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:id="@+id/reason"
-                android:inputType="text" />
+                android:inputType="text"
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -157,7 +169,7 @@
                 <TextView
                     android:text="Date:"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="wrap_content"
                     android:id="@+id/text3_date"
                     android:layout_weight="1.65"
                     android:textSize="18sp"
