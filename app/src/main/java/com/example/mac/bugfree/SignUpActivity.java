@@ -33,4 +33,9 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
+    //TODO do not allow duplicate user name
+    private boolean isDuplicateName(){
+        return false;
+    }
 }

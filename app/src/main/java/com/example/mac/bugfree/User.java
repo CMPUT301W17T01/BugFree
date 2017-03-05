@@ -17,7 +17,7 @@ public class User {
     private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
     private MoodEventList moodEventList= new MoodEventList();
     private UserList usrList = new UserList();
-    public static Integer currentUserID;
+
 
     public User() {
         setUsrID(uniqueID);
@@ -94,11 +94,4 @@ public class User {
         this.moodEventList = moodEventList;
     }
 
-    public static Integer getCurrentUserID() {
-        return currentUserID;
-    }
-
-    public static void setCurrentUserID(Integer currentUserID) {
-        User.currentUserID = currentUserID;
-    }
 }

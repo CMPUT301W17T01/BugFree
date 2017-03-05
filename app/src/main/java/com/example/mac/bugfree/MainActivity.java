@@ -26,13 +26,24 @@ public class MainActivity extends AppCompatActivity {
 
     // Test CardView
     private MoodEventList moodEventArrayList = new MoodEventList();
+    public UserList userList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        //TODO if internet connection is available, get file from elastic search first
+        //load from local file for now
+        LoadJsonFile load = new LoadJsonFile();
+        userList = load.loadFile();
+
+        //TODO how to save a curent user as a txt file?
+        //If no current user is stored, load the saved userList file and save the current user.
+        //if there is a currentUser text file, load from it and make it current user.
+
+
+//        setContentView(R.layout.activity_sign_in);
 
         //Intent intent = new Intent(MainActivity.this, ViewMoodActivity.class);
         //startActivity(intent);
