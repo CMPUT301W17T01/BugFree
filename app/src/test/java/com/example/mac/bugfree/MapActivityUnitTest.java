@@ -12,12 +12,22 @@ import static org.junit.Assert.assertTrue;
 
 public class MapActivityUnitTest  {
 
+    /**
+     * Test showPin() in MapActivity
+     *
+     * Should fail
+     */
     @Test
     public void testShowPin(){
         MapActivity pin = new MapActivity();
         assertFalse(pin.showPin());
     }
 
+    /**
+     * Test showDetail() in MapActivity
+     *
+     * Should fail
+     */
     @Test
     public void testShowDetail(){
         MapActivity detail = new MapActivity();
