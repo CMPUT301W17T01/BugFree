@@ -1,5 +1,13 @@
 package com.example.mac.bugfree;
 
+import android.app.Activity;
+import android.test.ActivityInstrumentationTestCase2;
+
+import org.junit.Test;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by mengyangchen on 2017-02-23.
  */
+
 
 @RunWith(AndroidJUnit4.class)
 public class CreateEditMoodActivityUnitTest{
@@ -30,6 +39,7 @@ public class CreateEditMoodActivityUnitTest{
     public void test_load_mood_list(){
         CreateEditMoodActivity mood= new CreateEditMoodActivity();
         User new_mood = new User();
+        //assertThat(location.add_location(),is(true));
         //assertFalse(mood.load_mood_list());
     }
 
@@ -37,13 +47,14 @@ public class CreateEditMoodActivityUnitTest{
     public void test_save_mood_list(){
         CreateEditMoodActivity mood= new CreateEditMoodActivity();
         User new_mood = new User();
-        //assertFalse(mood.save_mood_list());
+
     }
 
     @Test
     public void test_add_location(){
         CreateEditMoodActivity location= new CreateEditMoodActivity();
         User new_mood = new User();
+        assertThat(location.add_location(),is(true));
         //assertFalse(location.add_location());
     }
 }

@@ -7,15 +7,21 @@
     android:orientation="vertical"
     tools:context="com.example.mac.bugfree.FilterActivity">
 
-    <android.support.v7.widget.Toolbar
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:id="@+id/toolbar_filter"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        android:layout_height="wrap_content">
 
-    </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/toolbar_filter"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <TabHost
         android:layout_width="match_parent"
@@ -40,6 +46,8 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+
 
                 <LinearLayout
                     android:id="@+id/myself"
@@ -109,6 +117,7 @@
 
                         <EditText
                             android:id="@+id/edittext_reason_myself"
+                            android:maxLength="20"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -146,6 +155,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/following"
@@ -215,6 +225,7 @@
 
                         <EditText
                             android:id="@+id/edittext_reason_following"
+                            android:maxLength="20"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginLeft="10dp"
@@ -258,7 +269,6 @@
         </LinearLayout>
 
     </TabHost>
-
 
 
 </LinearLayout>

@@ -12,9 +12,10 @@ import java.util.Comparator;
  * @author Xinlei Chen
  */
 
-public class MoodEventList {
+public class
+MoodEventList {
 
-    private ArrayList<MoodEvent> moodEventArrayList;
+    public ArrayList<MoodEvent> moodEventArrayList;
 
 
     public MoodEventList(ArrayList<MoodEvent> moodEventList) {

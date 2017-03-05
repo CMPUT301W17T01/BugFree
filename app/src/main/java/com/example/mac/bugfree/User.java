@@ -58,7 +58,7 @@ public class User {
     }
 
     public void setFolloweeIDs(ArrayList<Integer> followeeIDs) {
-        this.followeeIDs = followeeIDs;
+        this.followeeIDs.add(uniqueID);
     }
     public void setFolloweeID(Integer followeeID) {
         this.followeeIDs.add(followeeID);
@@ -69,7 +69,7 @@ public class User {
     }
 
     public void setFollowerIDs(ArrayList<Integer> followerIDs) {
-        this.followerIDs = followerIDs;
+        this.followerIDs.add(uniqueID);
     }
 
     public void setFollowerID(Integer followerID) {

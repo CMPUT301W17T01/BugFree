@@ -9,10 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -25,6 +32,14 @@ public class FilterActivity extends AppCompatActivity {
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
 //    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
+    ArrayAdapter<CharSequence> adapter;
+    private ArrayList<MoodEventList> moodList;
+    private String selectedMyMoodState;
+    private String selectedFoMoodState;
+    private String enteredMyReason;
+    private String enteredFoReason;
+    private int flag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +58,82 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
-        if(myMostRecentWeekCheckbox.isChecked()){
-            myMostRecentWeekCheckbox.setChecked(false);
-        }
-        if(myDisplayAllCheckbox.isChecked()){
-            myDisplayAllCheckbox.setChecked(false);
-        }
-        if(foMostRecentWeekCheckbox.isChecked()){
-            foMostRecentWeekCheckbox.setChecked(false);
-        }
-        if(foDisplayAllCheckbox.isChecked()){
-            foDisplayAllCheckbox.setChecked(false);
-        }
+        // checkbox for myself most recent week
+        myMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myMostRecentWeekCheckbox.isChecked()) {
+                    myDisplayAllCheckbox.setChecked(false);
+                    foMostRecentWeekCheckbox.setChecked(false);
+                    foDisplayAllCheckbox.setChecked(false);
+                }
+            }
+        });
+        // checkbox for myself display all
+        myDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myDisplayAllCheckbox.isChecked()) {
+                    myMostRecentWeekCheckbox.setChecked(false);
+                    foMostRecentWeekCheckbox.setChecked(false);
+                    foDisplayAllCheckbox.setChecked(false);
+                }
+            }
+        });
+        // checkbox for following most recent week
+        foMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (foMostRecentWeekCheckbox.isChecked()) {
+                    myMostRecentWeekCheckbox.setChecked(false);
+                    myDisplayAllCheckbox.setChecked(false);
+                    foDisplayAllCheckbox.setChecked(false);
+                }
+            }
+        });
+        // checkbox for following display all
+        foDisplayAllCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (foDisplayAllCheckbox.isChecked()) {
+                    myMostRecentWeekCheckbox.setChecked(false);
+                    myDisplayAllCheckbox.setChecked(false);
+                    foMostRecentWeekCheckbox.setChecked(false);
+                }
+            }
+        });
+
+        //spinner for myself
+        adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        myEmotionalStateSpinner.setAdapter(adapter);
+        myEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i>0) {
+                    Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        //spinner for following
+        adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        foEmotionalStateSpinner.setAdapter(adapter);
+        foEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i>0) {
+                    Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -91,17 +170,166 @@ public class FilterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.activity_filter:
+                checkWhichIsChoosen();
+                if(flag > 1){
+                    Toast.makeText(this,"Warning: More than one option is chosen" ,Toast.LENGTH_LONG).show();
+                    setErrorMessages();
+                    break;
+                }
+                if(flag == 0){
+                    Toast.makeText(this,"Warning: No option is chosen" ,Toast.LENGTH_LONG).show();
+                    break;
+                }
+
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-            //TODO change icon
 
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void checkWhichIsChoosen(){
+        flag = 0;
+        enteredMyReason = myReasonEditText.getText().toString();
+        enteredFoReason = foReasonEditText.getText().toString();
+        selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+        selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
+
+        if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
+//            Toast.makeText(this,"This is the selected Mood State of Myself " + selectedMyMoodState,Toast.LENGTH_LONG).show();
+            filterByMyMoodState(selectedMyMoodState);
+            flag ++;
+
+        }
+        if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
+//            Toast.makeText(this,"This is the selected Mood State of Following " + selectedFoMoodState,Toast.LENGTH_LONG).show();
+            filterByFoMoodState(selectedFoMoodState);
+            flag ++;
+
+        }
+
+        if (myMostRecentWeekCheckbox.isChecked()){
+//            Toast.makeText(this,"Myself Most Recent Week duile",Toast.LENGTH_LONG).show();
+            filterByMyMostRece();
+            flag ++;
+
+        }
+        if (foMostRecentWeekCheckbox.isChecked()){
+//            Toast.makeText(this,"Following Most Recent Week duile",Toast.LENGTH_LONG).show();
+            filterByFoMostRece();
+            flag ++;
+
+        }
+
+        if (myDisplayAllCheckbox.isChecked()){
+//            Toast.makeText(this,"Myself Display All duile",Toast.LENGTH_LONG).show();
+            filterByMyDisplayAll();
+            flag ++;
+
+        }
+        if (foDisplayAllCheckbox.isChecked()){
+//            Toast.makeText(this,"Following Display All duile",Toast.LENGTH_LONG).show();
+            filterByFoDisplayAll();
+            flag ++;
+
+        }
+
+        if(enteredMyReason != null && !enteredMyReason.isEmpty()){
+//            Toast.makeText(this,"This is the Reason of Myself: " + enteredMyReason,Toast.LENGTH_LONG).show();
+            filterByMyReason(enteredMyReason);
+            flag ++;
+
+        }
+
+        if(enteredFoReason != null && !enteredFoReason.isEmpty()){
+//            Toast.makeText(this,"This is the Reason of Following: " + enteredFoReason,Toast.LENGTH_LONG).show();
+            filterByFoReason(enteredFoReason);
+            flag ++;
+
+        }
+
+    }
     public boolean filterList(){
         return true;
     }
 
+    //TODO
+    public void filterByMyMostRece(){
+        //test
+        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
+    }
 
+    //TODO
+    public void filterByMyDisplayAll(){
+        //test
+        Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
+    }
+    //TODO
+    public void filterByFoMostRece(){
+        //test
+        Toast.makeText(this,"Following Most Recent Week",Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByFoDisplayAll(){
+        //test
+        Toast.makeText(this,"Following Display All",Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByMyMoodState(String selectedMoodState){
+        //test
+        Toast.makeText(this,"Myself Mood State: "+ selectedMoodState,Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByFoMoodState(String selectedMoodState){
+        //test
+        Toast.makeText(this,"Following Mood State: " + selectedMoodState,Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByMyReason(String enteredReason){
+        //test
+        Toast.makeText(this,"Myself Reason: "+ enteredReason,Toast.LENGTH_LONG).show();
+    }
+
+    //TODO
+    public void filterByFoReason(String enteredReason){
+        //test
+        Toast.makeText(this,"Following Reason: "+ enteredReason,Toast.LENGTH_LONG).show();
+    }
+
+    public void setErrorMessages(){
+
+        if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
+            ((TextView)myEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
+        }
+        if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
+            ((TextView)foEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
+        }
+
+        if (myMostRecentWeekCheckbox.isChecked()){
+            myMostRecentWeekCheckbox.setError("More than one option is chosen");
+        }
+
+        if (foMostRecentWeekCheckbox.isChecked()){
+            foMostRecentWeekCheckbox.setError("More than one option is chosen");
+        }
+
+        if (myDisplayAllCheckbox.isChecked()){
+            myDisplayAllCheckbox.setError("More than one option is chosen");
+        }
+        if (foDisplayAllCheckbox.isChecked()){
+            foDisplayAllCheckbox.setError("More than one option is chosen");
+        }
+
+        if(enteredMyReason != null && !enteredMyReason.isEmpty()){
+            myReasonEditText.setError("More than one option is chosen");
+        }
+
+        if(enteredFoReason != null && !enteredFoReason.isEmpty()){
+            foReasonEditText.setError("More than one option is chosen");
+        }
+    }
 }
