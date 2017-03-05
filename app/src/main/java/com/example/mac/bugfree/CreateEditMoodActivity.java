@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,14 +18,17 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-
+/**
+ * @author Mengyang Chen
+ */
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     //Test
     private String mood_state, social_situation, reason;
     private Date date;
-
-    ArrayAdapter<CharSequence> adapter;
+    UserList userList = new UserList();
+    ArrayAdapter<CharSequence> adapter1;
+    ArrayAdapter<CharSequence> adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //ActionBar actionBar = getSupportActionBar();
 
-
         ImageView home_tab = (ImageView) findViewById(R.id.home_tab_add);
+        Spinner mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
+        final Spinner social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
+
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,14 +52,35 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-        Spinner mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
-        adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mood_state_spinner.setAdapter(adapter);
-        mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mood_state_spinner.setAdapter(adapter1);
+        mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),adapterView.getItemAtPosition(i)+" is selected.",Toast.LENGTH_LONG).show();
+                if(i>0)
+                    mood_state = adapterView.getItemAtPosition(i).toString();
+                    Toast.makeText(getApplicationContext(),mood_state+" is selected.1",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        adapter2 = ArrayAdapter.createFromResource(this,R.array.social_situation_array,android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        social_situation_spinner.setAdapter(adapter2);
+        social_situation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i>0)
+                    social_situation = adapterView.getItemAtPosition(i).toString();
+                    Toast.makeText(getApplicationContext(),social_situation+" is selected.2",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -64,16 +91,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
 
-        Button send_button = (Button) findViewById(R.id.send);
-        send_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-                startActivity(intent);
 
-
-            }
-        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,10 +106,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         //handle presses on the action bar items
         switch (item.getItemId()) {
 
-            case R.id.activity_filter:
+            case R.id.action_add_tick:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-            //TODO change icon
+
+                //TODO change icon
 
         }
         return super.onOptionsItemSelected(item);
@@ -99,7 +118,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public boolean add_location(){
         return true;
     }
-    public boolean save_mood_list(){
+    public boolean save_mood_list(String mood_state, String social_situation,String reason){
         return true;
     }
     public boolean load_mood_list(){

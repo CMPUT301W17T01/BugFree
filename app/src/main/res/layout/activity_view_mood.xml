@@ -8,9 +8,20 @@
     android:orientation="vertical"
     tools:context="com.example.mac.bugfree.ViewMoodActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_view_mood"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,9 +34,10 @@
                 android:layout_width="300dp"
                 android:layout_height="175dp" />
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
                     android:text="Mood State:"
@@ -33,20 +45,25 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/text1_mood"
                     android:layout_weight="1.65"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
 
-                <EditText
-                    android:layout_width="173dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/mood_state"
-                    android:inputType="text"
-                    android:hint="State" />
+                    android:id="@+id/moodState_textView"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold"
+                    android:fontFamily="serif" />
+
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
                     android:text="Social Situation:"
@@ -54,52 +71,69 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/text2_social"
                     android:layout_weight="1.65"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
 
-                <EditText
-                    android:layout_width="173dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/social_situation"
-                    android:inputType="text" />
+                    android:id="@+id/socialSituation_textView"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif" />
+
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
                     android:text="Reason:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text3_reason"
-                    android:layout_weight="1.65" />
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
 
-                <EditText
-                    android:layout_width="173dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/reason"
-                    android:inputType="text" />
+                    android:id="@+id/reason_textView"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold" />
+
             </LinearLayout>
             <LinearLayout
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="vertical" >
 
                 <TextView
                     android:text="Date:"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text3_date"
-                    android:layout_weight="1.65" />
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
 
-                <EditText
-                    android:layout_width="173dp"
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/date"
-                    android:inputType="date" />
+                    android:id="@+id/date_textView"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

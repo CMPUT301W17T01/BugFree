@@ -17,13 +17,22 @@
 
     <string-array name="mood_states_array">
 
-        <item>anger</item>
-        <item>confusion</item>
-        <item>fear</item>
-        <item>happiness</item>
-        <item>sadness</item>
-        <item>shame</item>
-        <item>surprise</item>
+        <item></item>
+        <item>Anger</item>
+        <item>Confusion</item>
+        <item>Fear</item>
+        <item>Happiness</item>
+        <item>Sadness</item>
+        <item>Shame</item>
+        <item>Surprise</item>
+    </string-array>
+
+    <string-array name="social_situation_array">
+        <item></item>
+        <item>alone</item>
+        <item>with one other person</item>
+        <item>with two to several people</item>
+        <item>with a crowd</item>
     </string-array>
 
 
