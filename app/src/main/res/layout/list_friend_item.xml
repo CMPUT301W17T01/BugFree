@@ -8,6 +8,6 @@
         android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/friendName"
-        android:layout_weight="0.08" />
+        android:id="@+id/friendID"
+        android:layout_weight="0.10" />
 </LinearLayout>
