@@ -14,7 +14,7 @@ import java.util.Comparator;
 
 public class MoodEventList {
 
-    private ArrayList<MoodEvent> moodEventArrayList;
+    public ArrayList<MoodEvent> moodEventArrayList;
 
 
     public MoodEventList(ArrayList<MoodEvent> moodEventList) {

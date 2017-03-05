@@ -16,7 +16,7 @@
     <string name="action_add_current_contact">Add Contact</string>
 
     <string-array name="mood_states_array">
-
+        <item></item>
         <item>anger</item>
         <item>confusion</item>
         <item>fear</item>
@@ -24,6 +24,14 @@
         <item>sadness</item>
         <item>shame</item>
         <item>surprise</item>
+        </string-array>
+
+    <string-array name="social_situation_array">
+        <item></item>
+        <item>alone</item>
+        <item>with one other person</item>
+        <item>with two to several people</item>
+        <item>with a crowd</item>
     </string-array>
 
 
