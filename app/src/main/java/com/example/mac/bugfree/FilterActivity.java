@@ -18,9 +18,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
 
 import java.util.ArrayList;
 
@@ -304,10 +301,6 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void setErrorMessages(){
-        enteredMyReason = myReasonEditText.getText().toString();
-        enteredFoReason = foReasonEditText.getText().toString();
-        selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
-        selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
 
         if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
             ((TextView)myEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
