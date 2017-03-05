@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -114,15 +115,10 @@ public class FilterActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i>0) {
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
-//                    selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
-//                    Toast.makeText(getApplicationContext(), "Stored value = " + selectedMyMoodState, Toast.LENGTH_LONG).show();
-
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -134,16 +130,11 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i>0) {
-
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
-//                    selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
-//                    Toast.makeText(getApplicationContext(), "Stored value = " + selectedFoMoodState, Toast.LENGTH_LONG).show();
-
                 }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -185,6 +176,7 @@ public class FilterActivity extends AppCompatActivity {
                 checkWhichIsChoosen();
                 if(flag > 1){
                     Toast.makeText(this,"Warning: More than one option is chosen" ,Toast.LENGTH_LONG).show();
+                    setErrorMessages();
                     break;
                 }
                 if(flag == 0){
@@ -192,10 +184,8 @@ public class FilterActivity extends AppCompatActivity {
                     break;
                 }
 
-//                Toast.makeText(this,"Weishenmebuxing",Toast.LENGTH_LONG).show();
-
-//                startActivity(new Intent(this, MainActivity.class));
-//                return true;
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
@@ -207,8 +197,6 @@ public class FilterActivity extends AppCompatActivity {
         enteredFoReason = foReasonEditText.getText().toString();
         selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
         selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
-
-//        Toast.makeText(this,"Fangzaizhelixingbuxing",Toast.LENGTH_LONG).show();
 
         if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
 //            Toast.makeText(this,"This is the selected Mood State of Myself " + selectedMyMoodState,Toast.LENGTH_LONG).show();
@@ -315,5 +303,40 @@ public class FilterActivity extends AppCompatActivity {
         Toast.makeText(this,"Following Reason: "+ enteredReason,Toast.LENGTH_LONG).show();
     }
 
+    public void setErrorMessages(){
+        enteredMyReason = myReasonEditText.getText().toString();
+        enteredFoReason = foReasonEditText.getText().toString();
+        selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
+        selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
 
+        if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
+            ((TextView)myEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
+        }
+        if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
+            ((TextView)foEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
+        }
+
+        if (myMostRecentWeekCheckbox.isChecked()){
+            myMostRecentWeekCheckbox.setError("More than one option is chosen");
+        }
+
+        if (foMostRecentWeekCheckbox.isChecked()){
+            foMostRecentWeekCheckbox.setError("More than one option is chosen");
+        }
+
+        if (myDisplayAllCheckbox.isChecked()){
+            myDisplayAllCheckbox.setError("More than one option is chosen");
+        }
+        if (foDisplayAllCheckbox.isChecked()){
+            foDisplayAllCheckbox.setError("More than one option is chosen");
+        }
+
+        if(enteredMyReason != null && !enteredMyReason.isEmpty()){
+            myReasonEditText.setError("More than one option is chosen");
+        }
+
+        if(enteredFoReason != null && !enteredFoReason.isEmpty()){
+            foReasonEditText.setError("More than one option is chosen");
+        }
+    }
 }
