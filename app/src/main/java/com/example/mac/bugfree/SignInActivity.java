@@ -39,4 +39,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+    //TODO validate user
+    private boolean validateUser (){
+        return true;
+    }
 }
