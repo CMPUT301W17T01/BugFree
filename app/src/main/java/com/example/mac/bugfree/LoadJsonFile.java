@@ -15,8 +15,8 @@ import com.google.gson.reflect.TypeToken;
  * (Version 1.0 contains load file locally only, load from online function will be added later.)
  * To use this class,use the following steps:
  *  (need to declare: [private UserList userList;] on top)
- * 1. LoadJsonFile load = new LoadJsonFile;
- * 2. userList = load.loadFile;
+ * 1. LoadJsonFile load = new LoadJsonFile();
+ * 2. userList = load.loadFile();
  * @version1.0
  * @author Zhi Li
  */
@@ -36,9 +36,10 @@ public class LoadJsonFile extends MainActivity {
             // TODO Auto-generated catch block
             userList = new UserList();
             return userList;
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
         }
+//        catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            throw new RuntimeException();
+//        }
     }
 }
