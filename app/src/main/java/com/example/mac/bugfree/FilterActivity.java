@@ -31,7 +31,7 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
-//    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
+    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<MoodEvent>();
     ArrayAdapter<CharSequence> adapter;
     private ArrayList<MoodEventList> moodList;
     private String selectedMyMoodState;
@@ -199,53 +199,45 @@ public class FilterActivity extends AppCompatActivity {
 //            Toast.makeText(this,"This is the selected Mood State of Myself " + selectedMyMoodState,Toast.LENGTH_LONG).show();
             filterByMyMoodState(selectedMyMoodState);
             flag ++;
-
         }
         if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
 //            Toast.makeText(this,"This is the selected Mood State of Following " + selectedFoMoodState,Toast.LENGTH_LONG).show();
             filterByFoMoodState(selectedFoMoodState);
             flag ++;
-
         }
 
         if (myMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByMyMostRece();
             flag ++;
-
         }
         if (foMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByFoMostRece();
             flag ++;
-
         }
 
         if (myDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Display All duile",Toast.LENGTH_LONG).show();
             filterByMyDisplayAll();
             flag ++;
-
         }
         if (foDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Display All duile",Toast.LENGTH_LONG).show();
             filterByFoDisplayAll();
             flag ++;
-
         }
 
         if(enteredMyReason != null && !enteredMyReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Myself: " + enteredMyReason,Toast.LENGTH_LONG).show();
             filterByMyReason(enteredMyReason);
             flag ++;
-
         }
 
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Following: " + enteredFoReason,Toast.LENGTH_LONG).show();
             filterByFoReason(enteredFoReason);
             flag ++;
-
         }
 
     }
@@ -262,6 +254,10 @@ public class FilterActivity extends AppCompatActivity {
     //TODO
     public void filterByMyDisplayAll(){
         //test
+        MoodEventList moodList = new MoodEventList();
+        for(int i = 0; i < moodList.getCount(); i++){
+            moodListAfterFilter.add(moodList.getMoodEvent(i));
+        }
         Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
