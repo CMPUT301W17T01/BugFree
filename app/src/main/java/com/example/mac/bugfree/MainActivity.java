@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //If no current user is stored, load the saved userList file and save the current user.
         //if there is a currentUser text file, load from it and make it current user.
 
-        Intent intent1 = new Intent(MainActivity.this, SignInActivity.class);
-        startActivity(intent1);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
         add_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+
             }
         });
 
