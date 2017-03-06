@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SignInActivity extends AppCompatActivity {
     protected EditText loginText;
+    private UserList userList = new UserList();
+    private String signInName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,9 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                do{
+                    signInName = loginText.getText().toString();
+                } while(!validateUser(signInName));
                 intent.putExtra("loginName",loginText.getText().toString());
                 startActivity(intent);
             }
@@ -38,5 +44,26 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    //Validate user
+    private boolean validateUser (String name){
+        int i,n;
+        n=userList.getUserListSize();
+        for (i=0;i<n;i++){
+            if(userList.getUser(i).getUsr().equals(name)){
+                storeTextFile(name);
+                userList.setCurrentUserID(i);
+                return true;
+            }
+        }
+        Toast.makeText(getApplicationContext(),
+                name+"does not exist.",
+                Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    //TODO store user
+    private void storeTextFile(String name){
+
     }
 }

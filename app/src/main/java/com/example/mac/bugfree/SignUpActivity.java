@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
     private String signUpName;
+    private UserList userList= new UserList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +26,28 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                do{
                 signUpName = signUpText.getText().toString();
+                } while(!isDuplicateName(signUpName));
                 Toast.makeText(getApplicationContext(),
-                    "clicked",
-                    Toast.LENGTH_SHORT).show();
+                        "User "+signUpName+"created.",
+                        Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
+    }
+
+    //Check duplicate user name
+    private boolean isDuplicateName(String newName){
+        int i,n;
+        n=userList.getUserListSize();
+        for (i=0;i<=n;i++){
+            if(userList.getUser(i).getUsr().equals(newName)){
+                Toast.makeText(getApplicationContext(),
+                        signUpName+"already exists.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        return true;
     }
 }

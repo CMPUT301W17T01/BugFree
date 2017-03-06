@@ -69,6 +69,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
             @Override
             public void onClick(View v) {
                 int position = vh.getAdapterPosition();
+                // write code about authority
+                // if the moodEvent is not belong to user, it will not show PopupMenu
                 showPopupMenu(vh.eventHandleImage, position);
             }
         });
@@ -95,6 +97,9 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.picImage.setImageResource(R.drawable.picture_text);
         holder.reasonText.setText("Reason");
         holder.dateText.setText("Date");
+        // write code about authority
+        // if the moodEvent is not belong to user, it will not show PopupMenu
+        //holder.eventHandleImage.setVisibility(View.INVISIBLE);
         holder.eventHandleImage.setImageResource(R.drawable.point);
 
 

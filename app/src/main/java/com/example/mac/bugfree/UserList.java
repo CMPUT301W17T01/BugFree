@@ -6,9 +6,11 @@ import java.util.ArrayList;
  * @author Zhi Li
  */
 
-public class UserList {
+public class UserList extends MainActivity{
     // A public arrayList, shared by all users, all users created are stored in this list.
     private static ArrayList<User> UserList= new ArrayList<User>();
+    //TODO currentUser here!!!!
+    public static Integer currentUserID;
     public UserList() {
     }
 
@@ -22,5 +24,20 @@ public class UserList {
     public User getUser(Integer userID) {
         return UserList.get(userID);
     }
-    public void cleanList(){UserList.clear();}
+    public void cleanList(){
+
+        UserList.clear();
+
+    }
+
+    public Integer getCurrentUserID() {
+        return currentUserID;
+    }
+
+    public void setCurrentUserID(Integer currentUserID) {
+        this.currentUserID = currentUserID;
+    }
+    public void clearCurrentUserID(){
+        this.currentUserID = -1;
+    }
 }
