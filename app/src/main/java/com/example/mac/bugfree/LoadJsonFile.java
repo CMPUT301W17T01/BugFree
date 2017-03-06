@@ -24,6 +24,7 @@ import com.google.gson.reflect.TypeToken;
 public class LoadJsonFile extends MainActivity {
     private static final String FILENAME = "file.sav";
     private UserList userList;
+    public LoadJsonFile(){}
     public UserList loadFile(){
         try {
             FileInputStream fis = openFileInput(FILENAME);

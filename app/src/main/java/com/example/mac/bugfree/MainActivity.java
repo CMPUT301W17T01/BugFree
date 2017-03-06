@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,19 +35,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //TODO if internet connection is available, get file from elastic search first
-        //load from local file for now
-        LoadJsonFile load = new LoadJsonFile();
-        userList = load.loadFile();
+        //load from local file
+//        LoadJsonFile load = new LoadJsonFile();
+//        userList = load.loadFile();
 
-        //TODO how to save a curent user as a txt file?
+        //TODO how to save a current user as a txt file?
         //If no current user is stored, load the saved userList file and save the current user.
         //if there is a currentUser text file, load from it and make it current user.
 
+        Intent intent1 = new Intent(MainActivity.this, SignInActivity.class);
+        startActivity(intent1);
 
-//        setContentView(R.layout.activity_sign_in);
-
-        //Intent intent = new Intent(MainActivity.this, ViewMoodActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, ViewMoodActivity.class);
+        startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
