@@ -23,7 +23,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         ArrayList<Integer> AL2 = new ArrayList<Integer>(Arrays.asList(4,5));
         usr.setFollowerIDs(AL2);
         ArrayList<Integer> AL3 = new ArrayList<Integer>(Arrays.asList(6,7));
-        usr.setPendingPermission(AL3);
+        usr.setPendingPermissions(AL3);
         MoodEventList MEL = new MoodEventList();
         try{MoodEvent mood = new MoodEvent("Happy",0);
             MEL.addMoodEvent(mood);
