@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         //if there is a currentUser text file, load from it and make it current user.
 
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -63,9 +64,7 @@ public class MainActivity extends AppCompatActivity {
         add_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+
             }
         });
 

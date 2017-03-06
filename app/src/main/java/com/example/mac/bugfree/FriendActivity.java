@@ -18,12 +18,14 @@ import java.util.ArrayList;
 public class FriendActivity extends AppCompatActivity {
 
     UserList userlist = new UserList();
-    User user1 = new User();
-    User currentUser = userlist.getUser(0);
+    int currentUserID = userlist.getCurrentUserID();
+    User currentUser = userlist.getUser(currentUserID);
     ArrayList followList = currentUser.getFolloweeIDs();
     ArrayList followerList = currentUser.getFollowerIDs();
     ArrayList notificationList = currentUser.getPendingPermission();
     ListView followListView;
+    ListView followerListView;
+    ListView notificationListView;
 
 
     @Override
@@ -31,11 +33,11 @@ public class FriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
 
-        ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
+        final ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
+        final ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);
+        final ArrayAdapter<User> adapter3 = new NotificationListAdapter(this, notificationList);
 
-        followListView = (ListView) findViewById(R.id.followList);
 
-        followListView.setAdapter(adapter);
 
 
         final TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
@@ -54,6 +56,18 @@ public class FriendActivity extends AppCompatActivity {
                 TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
                 tv.setTextColor(Color.parseColor("#3399ff"));
                 tv.setTextSize(13);
+
+                switch (tabHost.getCurrentTab()){
+                    case 0:
+                        followListView = (ListView) findViewById(R.id.followList);
+                        followListView.setAdapter(adapter1);
+                    case 1:
+                        followerListView = (ListView) findViewById(R.id.followList);
+                        followerListView.setAdapter(adapter2);
+                    case 2:
+                        notificationListView = (ListView) findViewById(R.id.followList);
+                        notificationListView.setAdapter(adapter3);
+                }
 
             }
         });
@@ -147,7 +161,6 @@ public class FriendActivity extends AppCompatActivity {
 
         ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
         followListView = (ListView) findViewById(R.id.followList);
-
         followListView.setAdapter(adapter);
     }
 
