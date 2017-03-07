@@ -16,16 +16,16 @@ public class User {
     private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
     private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
     private MoodEventList moodEventList= new MoodEventList();
-    private UserList usrList = new UserList();
+    //private UserList usrList = new UserList();
 
 
     public User() {
         setUsrID(uniqueID);
-        usrList.addUser(this);
+        //usrList.addUser(this);
     }
     public User(String name){
         setUsrID(uniqueID);
-        usrList.addUser(this);
+        //usrList.addUser(this);
         setUsr(name);
     }
     public String getUsr() {
@@ -94,4 +94,14 @@ public class User {
         this.moodEventList = moodEventList;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj == this) return true;
+        if(!(obj instanceof User)) return false;
+        User otherUser = (User) obj;
+        if(otherUser.getUsrID() == this.getUsrID()) return true;
+
+        return false;
+    }
 }
