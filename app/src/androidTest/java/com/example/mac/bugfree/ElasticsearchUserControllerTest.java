@@ -42,6 +42,12 @@ public class ElasticsearchUserControllerTest {
                 Log.i("Error", "MoodEvent state is wrong" );
             }
 
+            ArrayList<String> followerList = new ArrayList<>();
+            followerList.add("apple");
+            followerList.add("banana");
+            followerList.add("orange");
+            newUser.setFollowerIDs(followerList);
+
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);
 
