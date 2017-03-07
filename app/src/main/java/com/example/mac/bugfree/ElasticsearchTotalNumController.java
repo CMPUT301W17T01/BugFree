@@ -1,7 +1,6 @@
 package com.example.mac.bugfree;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 
 import com.searchly.jestdroid.DroidClientConfig;
@@ -9,32 +8,30 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import io.searchbox.client.JestResult;
-import io.searchbox.core.Bulk;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
-import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
 
 /**
- * Created by mac on 2017-03-05.
+ * Created by mac on 2017-03-06.
+ * @author Ray Chen
  */
 
-public class ElasticsearchUserController {
+public class ElasticsearchTotalNumController {
     private static JestDroidClient client;
 
 
-    public static class AddUserTask extends AsyncTask<User, Void, Void> {
+    public static class AddNumTask extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(User... users) {
+        protected Void doInBackground(String... strings) {
             verifySettings();
 
-            for (User user : users) {
-                Index index = new Index.Builder(user).index("cmput301w17t01").type("user").id(Integer.toString(user.getUsrID())).build();
+            for (String string : strings) {
+                Index index = new Index.Builder(string).index("cmput301w17t01").type("string").id("0").build();
 
 
                 try {
@@ -43,10 +40,10 @@ public class ElasticsearchUserController {
                     if (result.isSucceeded()) {
                         Log.d("In AsyncTask ID", result.getId());
                     } else {
-                        Log.i("Error", "Elasticsearch was not able to add the user.");
+                        Log.i("Error", "Elasticsearch was not able to add the Integer.");
                     }
                 } catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the user");
+                    Log.i("Error", "The application failed to build and send the Integer");
                 }
 
             }
@@ -54,23 +51,22 @@ public class ElasticsearchUserController {
         }
     }
 
-    public static class GetUserTask extends AsyncTask<String, Void, User> {
+    public static class GetNumTask extends AsyncTask<String, Void, String> {
         @Override
-        protected User doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             verifySettings();
 
-            User user = new User();
+            String total_num = "";
 
-            Log.d("parma[0]", params[0]);
-            Get get = new Get.Builder("cmput301w17t01", params[0]).type("user").build();
+            Get get = new Get.Builder("cmput301w17t01", "0").type("string").build();
 
             try{
                 JestResult result = client.execute(get);
-                user = result.getSourceAsObject(User.class);
+                total_num = result.getSourceAsObject(String.class);
             } catch (Exception e) {
                 Log.i("Error", "Somthing went wrong when we tried to communicate with the elasticsearch server!");
             }
-            return user;
+            return total_num;
         }
     }
 
