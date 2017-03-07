@@ -91,7 +91,8 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         try {
             MoodEvent mood1 = new MoodEvent("what", 0);
             fail();
-        } catch (MoodStateNotAvailableException e) {
+        }
+        catch (MoodStateNotAvailableException e) {
             assertTrue(true);
         }
 
