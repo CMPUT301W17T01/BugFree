@@ -9,23 +9,24 @@ package com.example.mac.bugfree;
  */
 import java.util.ArrayList;
 public class User {
+
+//    private static Integer uniqueID = 0;
+//    private Integer usrID;
+//    private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
+//    private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
+//    private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
+//    private UserList usrList = new UserList();
+
     private String usr;
-    private static Integer uniqueID = 0;
-    private Integer usrID;
-    private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
-    private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
-    private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
+    private ArrayList<String> followeeIDs = new ArrayList<>();
+    private ArrayList<String> followerIDs = new ArrayList<>();
+    private ArrayList<String> pendingPermissions = new ArrayList<>();
     private MoodEventList moodEventList= new MoodEventList();
-    //private UserList usrList = new UserList();
 
 
     public User() {
-        setUsrID(uniqueID);
-        //usrList.addUser(this);
     }
     public User(String name){
-        setUsrID(uniqueID);
-        //usrList.addUser(this);
         setUsr(name);
     }
     public String getUsr() {
@@ -36,53 +37,53 @@ public class User {
         this.usr = usr;
     }
 
-    public int getUniqueID() {
-        return uniqueID;
+//    public int getUniqueID() {
+//        return uniqueID;
+//    }
+
+//    public void setUniqueID(int uniqueID) {
+//        this.uniqueID = uniqueID;
+//    }
+
+//    public int getUsrID() {
+//        return usrID;
+//    }
+
+//    public void setUsrID(int uniqueID) {
+//        this.usrID = uniqueID;
+//        setUniqueID(uniqueID+1);
+//    }
+
+    public ArrayList<String> getFolloweeIDs() {
+        return this.followeeIDs;
     }
 
-    public void setUniqueID(int uniqueID) {
-        this.uniqueID = uniqueID;
+    public void setFolloweeIDs(ArrayList<String> followeeIDs) {
+        this.followeeIDs.addAll(followeeIDs);
     }
-
-    public int getUsrID() {
-        return usrID;
-    }
-
-    public void setUsrID(int uniqueID) {
-        this.usrID = uniqueID;
-        setUniqueID(uniqueID+1);
-    }
-
-    public ArrayList<Integer> getFolloweeIDs() {
-        return followeeIDs;
-    }
-
-    public void setFolloweeIDs(ArrayList<Integer> followeeIDs) {
-        this.followeeIDs.add(uniqueID);
-    }
-    public void setFolloweeID(Integer followeeID) {
+    public void setFolloweeID(String followeeID) {
         this.followeeIDs.add(followeeID);
     }
 
-    public ArrayList<Integer> getFollowerIDs() {
+    public ArrayList<String> getFollowerIDs() {
         return followerIDs;
     }
 
-    public void setFollowerIDs(ArrayList<Integer> followerIDs) {
-        this.followerIDs.add(uniqueID);
+    public void setFollowerIDs(ArrayList<String> followerIDs) {
+        this.followerIDs.addAll(followerIDs);
     }
 
-    public void setFollowerID(Integer followerID) {
+    public void setFollowerID(String followerID) {
         this.followerIDs.add(followerID);
     }
-    public ArrayList<Integer> getPendingPermission() {
+    public ArrayList<String> getPendingPermission() {
         return pendingPermissions;
     }
 
-    public void setPendingPermissions(ArrayList<Integer> pendingPermissions) {
+    public void setPendingPermissions(ArrayList<String> pendingPermissions) {
         this.pendingPermissions = pendingPermissions;
     }
-    public void setPendingPermission(Integer pendingPermission) {
+    public void setPendingPermission(String pendingPermission) {
         this.pendingPermissions.add(pendingPermission);
     }
 
@@ -100,7 +101,7 @@ public class User {
         if(obj == this) return true;
         if(!(obj instanceof User)) return false;
         User otherUser = (User) obj;
-        if(otherUser.getUsrID() == this.getUsrID()) return true;
+        if(otherUser.getUsr().compareTo(this.getUsr())  == 0) return true;
 
         return false;
     }

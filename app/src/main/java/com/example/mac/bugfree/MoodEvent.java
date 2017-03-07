@@ -63,7 +63,7 @@ public class MoodEvent {
     private String socialSituation;
     private String urlPic;
     //private Location location;
-    private Integer belongsTo;
+    private String belongsTo;
     //private User user;
     //private UserList userList;
 
@@ -75,16 +75,17 @@ public class MoodEvent {
         2. Add this mood event to corresponding user's moodEvent list.
         Other attributes are added by setters.
      */
-    public MoodEvent(String MoodState,Integer belongsTo) throws MoodStateNotAvailableException {
+    public MoodEvent(String MoodState,String belongsTo) throws MoodStateNotAvailableException {
     //public MoodEvent(String MoodState,Integer belongsTo){
         //userList = new UserList();
         //Initialize moodState, color, icon.
         this.setMoodState(MoodState);
-        try{this.setColorIcon();
-        }catch (MoodStateNotAvailableException e){
+        try{
+            this.setColorIcon();
+        } catch (MoodStateNotAvailableException e){
             e.printStackTrace();
         }
-//        this.setColorIcon();
+
         this.setBelongsTo(belongsTo);
         //Add to creator user's MoodEventList.
         //user = userList.getUser(belongsTo);
@@ -140,11 +141,11 @@ public class MoodEvent {
         return moodIcon;
     }
 
-    public Integer getBelongsTo() {
+    public String getBelongsTo() {
         return belongsTo;
     }
 
-    public void setBelongsTo(Integer belongsTo) {
+    public void setBelongsTo(String belongsTo) {
         this.belongsTo = belongsTo;
     }
 
