@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -17,12 +18,17 @@ import java.util.ArrayList;
 
 public class FriendActivity extends AppCompatActivity {
 
-    UserList userlist = new UserList();
-    int currentUserID = userlist.getCurrentUserID();
-    User currentUser = userlist.getUser(currentUserID);
-    ArrayList followList = currentUser.getFolloweeIDs();
-    ArrayList followerList = currentUser.getFollowerIDs();
-    ArrayList notificationList = currentUser.getPendingPermission();
+    //UserList userlist = new UserList();
+    //int currentUserID = userlist.getCurrentUserID();
+    //User currentUser = userlist.getUser(currentUserID);
+
+
+//    ArrayList followList = currentUser.getFolloweeIDs();
+//    ArrayList followerList = currentUser.getFollowerIDs();
+//    ArrayList notificationList = currentUser.getPendingPermission();
+    ArrayList<String> followList;
+    ArrayList<String> followerList;
+    ArrayList<String> notificationList;
     ListView followListView;
     ListView followerListView;
     ListView notificationListView;
@@ -32,6 +38,25 @@ public class FriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
+
+        User user = new User("John");
+        String query = user.getUsr();
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(query);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+
+        followerList = user.getFollowerIDs();
+        followList = user.getFolloweeIDs();
+        notificationList = user.getPendingPermission();
+
+        Log.d("List", followerList.get(0));
+
+
 
         final ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
         final ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);
