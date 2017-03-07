@@ -27,12 +27,12 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         switch (item.getItemId()){
 
             case R.id.edit_card:
-                Integer userId1 = this.moodEvent.getBelongsTo();
+                //Integer userId1 = this.moodEvent.getBelongsTo();
                 break;
 
             case R.id.delete_card:
                 // content here
-                Integer userId2 = this.moodEvent.getBelongsTo();
+                //Integer userId2 = this.moodEvent.getBelongsTo();
 
                 // get user list from gson file
                 break;

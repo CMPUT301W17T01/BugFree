@@ -25,7 +25,8 @@ public class ViewMoodActivityUnitTest{
 
     @Test
     public void test_load_mood_list() throws MoodStateNotAvailableException{
-        MoodEvent moodEvent = new MoodEvent("Happy",1);
-        assertEquals(moodEvent.getMoodState(), "Happy",1);
+        User usr = new User("John");
+        MoodEvent moodEvent = new MoodEvent("Happy",usr.getUsr());
+        assertEquals(moodEvent.getMoodState(), "Happy");
     }
 }
