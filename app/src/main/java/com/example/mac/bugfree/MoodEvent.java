@@ -62,10 +62,10 @@ public class MoodEvent {
     private String triggerText;
     private String socialSituation;
     private String urlPic;
-    //private Loaction location;
-    private Integer belongsTo;
-    private User user;
-    private UserList userList;
+    //private Location location;
+    private String belongsTo;
+    //private User user;
+    //private UserList userList;
 
     /* To create a mood event, two factors are needed.
         1. A mood state(happy/sad etc.)
@@ -75,19 +75,25 @@ public class MoodEvent {
         2. Add this mood event to corresponding user's moodEvent list.
         Other attributes are added by setters.
      */
-    public MoodEvent(String MoodState,Integer belongsTo) throws MoodStateNotAvailableException{
-        userList = new UserList();
+    public MoodEvent(String MoodState,String belongsTo) throws MoodStateNotAvailableException {
+    //public MoodEvent(String MoodState,Integer belongsTo){
+        //userList = new UserList();
         //Initialize moodState, color, icon.
         this.setMoodState(MoodState);
-        try{this.setColorIcon();
-        }catch (MoodStateNotAvailableException e){
+        try{
+            this.setColorIcon();
+        } catch (MoodStateNotAvailableException e){
+            e.printStackTrace();
         }
+
         this.setBelongsTo(belongsTo);
         //Add to creator user's MoodEventList.
-        user = userList.getUser(belongsTo);
-        user.getMoodEventList().addMoodEvent(this);
+        //user = userList.getUser(belongsTo);
+        //user.getMoodEventList().addMoodEvent(this);
     }
-//Set Color and Icon together
+
+    //Set Color and Icon together
+    //public void setColorIcon() throws MoodStateNotAvailableException{
     public void setColorIcon() throws MoodStateNotAvailableException{
         String MoodState = this.moodState;
         if (MoodState.equals("Anger")){
@@ -135,11 +141,11 @@ public class MoodEvent {
         return moodIcon;
     }
 
-    public Integer getBelongsTo() {
+    public String getBelongsTo() {
         return belongsTo;
     }
 
-    public void setBelongsTo(Integer belongsTo) {
+    public void setBelongsTo(String belongsTo) {
         this.belongsTo = belongsTo;
     }
 

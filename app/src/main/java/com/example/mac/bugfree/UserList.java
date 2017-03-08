@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Zhi Li
  */
 
-public class UserList extends MainActivity{
+public class UserList{
     // A public arrayList, shared by all users, all users created are stored in this list.
     private static ArrayList<User> UserList= new ArrayList<User>();
     //TODO currentUser here!!!!

@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ElasticsearchUserController.createIndex();
+
         //TODO if internet connection is available, get file from elastic search first
 
 
@@ -63,9 +65,12 @@ public class MainActivity extends AppCompatActivity {
         add_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
             }
         });
+
 
 //        ImageView earth_tab = (ImageView) findViewById(R.id.earth_tab_home);
 //        earth_tab.setOnClickListener(new View.OnClickListener() {
@@ -102,13 +107,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Test CardView
-        try{
-            TestCardView(moodEventArrayList);
-        }catch(MoodStateNotAvailableException e){
-            Toast.makeText(getApplicationContext(),
-                    "Invalid mood state tested.",
-                    Toast.LENGTH_SHORT).show();
-        };
+//        try{
+//            TestCardView(moodEventArrayList);
+//        }catch(MoodStateNotAvailableException e){
+//            Toast.makeText(getApplicationContext(),
+//                    "Invalid mood state tested.",
+//                    Toast.LENGTH_SHORT).show();
+//        };
 
 
         // use this setting to improve performance if you know that changes
@@ -150,16 +155,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void TestCardView(MoodEventList List) throws MoodStateNotAvailableException{
-
-        User user1 = new User();
-        Log.d("user1 id", Integer.toString(user1.getUsrID()));
-        MoodEvent moodEvent1 = new MoodEvent("Anger", user1.getUsrID());
-        MoodEvent moodEvent2 = new MoodEvent("Happy", user1.getUsrID());
-
-        moodEventArrayList = user1.getMoodEventList();
-
-    }
+//    public void TestCardView(MoodEventList List) throws MoodStateNotAvailableException{
+//
+//        User user1 = new User();
+//        Log.d("user1 id", Integer.toString(user1.getUsrID()));
+//        MoodEvent moodEvent1 = new MoodEvent("Anger", user1.getUsrID());
+//        MoodEvent moodEvent2 = new MoodEvent("Happy", user1.getUsrID());
+//
+//        moodEventArrayList = user1.getMoodEventList();
+//
+//    }
 
 
     public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
