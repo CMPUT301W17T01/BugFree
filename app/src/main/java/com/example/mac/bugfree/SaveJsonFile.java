@@ -20,19 +20,19 @@ import java.io.OutputStreamWriter;
 
 public class SaveJsonFile extends CreateEditMoodActivity {
     private static final String FILENAME = "file.sav";
+    private UserList userList;
 
-    public SaveJsonFile(User user) {
-        saveJson(user);
+    public SaveJsonFile(UserList userList) {
+        saveJson(userList);
     }
 
-    public void saveJson(User user) {
+    public void saveJson(UserList userList) {
         try {
             FileOutputStream fos = openFileOutput(FILENAME, 0);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
             Gson gson = new Gson();
-            gson.toJson(user, writer);
+            gson.toJson(userList, writer);
             writer.flush();
-            fos.close();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             throw new RuntimeException();
