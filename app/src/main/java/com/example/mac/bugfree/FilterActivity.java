@@ -7,6 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +32,6 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
-    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<MoodEvent>();
     ArrayAdapter<CharSequence> adapter;
     private ArrayList<MoodEventList> moodList;
     private String selectedMyMoodState;
@@ -39,13 +39,25 @@ public class FilterActivity extends AppCompatActivity {
     private String enteredMyReason;
     private String enteredFoReason;
     private int flag;
-
+    private ArrayList<String> followeeList;
+    private MoodEventList moodListAfterFilter = new MoodEventList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        User user = new User("John");
+        String query = user.getUsr();
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(query);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
 
         // content of tab Myself
         myEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_myself);
@@ -111,7 +123,7 @@ public class FilterActivity extends AppCompatActivity {
         myEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
+                if(i > 0) {
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -127,7 +139,7 @@ public class FilterActivity extends AppCompatActivity {
         foEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
+                if(i > 0) {
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -254,11 +266,9 @@ public class FilterActivity extends AppCompatActivity {
 
     //TODO
     public void filterByMyDisplayAll(){
+
         //test
-        MoodEventList moodList = new MoodEventList();
-        for(int i = 0; i < moodList.getCount(); i++){
-            moodListAfterFilter.add(moodList.getMoodEvent(i));
-        }
+
         Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
