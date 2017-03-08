@@ -29,8 +29,8 @@ public class ElasticsearchUserControllerTest {
 
         @Test
         public void elasticSearchAddUserTest(){
-            ElasticsearchUserController.createIndex();
-            User newUser = new User("John");
+            ElasticsearchUserController.createIndex();//clear our team index, everything will gone
+            User newUser = new User("John");//create user named john
             MoodEventList moodEventList = new MoodEventList();
             try {
                 MoodEvent moodEvent = new MoodEvent("Happy", newUser.getUsr());
@@ -47,11 +47,11 @@ public class ElasticsearchUserControllerTest {
             followerList.add("banana");
             followerList.add("orange");
             newUser.setFollowerIDs(followerList);
-
+//these two lines uploads the user
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);
 
-
+//get user name
             String query = newUser.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
             getUserTask.execute(query);
@@ -109,7 +109,7 @@ public class ElasticsearchUserControllerTest {
 
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(user_1);
-
+//update
             String query = user_1.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
             getUserTask.execute(query);
@@ -131,6 +131,7 @@ public class ElasticsearchUserControllerTest {
             }
 //            ElasticsearchUserController.AddUserTask addUserTask1 = new ElasticsearchUserController.AddUserTask();
 //            addUserTask1.execute(user_get);
+            //the following two lines updates the online version
             ElasticsearchUserController.UpdateUserTask updateUserTask = new ElasticsearchUserController.UpdateUserTask();
             updateUserTask.execute(user_get);
 
@@ -153,7 +154,7 @@ public class ElasticsearchUserControllerTest {
             User user_1 = new User("John");
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(user_1);
-
+            //check if the user requested exists
             ElasticsearchUserController.IsExist isExist = new ElasticsearchUserController.IsExist();
             isExist.execute(user_1.getUsr());
 

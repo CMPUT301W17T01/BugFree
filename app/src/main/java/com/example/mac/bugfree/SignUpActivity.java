@@ -23,9 +23,12 @@ public class SignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+            signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (exists(signUpText.getText().toString())){
+
+                }
                 do{
                 signUpName = signUpText.getText().toString();
                 } while(!isDuplicateName(signUpName));
@@ -38,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //Check duplicate user name
-    private boolean isDuplicateName(String newName){
+    private boolean exists(String newName){
         int i,n;
         n=userList.getUserListSize();
         for (i=0;i<=n;i++){
