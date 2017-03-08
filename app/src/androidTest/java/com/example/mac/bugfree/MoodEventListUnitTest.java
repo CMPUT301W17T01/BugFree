@@ -13,13 +13,14 @@ import java.util.GregorianCalendar;
 public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     public MoodEventListUnitTest() {
         super(MainActivity.class);
-        User usr = new User();
     }
 //Test if a mood event can be added to a MoodEventList
     public void testAddMoodEvent() throws MoodStateNotAvailableException{
 
+        User usr = new User("John");
+
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Happy",0);
+        MoodEvent moodEvent = new MoodEvent("Happy",usr.getUsr());
 
         moodEventList.addMoodEvent(moodEvent);
         assertTrue(moodEventList.hasMoodEvent(moodEvent));
@@ -33,8 +34,9 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     }
 //Test if a mood event is in a list
     public void testHasMoodEvent() throws MoodStateNotAvailableException{
+        User usr = new User("John");
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Anger",0);
+        MoodEvent moodEvent = new MoodEvent("Anger",usr.getUsr());
 
         assertFalse(moodEventList.hasMoodEvent(moodEvent));
         moodEventList.addMoodEvent(moodEvent);
@@ -42,8 +44,9 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     }
 //Test if a mood event can be deleted from a MoodEventList(MEL)
     public void testDeleteMoodEvent() throws MoodStateNotAvailableException{
+        User usr = new User("John");
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Confusion",0);
+        MoodEvent moodEvent = new MoodEvent("Confusion",usr.getUsr());
 
         moodEventList.addMoodEvent(moodEvent);
         moodEventList.deleteMoodEvent(moodEvent);
@@ -52,8 +55,9 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     }
 //Tests if a MoodEvent can be found from a MEL
     public void testGetMoodEvent() throws MoodStateNotAvailableException{
+        User usr = new User("John");
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent = new MoodEvent("Disgust",0);
+        MoodEvent moodEvent = new MoodEvent("Disgust",usr.getUsr());
         moodEventList.addMoodEvent(moodEvent);
         MoodEvent returnedMoodEvent = moodEventList.getMoodEvent(0);
 
@@ -61,10 +65,11 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     }
 //Test if MEL counter work properly
     public void testGetCount() throws MoodStateNotAvailableException{
+        User usr = new User("John");
         MoodEventList moodEventList = new MoodEventList();
 
         assertEquals(moodEventList.getCount(), 0);
-        MoodEvent moodEvent = new MoodEvent("Fear",0);
+        MoodEvent moodEvent = new MoodEvent("Fear",usr.getUsr());
         moodEventList.addMoodEvent(moodEvent);
         assertEquals(moodEventList.getCount(), 1);
 
@@ -74,12 +79,13 @@ public class MoodEventListUnitTest extends ActivityInstrumentationTestCase2{
     }
 //Test if MoodEvents in a MEL can be sort according to date
     public void testSortByDate() throws MoodStateNotAvailableException{
+        User usr = new User("John");
         MoodEventList moodEventList = new MoodEventList();
-        MoodEvent moodEvent1 = new MoodEvent("Surprise",0);
+        MoodEvent moodEvent1 = new MoodEvent("Surprise",usr.getUsr());
         moodEvent1.setDateOfRecord(new GregorianCalendar(2017,2,25,15,16,17));
-        MoodEvent moodEvent2 = new MoodEvent("Sad",0);
+        MoodEvent moodEvent2 = new MoodEvent("Sad",usr.getUsr());
         moodEvent2.setDateOfRecord(new GregorianCalendar(2017,1,25,15,16,17));
-        MoodEvent moodEvent3 = new MoodEvent("Shame",0);
+        MoodEvent moodEvent3 = new MoodEvent("Shame",usr.getUsr());
         moodEvent3.setDateOfRecord(new GregorianCalendar(2017,3,25,15,16,17));
 
         moodEventList.addMoodEvent(moodEvent1);
