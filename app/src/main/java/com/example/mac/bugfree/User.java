@@ -1,21 +1,12 @@
 package com.example.mac.bugfree;
 
 /**
- * This class stores all user related info, ID, follower ID followee ID ,and moodEventList.
- * An user can construct without a name for testing purpose, it should normally construct with
- * a name in String format.
- * Users are distinguished by uniqueID, corresponding to position stored in User List.
- * @author Zhi Li
+ * This class stores all user related info, name, follower ID list, followee ID list,and moodEventList.
+ * An user should construct with a name in String format, this name is unique.
+ * @author Zhi Li,Xinlei Chen
  */
 import java.util.ArrayList;
 public class User {
-
-//    private static Integer uniqueID = 0;
-//    private Integer usrID;
-//    private ArrayList<Integer> followeeIDs = new ArrayList<Integer>();
-//    private ArrayList<Integer> followerIDs= new ArrayList<Integer>();
-//    private ArrayList<Integer> pendingPermissions= new ArrayList<Integer>();
-//    private UserList usrList = new UserList();
 
     private String usr;
     private ArrayList<String> followeeIDs = new ArrayList<>();
@@ -23,9 +14,7 @@ public class User {
     private ArrayList<String> pendingPermissions = new ArrayList<>();
     private MoodEventList moodEventList= new MoodEventList();
 
-
-    public User() {
-    }
+    public User (){}
     public User(String name){
         setUsr(name);
     }
@@ -36,23 +25,6 @@ public class User {
     public void setUsr(String usr) {
         this.usr = usr;
     }
-
-//    public int getUniqueID() {
-//        return uniqueID;
-//    }
-
-//    public void setUniqueID(int uniqueID) {
-//        this.uniqueID = uniqueID;
-//    }
-
-//    public int getUsrID() {
-//        return usrID;
-//    }
-
-//    public void setUsrID(int uniqueID) {
-//        this.usrID = uniqueID;
-//        setUniqueID(uniqueID+1);
-//    }
 
     public ArrayList<String> getFolloweeIDs() {
         return this.followeeIDs;
