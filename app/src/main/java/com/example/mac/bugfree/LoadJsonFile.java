@@ -23,7 +23,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class LoadJsonFile extends MainActivity {
     private static final String FILENAME = "file.sav";
-    private UserList userList;
+    private static UserList userList;
     public LoadJsonFile(){}
     public UserList loadFile(){
         try {
@@ -34,13 +34,14 @@ public class LoadJsonFile extends MainActivity {
             userList = gson.fromJson(in, listType);
             return userList;
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
+            userList = new UserList();
+            return userList;
+        } catch (NullPointerException e) {
+            userList = new UserList();
+            return userList;
+        } catch(Exception e){
             userList = new UserList();
             return userList;
         }
-//        catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            throw new RuntimeException();
-//        }
     }
 }
