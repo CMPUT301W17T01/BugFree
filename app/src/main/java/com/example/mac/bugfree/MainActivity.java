@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ElasticsearchUserController.createIndex();
+        //ElasticsearchUserController.createIndex();
 
         //TODO if internet connection is available, get file from elastic search first
         //Intent intent = new Intent(MainActivity.this, FriendActivity.class);

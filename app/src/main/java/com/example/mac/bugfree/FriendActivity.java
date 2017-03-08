@@ -1,10 +1,15 @@
 package com.example.mac.bugfree;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,6 +43,10 @@ public class FriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_friend);
+        setSupportActionBar(toolbar);
+
 
         User user = new User("John");
         String query = user.getUsr();
@@ -87,10 +96,10 @@ public class FriendActivity extends AppCompatActivity {
                         followListView = (ListView) findViewById(R.id.followList);
                         followListView.setAdapter(adapter1);
                     case 1:
-                        followerListView = (ListView) findViewById(R.id.followList);
+                        followerListView = (ListView) findViewById(R.id.followerList);
                         followerListView.setAdapter(adapter2);
                     case 2:
-                        notificationListView = (ListView) findViewById(R.id.followList);
+                        notificationListView = (ListView) findViewById(R.id.notificationList);
                         notificationListView.setAdapter(adapter3);
                 }
 
@@ -116,6 +125,25 @@ public class FriendActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.homebtn, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeBtn:
+                Intent intent = new Intent(FriendActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
+
+            default:
+        }
+        return true;
+    }
+
 
     private class FollowListAdapter extends ArrayAdapter<User> {
         public FollowListAdapter(Context context, ArrayList followList) {
@@ -126,7 +154,7 @@ public class FriendActivity extends AppCompatActivity {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
-            String singleFollowee = getItem(position).toString();
+            String singleFollowee = followList.get(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
             friendName.setText(singleFollowee);
 
@@ -143,7 +171,7 @@ public class FriendActivity extends AppCompatActivity {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
-            String singleFollower = getItem(position).toString();
+            String singleFollower = followerList.get(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
             friendName.setText(singleFollower);
             return view;
@@ -183,10 +211,6 @@ public class FriendActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
-
-        ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
-        followListView = (ListView) findViewById(R.id.followList);
-        followListView.setAdapter(adapter);
     }
 
 }
