@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //TODO if internet connection is available, get file from elastic search first
-        Intent intent = new Intent(MainActivity.this, FriendActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(MainActivity.this, FriendActivity.class);
+        //startActivity(intent);
 
         //load from local file for now
 

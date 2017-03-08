@@ -6,13 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,6 +30,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //Test
     private String mood_state, social_situation, reason;
     private Date date;
+
+    EditText create_edit_reason;
     UserList userList = new UserList();
     ArrayAdapter<CharSequence> adapter1;
     ArrayAdapter<CharSequence> adapter2;
@@ -35,6 +41,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_mood);
 
+        create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         //ActionBar actionBar = getSupportActionBar();
@@ -59,10 +66,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0)
+                if(i>0){
                     mood_state = adapterView.getItemAtPosition(i).toString();
-                    Toast.makeText(getApplicationContext(),mood_state+" is selected.1",Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getApplicationContext(),mood_state+" is selected.",Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -78,9 +85,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         social_situation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i>0)
+                if (i>0) {
                     social_situation = adapterView.getItemAtPosition(i).toString();
-                    Toast.makeText(getApplicationContext(),social_situation+" is selected.2",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), social_situation + " is selected.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -89,6 +97,22 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
+        create_edit_reason.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //TODO store the reason and limit the letters to 3
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
 
@@ -105,12 +129,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         //handle presses on the action bar items
         switch (item.getItemId()) {
-
             case R.id.action_add_tick:
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-
-                //TODO change icon
+                //TODO Save the creates & changes
+                setResult(RESULT_OK);
+                finish();
 
         }
         return super.onOptionsItemSelected(item);
@@ -124,4 +146,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public boolean load_mood_list(){
         return true;
     }
+
+
+    protected void onStart(){
+        super.onStart();
+    }
 }
+
