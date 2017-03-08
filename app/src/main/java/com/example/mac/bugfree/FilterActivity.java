@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +23,18 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 
 public class FilterActivity extends AppCompatActivity {
+    private static final String FILENAME = "filter.sav";
     private Spinner myEmotionalStateSpinner;
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
@@ -201,10 +210,7 @@ public class FilterActivity extends AppCompatActivity {
                     break;
                 }
 
-                Bundle info = new Bundle();
-                Intent intent = new Intent();
-                info.putSerializable("listAfterFilter", moodListAfterFilter);
-                intent,putExtraData(info);
+                saveInFile();
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
@@ -213,6 +219,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void checkWhichIsChoosen(){
+        moodListAfterFilter.clear();
+        deleteFile("filter.sav");
         flag = 0;
         enteredMyReason = myReasonEditText.getText().toString();
         enteredFoReason = foReasonEditText.getText().toString();
@@ -351,6 +359,25 @@ public class FilterActivity extends AppCompatActivity {
 
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
             foReasonEditText.setError("More than one option is chosen");
+        }
+    }
+
+    private void saveInFile() {
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME,
+                    Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            // save the record list to Json
+            Gson gson = new Gson();
+            gson.toJson(moodListAfterFilter, out);
+
+            out.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 }
