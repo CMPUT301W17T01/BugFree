@@ -23,25 +23,41 @@ import com.google.gson.reflect.TypeToken;
 
 public class LoadJsonFile extends MainActivity {
     private static final String FILENAME = "file.sav";
-    private static UserList userList;
+    private User user;
     public LoadJsonFile(){}
-    public UserList loadFile(){
+    public User loadFile(){
         try {
+            //Taken fron https://static.javadoc.io/com.google.code.gson/gson/2.6.2/com/google/gson/Gson.html
+            //2017-03-07 21:10
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
-            Type listType = new TypeToken<UserList>(){}.getType();
-            userList = gson.fromJson(in, listType);
-            return userList;
-        } catch (FileNotFoundException e) {
-            userList = new UserList();
-            return userList;
+            user = gson.fromJson(in, User.class); // deserializes json into target2
+            return user;
+        }catch (FileNotFoundException e) {
+            return null;
         } catch (NullPointerException e) {
-            userList = new UserList();
-            return userList;
+            return null;
         } catch(Exception e){
-            userList = new UserList();
-            return userList;
+            return null;
         }
+
+//        try {
+//            FileInputStream fis = openFileInput(FILENAME);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<UserList>(){}.getType();
+//            userList = gson.fromJson(in, listType);
+//            return userList;
+//        } catch (FileNotFoundException e) {
+//            userList = new UserList();
+//            return userList;
+//        } catch (NullPointerException e) {
+//            userList = new UserList();
+//            return userList;
+//        } catch(Exception e){
+//            userList = new UserList();
+//            return userList;
+//        }
     }
 }

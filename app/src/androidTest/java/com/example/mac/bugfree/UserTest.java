@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 public class UserTest extends ActivityInstrumentationTestCase2 {
     public UserTest(){ super(MainActivity.class);}
-
     // Test Getter and Setters
     public void testGetterSetter(){
         User usr = new User("John");
@@ -35,7 +34,6 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
 
         usr.setFolloweeIDs(AL1);
         usr.setFollowerIDs(AL2);
-        usr.setPendingPermissions(AL3);
 
         MoodEventList MEL = new MoodEventList();
         try{MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
