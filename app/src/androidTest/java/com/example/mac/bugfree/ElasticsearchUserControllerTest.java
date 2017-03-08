@@ -43,7 +43,7 @@ public class ElasticsearchUserControllerTest {
             }
 
             ArrayList<String> followerList = new ArrayList<>();
-            followerList.add("apple\n\n\n\ntest");
+            followerList.add("apple");
             followerList.add("banana");
             followerList.add("orange");
             newUser.setFollowerIDs(followerList);

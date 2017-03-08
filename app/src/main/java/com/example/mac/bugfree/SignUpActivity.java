@@ -31,7 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 do{
                 signUpName = signUpText.getText().toString();
-                } while(!isDuplicateName(signUpName));
+                } while(!exists(signUpName));
                 Toast.makeText(getApplicationContext(),
                         "User "+signUpName+"created.",
                         Toast.LENGTH_SHORT).show();

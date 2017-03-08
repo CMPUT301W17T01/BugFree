@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 android:id="@+id/activity_friend"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+android:orientation="vertical"
 tools:context="com.example.mac.bugfree.FriendActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_friend"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
 <TabHost
     android:layout_width="match_parent"
@@ -71,5 +88,5 @@ tools:context="com.example.mac.bugfree.FriendActivity">
         </FrameLayout>
     </LinearLayout>
 </TabHost>
-</RelativeLayout>
+</LinearLayout>
 
