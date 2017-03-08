@@ -47,6 +47,15 @@ public class ElasticsearchUserControllerTest {
             followerList.add("banana");
             followerList.add("orange");
             newUser.setFollowerIDs(followerList);
+
+            ArrayList<String> followList = new ArrayList<>();
+            followList.add("apple");
+            followList.add("banana");
+            followList.add("orange");
+            newUser.setFolloweeIDs(followList);
+
+
+
 //these two lines uploads the user
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);

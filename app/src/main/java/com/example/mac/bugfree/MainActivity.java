@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//        startActivity(intent);
-//        ElasticsearchUserController.createIndex();
 
         //online = isNetworkAvailable();
         //If internet connection is available, get file from elastic search first
@@ -61,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(intent);
             }
-//            SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//            currentUserName = pref.getString("currentUser", "");
             //TODO find user using elastic search and preference
         }
 //        else {
+        //TODO if internet connection is available, get file from elastic search first
+        //TODO Offline mode
 //            Toast.makeText(getApplicationContext(),
 //                    "This device is not connected to internet.",
 //                    Toast.LENGTH_SHORT).show();
@@ -79,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
