@@ -39,6 +39,7 @@ public class FriendActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
 
+
         User user = new User("John");
         String query = user.getUsr();
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
@@ -87,10 +88,10 @@ public class FriendActivity extends AppCompatActivity {
                         followListView = (ListView) findViewById(R.id.followList);
                         followListView.setAdapter(adapter1);
                     case 1:
-                        followerListView = (ListView) findViewById(R.id.followList);
+                        followerListView = (ListView) findViewById(R.id.followerList);
                         followerListView.setAdapter(adapter2);
                     case 2:
-                        notificationListView = (ListView) findViewById(R.id.followList);
+                        notificationListView = (ListView) findViewById(R.id.notificationList);
                         notificationListView.setAdapter(adapter3);
                 }
 
@@ -126,7 +127,7 @@ public class FriendActivity extends AppCompatActivity {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
-            String singleFollowee = getItem(position).toString();
+            String singleFollowee = followList.get(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
             friendName.setText(singleFollowee);
 
@@ -183,10 +184,6 @@ public class FriendActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
-
-        ArrayAdapter<User> adapter= new FollowListAdapter(this, followList);
-        followListView = (ListView) findViewById(R.id.followList);
-        followListView.setAdapter(adapter);
     }
 
 }
