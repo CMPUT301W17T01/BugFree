@@ -1,5 +1,7 @@
 package com.example.mac.bugfree;
 
+import android.content.SharedPreferences;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -40,13 +42,18 @@ public class FilterActivity extends AppCompatActivity {
     private String enteredFoReason;
     private int flag;
     private ArrayList<String> followeeList;
-    private MoodEventList moodListAfterFilter = new MoodEventList();
+    private MoodEventList moodListBeforeFilter = new MoodEventList();
+    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<MoodEvent>();
+//    private MoodEventList moodListAfterFilter = new MoodEventList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        String current_user = pref.getString("currentUser", "");
 
         User user = new User("John");
         String query = user.getUsr();
@@ -58,6 +65,10 @@ public class FilterActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Error", "Failed to get the User out of the async object");
         }
+
+        followeeList  = user.getFolloweeIDs();
+        moodListBeforeFilter = user.getMoodEventList();
+
 
         // content of tab Myself
         myEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_myself);
@@ -189,11 +200,11 @@ public class FilterActivity extends AppCompatActivity {
                     setErrorMessages();
                     break;
                 }
-                if(flag == 0){
-                    Toast.makeText(this,"Warning: No option is chosen" ,Toast.LENGTH_LONG).show();
-                    break;
-                }
 
+                Bundle info = new Bundle();
+                Intent intent = new Intent();
+                info.putSerializable("listAfterFilter", moodListAfterFilter);
+                intent,putExtraData(info);
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
@@ -268,7 +279,10 @@ public class FilterActivity extends AppCompatActivity {
     public void filterByMyDisplayAll(){
 
         //test
-
+        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
+            moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
+        }
+//        moodListAfterFilter = moodListBeforeFilter;
         Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
