@@ -1,25 +1,18 @@
 package com.example.mac.bugfree;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-/**
- * This is the sign up activity.This activity is being called by Sign in activity when the button is clicked.
- * An Sign up screen will show, ask user input of user name. When user enters a user name (non-null value),
- * the program checks for existence in elastic search. If it is a valid entry and does not exist yet, the
- * program creates a user with the user input string and returns to sign in screen.
- * @author Zhi Li
- */
-
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
     private String signUpName;
+    private UserList userList= new UserList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,57 +26,31 @@ public class SignUpActivity extends AppCompatActivity {
             signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUpName = signUpText.getText().toString();
-                if (notExist(signUpName) ||!signUpName.equals("")){
-                    if (createUser(signUpName)) {
-                        Toast.makeText(getApplicationContext(),
-                                "User " + signUpName + "created.",
-                                Toast.LENGTH_SHORT).show();
-                        finish();
-                    }else{
-                        Toast.makeText(getApplicationContext(),
-                                "Unknown error. User " + signUpName + "not created.",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                if (exists(signUpText.getText().toString())){
+
                 }
+                do{
+                signUpName = signUpText.getText().toString();
+                } while(!exists(signUpName));
+                Toast.makeText(getApplicationContext(),
+                        "User "+signUpName+"created.",
+                        Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
 
     //Check duplicate user name
-    private boolean notExist(String newName){
-        ElasticsearchUserController.IsExist isExist = new ElasticsearchUserController.IsExist();
-        isExist.execute(newName);
-        try {
-            if(!isExist.get()){
-                return true;
-            } else{
+    private boolean exists(String newName){
+        int i,n;
+        n=userList.getUserListSize();
+        for (i=0;i<=n;i++){
+            if(userList.getUser(i).getUsr().equals(newName)){
                 Toast.makeText(getApplicationContext(),
-                        "Not created, "+signUpName+"already exists.",
+                        signUpName+"already exists.",
                         Toast.LENGTH_SHORT).show();
-                return false;}
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
-            Toast.makeText(getApplicationContext(),
-                    "Can not verify uniqueness. Internet connection Error",
-                    Toast.LENGTH_SHORT).show();
-            return false;
+            }
         }
-    }
-
-    //create a user using elastic search
-    private boolean createUser(String usr){
-        try {
-            User user = new User(usr);
-            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(user);
-            return true;
-        }catch (Exception e){
-            Log.i("Error", "Failed to create the User");
-            Toast.makeText(getApplicationContext(),
-                    "Can not create user. Internet connection Error",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        return true;
     }
 }
