@@ -43,10 +43,18 @@ public class ElasticsearchUserControllerTest {
             }
 
             ArrayList<String> followerList = new ArrayList<>();
-            followerList.add("apple");
+            followerList.add("apple\n\n\n\ntest");
             followerList.add("banana");
             followerList.add("orange");
             newUser.setFollowerIDs(followerList);
+
+            ArrayList<String> followList = new ArrayList<>();
+            followList.add("apple");
+            followList.add("banana");
+            followList.add("orange");
+            newUser.setFolloweeIDs(followList);
+
+
 
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);
