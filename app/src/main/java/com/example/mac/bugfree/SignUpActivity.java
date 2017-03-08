@@ -23,7 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
-            signUpButton.setOnClickListener(new View.OnClickListener() {
+            /*signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (exists(signUpText.getText().toString())){
@@ -37,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 finish();
             }
-        });
+        });*/
     }
 
     //Check duplicate user name

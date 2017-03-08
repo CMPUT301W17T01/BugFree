@@ -63,9 +63,6 @@ public class FriendActivity extends AppCompatActivity {
         final ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);
         final ArrayAdapter<User> adapter3 = new NotificationListAdapter(this, notificationList);
 
-
-
-
         final TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
@@ -73,14 +70,8 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onTabChanged(String tabId) {
 
-                for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                    TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-                    tv.setTextColor(Color.parseColor("#ffffff"));
-                    tv.setTextSize(13);
-                }
-
                 TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-                tv.setTextColor(Color.parseColor("#3399ff"));
+                tv.setTextColor(Color.parseColor("#ffffff"));
                 tv.setTextSize(13);
 
                 switch (tabHost.getCurrentTab()){
@@ -115,6 +106,13 @@ public class FriendActivity extends AppCompatActivity {
         tabSpec.setIndicator("Notification");
         tabHost.addTab(tabSpec);
 
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).
+                    findViewById(android.R.id.title); //Unselected Tabs
+            tv.setTextColor(Color.parseColor("#ffffff"));
+            tv.setTextSize(13);
+        }
+
     }
 
 
@@ -144,7 +142,7 @@ public class FriendActivity extends AppCompatActivity {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
-            String singleFollower = getItem(position).toString();
+            String singleFollower = followList.get(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
             friendName.setText(singleFollower);
             return view;
@@ -160,22 +158,22 @@ public class FriendActivity extends AppCompatActivity {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_notification_item, parent, false);
 
-            String singleNotification = getItem(position).toString();
-            TextView notificationName = (TextView) view.findViewById(R.id.notificationID);
+            final String singleNotification = followList.get(position).toString();
+            final TextView notificationName = (TextView) view.findViewById(R.id.notificationID);
             notificationName.setText(singleNotification);
-            Button acceptBtn = (Button) findViewById(R.id.acceptBtn);
-            Button declineBtn = (Button) findViewById(R.id.declineBtn);
+            Button acceptBtn = (Button) view.findViewById(R.id.acceptBtn);
+            Button declineBtn = (Button) view.findViewById(R.id.declineBtn);
             acceptBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"xxx has been accepted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),singleNotification+" has been accepted", Toast.LENGTH_SHORT).show();
                 }
             });
 
             declineBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"xxx has been declined", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),singleNotification+" has been declined", Toast.LENGTH_SHORT).show();
                 }
             });
             return view;
@@ -184,6 +182,12 @@ public class FriendActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
+        ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
+        followListView.setAdapter(adapter1);
+        ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);
+        followerListView.setAdapter(adapter2);
+        ArrayAdapter<User> adapter3 = new NotificationListAdapter(this, notificationList);
+        notificationListView.setAdapter(adapter3);
     }
 
 }

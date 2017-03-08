@@ -43,7 +43,7 @@ public class ElasticsearchUserControllerTest {
             }
 
             ArrayList<String> followerList = new ArrayList<>();
-            followerList.add("apple\n\n\n\ntest");
+            followerList.add("apple");
             followerList.add("banana");
             followerList.add("orange");
             newUser.setFollowerIDs(followerList);
@@ -53,6 +53,12 @@ public class ElasticsearchUserControllerTest {
             followList.add("banana");
             followList.add("orange");
             newUser.setFolloweeIDs(followList);
+
+            ArrayList<String> notificationList = new ArrayList<>();
+            notificationList.add("apple");
+            notificationList.add("banana");
+            notificationList.add("orange");
+            newUser.setPendingPermissions(notificationList);
 
 
 
