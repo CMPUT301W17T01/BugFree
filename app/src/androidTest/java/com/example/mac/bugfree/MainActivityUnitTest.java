@@ -25,7 +25,8 @@ public class MainActivityUnitTest{
      */
 
     @Test
-    public void test(){
+    public void testCheckOnline(){
 
     }
+
 }
