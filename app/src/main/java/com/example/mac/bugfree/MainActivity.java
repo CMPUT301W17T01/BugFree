@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,10 +25,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-
-    // Test CardView
     private MoodEventList moodEventArrayList = new MoodEventList();
-    public UserList userList;
+    private String currentUserName;
 
 
     @Override
@@ -35,20 +34,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ElasticsearchUserController.createIndex();
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
 
-        //TODO if internet connection is available, get file from elastic search first
-
-
-        //load from local file for now
-
-        //LoadJsonFile load = new LoadJsonFile();
-        //userList = load.loadFile();
-
-        //TODO how to save a current user as a txt file?
-        //If no current user is stored, load the saved userList file and save the current user.
-        //if there is a currentUser text file, load from it and make it current user.
-
+        if (currentUserName.equals("")) {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -106,15 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Test CardView
-//        try{
-//            TestCardView(moodEventArrayList);
-//        }catch(MoodStateNotAvailableException e){
-//            Toast.makeText(getApplicationContext(),
-//                    "Invalid mood state tested.",
-//                    Toast.LENGTH_SHORT).show();
-//        };
-
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -154,17 +137,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
-//    public void TestCardView(MoodEventList List) throws MoodStateNotAvailableException{
-//
-//        User user1 = new User();
-//        Log.d("user1 id", Integer.toString(user1.getUsrID()));
-//        MoodEvent moodEvent1 = new MoodEvent("Anger", user1.getUsrID());
-//        MoodEvent moodEvent2 = new MoodEvent("Happy", user1.getUsrID());
-//
-//        moodEventArrayList = user1.getMoodEventList();
-//
-//    }
 
 
     public void loadList(ArrayList<MoodEvent> moodEventArrayList) {

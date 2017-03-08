@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,34 +24,60 @@ public class SignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
-            signUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (exists(signUpText.getText().toString())){
-
-                }
-                do{
                 signUpName = signUpText.getText().toString();
-                } while(!exists(signUpName));
-                Toast.makeText(getApplicationContext(),
-                        "User "+signUpName+"created.",
-                        Toast.LENGTH_SHORT).show();
-                finish();
+                if (notExist(signUpName) ||!signUpName.equals("")){
+                    if (createUser(signUpName)) {
+                        Toast.makeText(getApplicationContext(),
+                                "User " + signUpName + "created.",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else{
+                        Toast.makeText(getApplicationContext(),
+                                "Unknown error. User " + signUpName + "not created.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
 
     //Check duplicate user name
-    private boolean exists(String newName){
-        int i,n;
-        n=userList.getUserListSize();
-        for (i=0;i<=n;i++){
-            if(userList.getUser(i).getUsr().equals(newName)){
+    private boolean notExist(String newName){
+        ElasticsearchUserController.IsExist isExist = new ElasticsearchUserController.IsExist();
+        isExist.execute(newName);
+        try {
+            if(!isExist.get()){
+                return true;
+            } else{
                 Toast.makeText(getApplicationContext(),
-                        signUpName+"already exists.",
+                        "Not created, "+signUpName+"already exists.",
                         Toast.LENGTH_SHORT).show();
-            }
+                return false;}
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+            Toast.makeText(getApplicationContext(),
+                    "Can not verify uniqueness. Internet connection Error",
+                    Toast.LENGTH_SHORT).show();
+            return false;
         }
-        return true;
+    }
+
+    //create a user using elastic search
+    private boolean createUser(String usr){
+        try {
+            User user = new User(usr);
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+            return true;
+        }catch (Exception e){
+            Log.i("Error", "Failed to create the User");
+            Toast.makeText(getApplicationContext(),
+                    "Can not create user. Internet connection Error",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 }
