@@ -35,13 +35,8 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
 
         usr.setFolloweeIDs(AL1);
         usr.setFollowerIDs(AL2);
-<<<<<<< HEAD
-        ArrayList<Integer> AL3 = new ArrayList<Integer>(Arrays.asList(6,7));
-        usr.setPendingPermissions(AL3);
-=======
         usr.setPendingPermissions(AL3);
 
->>>>>>> master
         MoodEventList MEL = new MoodEventList();
         try{MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
             MEL.addMoodEvent(mood);

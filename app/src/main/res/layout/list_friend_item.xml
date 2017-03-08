@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/friendID"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="207dp" />
+        android:padding="13dp"
+        android:textSize="20dp"
+        />
+        <!--android:layout_marginBottom="207dp" />-->
 </RelativeLayout>
