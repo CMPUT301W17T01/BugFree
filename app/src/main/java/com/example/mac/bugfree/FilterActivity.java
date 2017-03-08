@@ -1,5 +1,8 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -7,6 +10,7 @@ import android.support.v4.app.NavUtils;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +23,18 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 
 public class FilterActivity extends AppCompatActivity {
+    private static final String FILENAME = "filter.sav";
     private Spinner myEmotionalStateSpinner;
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
@@ -31,7 +43,6 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
-//    private ArrayList<MoodEvent> moodList = new ArrayList<MoodEvent>();
     ArrayAdapter<CharSequence> adapter;
     private ArrayList<MoodEventList> moodList;
     private String selectedMyMoodState;
@@ -39,12 +50,34 @@ public class FilterActivity extends AppCompatActivity {
     private String enteredMyReason;
     private String enteredFoReason;
     private int flag;
-
+    private ArrayList<String> followeeList;
+    private MoodEventList moodListBeforeFilter = new MoodEventList();
+    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<MoodEvent>();
+//    private MoodEventList moodListAfterFilter = new MoodEventList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        String current_user = pref.getString("currentUser", "");
+
+        User user = new User("John");
+        String query = user.getUsr();
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(query);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+
+        followeeList  = user.getFolloweeIDs();
+        moodListBeforeFilter = user.getMoodEventList();
+
 
         // content of tab Myself
         myEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_myself);
@@ -110,7 +143,7 @@ public class FilterActivity extends AppCompatActivity {
         myEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
+                if(i > 0) {
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -126,7 +159,7 @@ public class FilterActivity extends AppCompatActivity {
         foEmotionalStateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
+                if(i > 0) {
                     Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i) + " is selected.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -176,11 +209,8 @@ public class FilterActivity extends AppCompatActivity {
                     setErrorMessages();
                     break;
                 }
-                if(flag == 0){
-                    Toast.makeText(this,"Warning: No option is chosen" ,Toast.LENGTH_LONG).show();
-                    break;
-                }
 
+                saveInFile();
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
@@ -189,6 +219,8 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void checkWhichIsChoosen(){
+        moodListAfterFilter.clear();
+        deleteFile("filter.sav");
         flag = 0;
         enteredMyReason = myReasonEditText.getText().toString();
         enteredFoReason = foReasonEditText.getText().toString();
@@ -199,53 +231,45 @@ public class FilterActivity extends AppCompatActivity {
 //            Toast.makeText(this,"This is the selected Mood State of Myself " + selectedMyMoodState,Toast.LENGTH_LONG).show();
             filterByMyMoodState(selectedMyMoodState);
             flag ++;
-
         }
         if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
 //            Toast.makeText(this,"This is the selected Mood State of Following " + selectedFoMoodState,Toast.LENGTH_LONG).show();
             filterByFoMoodState(selectedFoMoodState);
             flag ++;
-
         }
 
         if (myMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByMyMostRece();
             flag ++;
-
         }
         if (foMostRecentWeekCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Most Recent Week duile",Toast.LENGTH_LONG).show();
             filterByFoMostRece();
             flag ++;
-
         }
 
         if (myDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Myself Display All duile",Toast.LENGTH_LONG).show();
             filterByMyDisplayAll();
             flag ++;
-
         }
         if (foDisplayAllCheckbox.isChecked()){
 //            Toast.makeText(this,"Following Display All duile",Toast.LENGTH_LONG).show();
             filterByFoDisplayAll();
             flag ++;
-
         }
 
         if(enteredMyReason != null && !enteredMyReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Myself: " + enteredMyReason,Toast.LENGTH_LONG).show();
             filterByMyReason(enteredMyReason);
             flag ++;
-
         }
 
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
 //            Toast.makeText(this,"This is the Reason of Following: " + enteredFoReason,Toast.LENGTH_LONG).show();
             filterByFoReason(enteredFoReason);
             flag ++;
-
         }
 
     }
@@ -261,7 +285,12 @@ public class FilterActivity extends AppCompatActivity {
 
     //TODO
     public void filterByMyDisplayAll(){
+
         //test
+        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
+            moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
+        }
+//        moodListAfterFilter = moodListBeforeFilter;
         Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
@@ -330,6 +359,25 @@ public class FilterActivity extends AppCompatActivity {
 
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
             foReasonEditText.setError("More than one option is chosen");
+        }
+    }
+
+    private void saveInFile() {
+        try {
+            FileOutputStream fos = openFileOutput(FILENAME,
+                    Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            // save the record list to Json
+            Gson gson = new Gson();
+            gson.toJson(moodListAfterFilter, out);
+
+            out.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 }
