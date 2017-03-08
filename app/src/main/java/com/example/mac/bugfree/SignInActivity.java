@@ -51,7 +51,7 @@ public class SignInActivity extends AppCompatActivity {
         n=userList.getUserListSize();
         for (i=0;i<n;i++){
             if(userList.getUser(i).getUsr().equals(name)){
-                storeTextFile(name);
+                storePreference(name);
                 userList.setCurrentUserID(i);
                 return true;
             }
@@ -63,7 +63,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     //TODO store user
-    private void storeTextFile(String name){
+    private void storePreference(String name){
 
     }
 }
