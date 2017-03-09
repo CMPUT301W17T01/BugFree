@@ -67,6 +67,7 @@ public class MoodEvent {
     //private User user;
     //private UserList userList;
 
+
     /* To create a mood event, two factors are needed.
         1. A mood state(happy/sad etc.)
         2. A creator ID (unique user ID, integer)

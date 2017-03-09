@@ -1,6 +1,7 @@
 package com.example.mac.bugfree;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +9,14 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,23 +28,29 @@ import java.util.Date;
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     //Test
-    private String mood_state, social_situation, reason;
+    private String current_user, mood_state, social_situation, reason;
     private Date date;
 
-    EditText create_edit_reason;
-    UserList userList = new UserList();
+    EditText create_edit_mood, create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
     ArrayAdapter<CharSequence> adapter2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_mood);
 
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        //current_user = pref.getString("currentUser","");
+
+
         create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
+        create_edit_mood = (EditText)findViewById(R.id.create_edit_mood);
+        create_edit_reason = (EditText)findViewById(R.id.create_edit_date);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
-        //ActionBar actionBar = getSupportActionBar();
 
         ImageView home_tab = (ImageView) findViewById(R.id.home_tab_add);
         Spinner mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
@@ -97,7 +103,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-        create_edit_reason.addTextChangedListener(new TextWatcher() {
+        create_edit_mood.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -105,7 +111,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //TODO store the reason and limit the letters to 3
+
             }
 
             @Override
@@ -114,6 +120,28 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
+        create_edit_reason.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                int spaces = create_edit_mood.getText().toString().length() -
+                        create_edit_mood.getText().toString().replace(" ", "").length();
+                Toast.makeText(getApplicationContext(),spaces, Toast.LENGTH_SHORT).show();
+                if (spaces>3){
+                    create_edit_reason.setError("No more than 3 words!");
+                }
+                //TODO store the reason and limit the letters to 3
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
     }
@@ -131,6 +159,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_add_tick:
                 //TODO Save the creates & changes
+                current_user  = "John";
+                try {
+                    setMoodEvent(current_user, mood_state, social_situation);
+                }catch (MoodStateNotAvailableException e){
+
+                }
                 setResult(RESULT_OK);
                 finish();
 
@@ -148,6 +182,30 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
+    public void setMoodEvent(String current_user, String mood_state, String social_situation) throws MoodStateNotAvailableException{
+        User user = new User();
+
+        String query = current_user;
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(query);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+
+        //Log.d("Text", user.getMoodEventList().getMoodEvent(1).getMoodState());
+        MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
+        try {
+            moodEvent.setSocialSituation(social_situation);
+        } catch (InvalidSSException e){}
+        MoodEventList moodEventList = user.getMoodEventList();
+        moodEventList.addMoodEvent(moodEvent);
+
+        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(user);
+    }
     protected void onStart(){
         super.onStart();
     }

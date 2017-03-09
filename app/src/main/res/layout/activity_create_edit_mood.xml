@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="20"
-                android:id="@+id/create_mood"
+                android:id="@+id/create_edit_mood"
                 android:hint="Text Something here"
                 android:inputType="text" />
 
@@ -152,6 +152,7 @@
                 android:textStyle="normal|bold"
                 android:layout_marginLeft="10dp" />
 
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,6 +161,8 @@
                 android:id="@+id/create_edit_reason"
                 android:inputType="text"
                 android:layout_marginLeft="10dp" />
+
+
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -181,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:id="@+id/date"
+                    android:id="@+id/create_edit_date"
                     android:inputType="date"
                     android:hint="DD/MM/YY" />
             </LinearLayout>
