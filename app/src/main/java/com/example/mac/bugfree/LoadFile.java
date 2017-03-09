@@ -1,12 +1,12 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,33 +15,33 @@ import com.google.gson.reflect.TypeToken;
  * (Version 1.0 contains load file locally only, load from online function will be added later.)
  * To use this class,use the following steps:
  *  (need to declare: [private UserList userList;] on top)
- * 1. LoadJsonFile load = new LoadJsonFile();
- * 2. userList = load.loadFile();
- * @version1.0
+ * 1. LoadFile load = new LoadFile();
+ * 2. user = load.loadFile();
+ * @version2.0
  * @author Zhi Li
  */
 
-public class LoadJsonFile extends MainActivity {
+public class LoadFile{
     private static final String FILENAME = "file.sav";
-    private static UserList userList;
-    public LoadJsonFile(){}
-    public UserList loadFile(){
+    private User user;
+    public LoadFile(){}
+    public User loadUser(Context context) {
         try {
-            FileInputStream fis = openFileInput(FILENAME);
+            //Taken fron https://static.javadoc.io/com.google.code.gson/gson/2.6.2/com/google/gson/Gson.html
+            //2017-03-07 21:10
+            FileInputStream fis = context.openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
-            Type listType = new TypeToken<UserList>(){}.getType();
-            userList = gson.fromJson(in, listType);
-            return userList;
+            Type type = new TypeToken<User>(){}.getType();
+            user = gson.fromJson(in, type); // deserializes json into User
+            fis.close();
+            return user;
         } catch (FileNotFoundException e) {
-            userList = new UserList();
-            return userList;
+            return null;
         } catch (NullPointerException e) {
-            userList = new UserList();
-            return userList;
-        } catch(Exception e){
-            userList = new UserList();
-            return userList;
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 }
