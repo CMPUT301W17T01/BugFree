@@ -54,6 +54,12 @@ public class ElasticsearchUserControllerTest {
             followList.add("orange");
             newUser.setFolloweeIDs(followList);
 
+            ArrayList<String> notificationList = new ArrayList<>();
+            notificationList.add("apple");
+            notificationList.add("banana");
+            notificationList.add("orange");
+            newUser.setPendingPermissions(notificationList);
+
 
 
 //these two lines uploads the user

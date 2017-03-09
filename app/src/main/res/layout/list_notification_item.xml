@@ -14,22 +14,23 @@
         android:layout_alignParentTop="true" />
 
     <Button
-        android:text="Button"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:id="@+id/acceptBtn"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/notificationID"
-        android:layout_toEndOf="@+id/notificationID" />
-
-    <Button
-        android:text="Button"
-        android:layout_width="60dp"
+        android:text="Decline"
+        android:layout_width="65dp"
         android:layout_height="50dp"
         android:id="@+id/declineBtn"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/acceptBtn"
-        android:layout_toEndOf="@+id/acceptBtn" />
+        android:textSize="9sp" />
+
+    <Button
+        android:text="Accept"
+        android:layout_width="65dp"
+        android:layout_height="50dp"
+        android:id="@+id/acceptBtn"
+        android:layout_marginLeft="35dp"
+        android:layout_marginStart="35dp"
+        android:textSize="9sp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/notificationID"
+        android:layout_toEndOf="@+id/notificationID" />
 </RelativeLayout>
