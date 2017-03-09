@@ -1,6 +1,7 @@
 package com.example.mac.bugfree;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +23,7 @@ import java.util.List;
 public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.ViewHolder> {
 
     private MoodEventList mmoodEventArrayList = new MoodEventList();
+    private String currentUser = "";
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImage;
@@ -43,9 +45,10 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     }
 
     // Provide a suitable constructor
-    public MoodEventAdapter(MoodEventList moodEventArrayList) {
+    public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser) {
         this.mmoodEventArrayList = moodEventArrayList;
-        Log.d("Size of ArrayList", Integer.toString(mmoodEventArrayList.getCount()));
+        this.currentUser = currentUser;
+        //Log.d("Size of ArrayList", Integer.toString(mmoodEventArrayList.getCount()));
     }
 
     // Create new views (invoked by the layout manager)
@@ -83,30 +86,25 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //String username = mmoodEventArrayList.get(position).getname();
 
-        // For Test
         MoodEvent moodEvent = mmoodEventArrayList.getMoodEvent(position);
-        Log.d("Test", moodEvent.getMoodState());
-        Log.d("Test 2", Boolean.toString(moodEvent.getMoodState().equals("Anger")));
-        Log.d("position", Integer.toString(position));
-        Log.d("iconId", Integer.toString(moodEvent.getMoodIcon()));
-        //holder.iconImage.setImageResource(R.drawable.drawer_id);
         holder.iconImage.setImageResource(moodEvent.getMoodIcon());
-        holder.usernameText.setText("Username");
+        //holder.usernameText.setText("Username");
+        holder.usernameText.setText(moodEvent.getBelongsTo());
         holder.picImage.setImageResource(R.drawable.picture_text);
-        holder.reasonText.setText("Reason");
+        holder.reasonText.setText(moodEvent.getTriggerText());
         holder.dateText.setText("Date");
-        // write code about authority
-        // if the moodEvent is not belong to user, it will not show PopupMenu
-        //holder.eventHandleImage.setVisibility(View.INVISIBLE);
         holder.eventHandleImage.setImageResource(R.drawable.point);
 
+        // write code about authority
+        // if the moodEvent is not belong to user, it will not show PopupMenu
+        if (!moodEvent.getBelongsTo().equals(currentUser)) {
+            holder.eventHandleImage.setVisibility(View.INVISIBLE);
+        }
 
     }
 
     // Return the size of your list
-
     @Override
     public int getItemCount() {
         return mmoodEventArrayList.getCount();

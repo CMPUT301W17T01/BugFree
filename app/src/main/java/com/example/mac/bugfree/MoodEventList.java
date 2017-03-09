@@ -34,6 +34,14 @@ public class MoodEventList {
         this.moodEventArrayList.add(moodEvent);
     }
 
+    public void addMoodEventList(MoodEventList moodEventList) {
+        this.moodEventArrayList.addAll(moodEventList.transferMoodEventListToArray());
+    }
+
+    private ArrayList<MoodEvent> transferMoodEventListToArray(){
+        return this.moodEventArrayList;
+    }
+
     public boolean hasMoodEvent(MoodEvent moodEvent) {
         return this.moodEventArrayList.contains(moodEvent);
     }
