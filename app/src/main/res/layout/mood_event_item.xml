@@ -44,7 +44,7 @@
                 android:id="@+id/event_handle"
                 android:src="@drawable/point"
                 android:layout_marginTop="25dp"
-                android:layout_marginLeft="90dp"/>
+                android:layout_marginLeft="120dp"/>
 
         </LinearLayout>
 

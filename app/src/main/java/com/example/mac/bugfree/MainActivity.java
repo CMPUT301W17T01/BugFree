@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-    private MoodEventList moodEventArrayList = new MoodEventList();
+    //private MoodEventList moodEventArrayList = new MoodEventList();
     private String currentUserName;
 
 
@@ -99,22 +99,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter
-        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventArrayList);
-        mRecyclerView.setAdapter(mAdapter);
-
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadList(currentUserName);
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,8 +131,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
+    public void loadList(String currentUserName) {
         // load List to UI
+
+        User user = new User();
+
+        String query = currentUserName;
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(query);
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+
+        MoodEventList moodEventList = user.getMoodEventList();
+        ElasticsearchUserController.GetUserTask getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+
+        ArrayList<String> followeeList = user.getFolloweeIDs();
+        for  (String followee : followeeList) {
+            getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+            getUserTask1.execute(followee);
+            try {
+                User user_follow = getUserTask1.get();
+                moodEventList.addMoodEventList(user_follow.getMoodEventList());
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        }
+
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter
+        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     public void followDialogue(String username) {

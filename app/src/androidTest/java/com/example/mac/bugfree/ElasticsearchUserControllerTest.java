@@ -56,11 +56,11 @@ public class ElasticsearchUserControllerTest {
 
 
 
-//these two lines uploads the user
+            //these two lines uploads the user
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);
 
-//get user name
+            //get user name
             String query = newUser.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
             getUserTask.execute(query);
@@ -118,7 +118,8 @@ public class ElasticsearchUserControllerTest {
 
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(user_1);
-//update
+
+            //update
             String query = user_1.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
             getUserTask.execute(query);
@@ -138,6 +139,7 @@ public class ElasticsearchUserControllerTest {
             } catch (MoodStateNotAvailableException e) {
                 Log.i("Error", "MoodEvent state is wrong" );
             }
+
 //            ElasticsearchUserController.AddUserTask addUserTask1 = new ElasticsearchUserController.AddUserTask();
 //            addUserTask1.execute(user_get);
             //the following two lines updates the online version
@@ -182,6 +184,68 @@ public class ElasticsearchUserControllerTest {
             }
 
         }
+
+    @Test
+    public void elasticsearchRenewIndex(){
+        ElasticsearchUserController.createIndex();
+    }
+
+    @Test
+    public void elasticsearchAddData() {
+        ElasticsearchUserController.createIndex();//clear our team index, everything will gone
+
+        User newUser_1 = new User("John");//create user named john
+        MoodEventList moodEventList = new MoodEventList();
+        try {
+            MoodEvent moodEvent = new MoodEvent("Happy", newUser_1.getUsr());
+            MoodEvent moodEvent1 = new MoodEvent("Anger", newUser_1.getUsr());
+            moodEventList.addMoodEvent(moodEvent);
+            moodEventList.addMoodEvent(moodEvent1);
+            newUser_1.setMoodEventList(moodEventList);
+        } catch (MoodStateNotAvailableException e) {
+            Log.i("Error", "MoodEvent state is wrong" );
+        }
+
+        ArrayList<String> followerList = new ArrayList<>();
+        followerList.add("apple");
+        followerList.add("banana");
+        followerList.add("orange");
+        newUser_1.setFollowerIDs(followerList);
+
+        ArrayList<String> followList = new ArrayList<>();
+        followList.add("apple");
+        followList.add("banana");
+        followList.add("orange");
+        newUser_1.setFolloweeIDs(followList);
+
+        //these two lines uploads the user
+        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(newUser_1);
+
+        User user_2 = new User("apple");
+        MoodEventList moodEventList_1 = new MoodEventList();
+        try {
+            MoodEvent moodEvent = new MoodEvent("Happy", user_2.getUsr());
+            MoodEvent moodEvent1 = new MoodEvent("Anger", user_2.getUsr());
+            moodEventList_1.addMoodEvent(moodEvent);
+            moodEventList_1.addMoodEvent(moodEvent1);
+            user_2.setMoodEventList(moodEventList_1);
+        } catch (MoodStateNotAvailableException e) {
+            Log.i("Error", "MoodEvent state is wrong" );
+        }
+
+        addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(user_2);
+
+        User banana = new User("banana");
+        User orange = new User("orange");
+        addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(banana);
+        addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(orange);
+    }
+
+
 
 }
 
