@@ -24,7 +24,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
