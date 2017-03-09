@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.drawer_sign_out:
+
                         intent = new Intent(MainActivity.this, SignInActivity.class);
                         startActivity(intent);
                         break;

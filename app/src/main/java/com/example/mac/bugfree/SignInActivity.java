@@ -32,7 +32,7 @@ public class SignInActivity extends AppCompatActivity {
                 if(validUser(signInName)){
                     storePreference(signInName);
                     Toast.makeText(getApplicationContext(),
-                            signInName + "has just logged in on this device.",
+                            signInName + " has just logged in on this device.",
                             Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
                     finish();
@@ -59,7 +59,7 @@ public class SignInActivity extends AppCompatActivity {
                 return true;
             } else{
                 Toast.makeText(getApplicationContext(),
-                        name+"does not exist.",
+                        name+" does not exist.",
                         Toast.LENGTH_SHORT).show();
                 return false;}
         } catch (Exception e) {
