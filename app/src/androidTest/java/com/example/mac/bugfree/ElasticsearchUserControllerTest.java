@@ -198,6 +198,11 @@ public class ElasticsearchUserControllerTest {
         MoodEventList moodEventList = new MoodEventList();
         try {
             MoodEvent moodEvent = new MoodEvent("Happy", newUser_1.getUsr());
+            try {
+                moodEvent.setTriggerText("Cake");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             MoodEvent moodEvent1 = new MoodEvent("Anger", newUser_1.getUsr());
             moodEventList.addMoodEvent(moodEvent);
             moodEventList.addMoodEvent(moodEvent1);
@@ -217,6 +222,7 @@ public class ElasticsearchUserControllerTest {
         followList.add("banana");
         followList.add("orange");
         newUser_1.setFolloweeIDs(followList);
+
 
         //these two lines uploads the user
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
