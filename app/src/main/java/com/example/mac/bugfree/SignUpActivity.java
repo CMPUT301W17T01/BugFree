@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,17 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-/**
- * This is the sign up activity.This activity is being called by Sign in activity when the button is clicked.
- * An Sign up screen will show, ask user input of user name. When user enters a user name (non-null value),
- * the program checks for existence in elastic search. If it is a valid entry and does not exist yet, the
- * program creates a user with the user input string and returns to sign in screen.
- * @author Zhi Li
- */
-
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
     private String signUpName;
+    private UserList userList= new UserList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +24,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
-            /*signUpButton.setOnClickListener(new View.OnClickListener() {
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signUpName = signUpText.getText().toString();
@@ -47,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 }
             }
-        });*/
+        });
     }
 
     //Check duplicate user name

@@ -3,7 +3,6 @@
     package="com.example.mac.bugfree">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
 
     <application
         android:allowBackup="true"
@@ -24,15 +23,15 @@
         <activity android:name=".MapActivity" />
 
         <activity
-            android:name=".FilterActivity">
-            <!--android:label="@string/title_activity_filter">-->
+            android:name=".FilterActivity"
+            android:label="@string/title_activity_filter">
             <!--<intent-filter>-->
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
 
         <activity android:name=".FriendActivity" />
-        <activity android:name=".ViewMoodActivity"/>
+        <activity android:name=".ViewMoodActivity"></activity>
     </application>
 
 </manifest>

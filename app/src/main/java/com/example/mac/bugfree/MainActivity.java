@@ -1,9 +1,6 @@
 package com.example.mac.bugfree;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,21 +19,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
-import static junit.framework.Assert.assertTrue;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
-
-    // Test CardView
     private MoodEventList moodEventArrayList = new MoodEventList();
-    public User currentUser;
-    private boolean online;
+    private String currentUserName;
 
 
     @Override
@@ -44,38 +34,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //online = isNetworkAvailable();
-        //If internet connection is available, get file from elastic search first
-        if (true) {
-            String currentUserName;
-            try{
-                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-                currentUserName = pref.getString("currentUser", "");}
-            catch(Exception e){
-                 currentUserName = "";
-            }
-            if (currentUserName.equals("")) {
-                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                startActivity(intent);
-            }
-            //TODO find user using elastic search and preference
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (currentUserName.equals("")) {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
         }
-//        else {
-        //TODO if internet connection is available, get file from elastic search first
-        //TODO Offline mode
-//            Toast.makeText(getApplicationContext(),
-//                    "This device is not connected to internet.",
-//                    Toast.LENGTH_SHORT).show();
-//            //if no internet connection is available, load from local file
-//            LoadJsonFile load = new LoadJsonFile();
-//            // Load current user to local file
-//            currentUser = load.loadFile();
-//            // if currentUser is null, nobody has signed in, go to signInActivity
-//            if (currentUser == null) {
-//                Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//                startActivity(intent);
-//            }
-//        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
+        if( actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
@@ -133,15 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Test CardView
-//        try{
-//            TestCardView(moodEventArrayList);
-//        }catch(MoodStateNotAvailableException e){
-//            Toast.makeText(getApplicationContext(),
-//                    "Invalid mood state tested.",
-//                    Toast.LENGTH_SHORT).show();
-//        };
-
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -157,38 +113,30 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
     }
-        @Override
-        public boolean onCreateOptionsMenu (Menu menu){
-            getMenuInflater().inflate(R.menu.toolbar_mainactivity, menu);
-            return true;
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_mainactivity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                break;
+
+            case R.id.add_follow:
+                Toast.makeText(this, "You clicked add_follow", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
         }
-
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item){
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    mDrawerLayout.openDrawer(GravityCompat.START);
-                    break;
-
-                case R.id.add_follow:
-                    Toast.makeText(this, "You clicked add_follow", Toast.LENGTH_SHORT).show();
-                    break;
-
-                default:
-            }
-            return true;
-        }
-//
-//    public void TestCardView(MoodEventList List) throws MoodStateNotAvailableException{
-//
-//        User user1 = new User();
-//        Log.d("user1 id", Integer.toString(user1.getUsrID()));
-//        MoodEvent moodEvent1 = new MoodEvent("Anger", user1.getUsrID());
-//        MoodEvent moodEvent2 = new MoodEvent("Happy", user1.getUsrID());
-//
-//        moodEventArrayList = user1.getMoodEventList();
-//
-//    }
+        return true;
+    }
 
 
     public void loadList(ArrayList<MoodEvent> moodEventArrayList) {
@@ -202,12 +150,6 @@ public class MainActivity extends AppCompatActivity {
     public void onitemDialogue() {
         //
     }
-    //Taken from http://stackoverflow.com/questions/4238921/detect-whether-there-is-an-internet-connection-available-on-android
-    //2017-03-07
-//    private boolean isNetworkAvailable() {
-//        ConnectivityManager connectivityManager
-//                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-//        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-//    }
+
+
 }

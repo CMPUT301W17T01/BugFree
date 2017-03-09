@@ -63,9 +63,6 @@ public class FriendActivity extends AppCompatActivity {
         followList = user.getFolloweeIDs();
         notificationList = user.getPendingPermission();
 
-        Log.d("List", followerList.get(0));
-
-
 
         final ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
         final ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);

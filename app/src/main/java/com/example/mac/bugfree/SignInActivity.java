@@ -12,9 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SignInActivity extends MainActivity {
+public class SignInActivity extends AppCompatActivity {
     protected EditText loginText;
-    //private UserList userList = new UserList();
     private String signInName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +39,8 @@ public class SignInActivity extends MainActivity {
                 }
             }
         });
-
         Button signUpButton = (Button) findViewById(R.id.link_signup);
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
