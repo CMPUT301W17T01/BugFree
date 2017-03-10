@@ -23,6 +23,9 @@ import com.google.gson.reflect.TypeToken;
 
 public class LoadFile{
     private static final String FILENAME = "file.sav";
+    private static final String FILENAME2 = "filter.sav";
+    private static final String FILENAME3 = "whole.sav";
+
     private User user;
     public LoadFile(){}
     public User loadUser(Context context) {
@@ -44,4 +47,23 @@ public class LoadFile{
             return null;
         }
     }
+
+//    public MoodEventList loadFilteredMoodEventList() {
+//        try {
+//
+//            FileInputStream fis = openFileInput(FILENAME2);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+//
+//            Gson gson = new Gson();
+//
+//            personList = gson.fromJson(in, new TypeToken<List<>>(){}.getType());
+//
+//            fis.close();
+//
+//        } catch (FileNotFoundException e) {
+//            personList = new ArrayList<>();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
@@ -47,10 +46,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        setContentView(R.layout.activity_main);
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.closeDrawers();
+
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         ActionBar actionBar = getSupportActionBar();
         if( actionBar != null) {

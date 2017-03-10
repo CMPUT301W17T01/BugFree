@@ -33,6 +33,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         TextView reasonText;
         TextView dateText;
         ImageView eventHandleImage;
+        TextView colorText;
 
         ViewHolder(View view) {
             super(view);
@@ -42,6 +43,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
             reasonText = (TextView) view.findViewById(R.id.mood_event_reason);
             dateText = (TextView) view.findViewById(R.id.mood_event_date);
             eventHandleImage = (ImageView) view.findViewById(R.id.event_handle);
+            colorText = (TextView) view.findViewById(R.id.mood_color_text);
         }
     }
 
@@ -96,6 +98,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.reasonText.setText(moodEvent.getTriggerText());
         holder.dateText.setText("Date");
         holder.eventHandleImage.setImageResource(R.drawable.point);
+        holder.colorText.setText(" @" + moodEvent.getMoodState());
+        holder.colorText.setTextColor(moodEvent.getMoodColor());
 
         // write code about authority
         // if the moodEvent is not belong to user, it will not show PopupMenu

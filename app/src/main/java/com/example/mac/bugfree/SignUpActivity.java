@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
     private String signUpName;
-    private UserList userList= new UserList();
+    //private UserList userList= new UserList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
