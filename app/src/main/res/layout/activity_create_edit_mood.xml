@@ -64,24 +64,16 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="20"
-                android:id="@+id/create_edit_mood"
-                android:hint="Text Something here"
-                android:inputType="text" />
-
             <ImageView
                 android:src="@drawable/ic_add_pic"
                 android:id="@+id/add_picture"
-                android:layout_height="50dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="50dp"
                 android:maxHeight="50dp"
                 android:scaleType="fitCenter"
                 android:layout_weight="0.16"
-                android:layout_width="50dp" />
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
 
             <LinearLayout
             android:layout_marginTop="30dp"
