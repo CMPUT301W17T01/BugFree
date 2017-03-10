@@ -37,23 +37,6 @@ public class User {
         this.usr = usr;
     }
 
-//    public int getUniqueID() {
-//        return uniqueID;
-//    }
-
-//    public void setUniqueID(int uniqueID) {
-//        this.uniqueID = uniqueID;
-//    }
-
-//    public int getUsrID() {
-//        return usrID;
-//    }
-
-//    public void setUsrID(int uniqueID) {
-//        this.usrID = uniqueID;
-//        setUniqueID(uniqueID+1);
-//    }
-
     public ArrayList<String> getFolloweeIDs() {
         return this.followeeIDs;
     }

@@ -2,6 +2,7 @@ package com.example.mac.bugfree;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,9 @@ public class FriendActivity extends AppCompatActivity {
     ListView followerListView;
     ListView notificationListView;
 
+    String currentUserName;
+    User user = new User();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +51,12 @@ public class FriendActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_friend);
         setSupportActionBar(toolbar);
 
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
 
-        User user = new User("John");
-        String query = user.getUsr();
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        String query = currentUserName;
+        ElasticsearchUserController.GetUserTask getUserTask =
+                new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
 
         try{
@@ -62,9 +68,6 @@ public class FriendActivity extends AppCompatActivity {
         followerList = user.getFollowerIDs();
         followList = user.getFolloweeIDs();
         notificationList = user.getPendingPermission();
-
-        Log.d("List", followerList.get(0));
-
 
 
         final ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
@@ -81,14 +84,9 @@ public class FriendActivity extends AppCompatActivity {
             @Override
             public void onTabChanged(String tabId) {
 
-                for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                    TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-                    tv.setTextColor(Color.parseColor("#ffffff"));
-                    tv.setTextSize(13);
-                }
-
-                TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-                tv.setTextColor(Color.parseColor("#3399ff"));
+                TextView tv = (TextView) tabHost.getCurrentTabView().
+                        findViewById(android.R.id.title); //for Selected Tab
+                tv.setTextColor(Color.parseColor("#ffffff"));
                 tv.setTextSize(13);
 
                 switch (tabHost.getCurrentTab()){
@@ -122,6 +120,13 @@ public class FriendActivity extends AppCompatActivity {
         tabSpec.setContent(R.id.Notification);
         tabSpec.setIndicator("Notification");
         tabHost.addTab(tabSpec);
+
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i)
+                    .findViewById(android.R.id.title); //Unselected Tabs
+            tv.setTextColor(Color.parseColor("#ffffff"));
+            tv.setTextSize(13);
+        }
 
     }
 
@@ -183,26 +188,47 @@ public class FriendActivity extends AppCompatActivity {
             super(context, R.layout.list_notification_item, notificationList);
         }
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(final int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_notification_item, parent, false);
 
-            String singleNotification = getItem(position).toString();
-            TextView notificationName = (TextView) view.findViewById(R.id.notificationID);
+            final String singleNotification = notificationList.get(position).toString();
+            final TextView notificationName = (TextView) view.findViewById(R.id.notificationID);
             notificationName.setText(singleNotification);
-            Button acceptBtn = (Button) findViewById(R.id.acceptBtn);
-            Button declineBtn = (Button) findViewById(R.id.declineBtn);
+            Button acceptBtn = (Button) view.findViewById(R.id.acceptBtn);
+            Button declineBtn = (Button) view.findViewById(R.id.declineBtn);
             acceptBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"xxx has been accepted", Toast.LENGTH_SHORT).show();
+                    followerList.add(singleNotification);
+                    notificationList.remove(position);
+                    ArrayAdapter<User> adapter = new NotificationListAdapter(FriendActivity.this,
+                            notificationList);
+                    notificationListView.setAdapter(adapter);
+
+                    ElasticsearchUserController.AddUserTask addUserTask =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+
+                    Toast.makeText(getApplicationContext(), singleNotification+
+                            " has been accepted", Toast.LENGTH_SHORT).show();
                 }
             });
 
             declineBtn.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"xxx has been declined", Toast.LENGTH_SHORT).show();
+                    notificationList.remove(position);
+                    ArrayAdapter<User> adapter = new NotificationListAdapter(FriendActivity.this,
+                            notificationList);
+                    notificationListView.setAdapter(adapter);
+
+                    ElasticsearchUserController.AddUserTask addUserTask =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+
+                    Toast.makeText(getApplicationContext(), singleNotification+
+                            " has been declined", Toast.LENGTH_SHORT).show();
                 }
             });
             return view;

@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -52,8 +53,10 @@ public class FilterActivity extends AppCompatActivity {
     private int flag;
     private ArrayList<String> followeeList;
     private MoodEventList moodListBeforeFilter = new MoodEventList();
-    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<MoodEvent>();
+    private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
 //    private MoodEventList moodListAfterFilter = new MoodEventList();
+    private Calendar currentDATE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +65,10 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//        String current_user = pref.getString("currentUser", "");
+        String current_user = pref.getString("currentUser", "");
 
-        User user = new User("John");
+
+        User user = new User("1Sam");
         String query = user.getUsr();
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
@@ -280,7 +284,10 @@ public class FilterActivity extends AppCompatActivity {
     //TODO
     public void filterByMyMostRece(){
         //test
-        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
+        currentDATE = Calendar.getInstance();
+        Toast.makeText(this,"Date" + currentDATE,Toast.LENGTH_LONG).show();
+
+//        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
     }
 
     //TODO
@@ -290,8 +297,7 @@ public class FilterActivity extends AppCompatActivity {
         for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
             moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
         }
-//        moodListAfterFilter = moodListBeforeFilter;
-        Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
     public void filterByFoMostRece(){
