@@ -191,14 +191,33 @@
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:orientation="horizontal"
                 android:layout_weight="0.16">
 
-                <TextClock
-                    android:layout_width="match_parent"
+                <DatePicker
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textClock"
-                    android:layout_weight="1" />
+                    android:id="@+id/datePicker"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:datePickerMode="spinner"
+                    android:calendarViewShown="false"
+                    android:layout_marginLeft="-30dp"
+                    android:layout_marginRight="-40dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="-10dp"/>
+
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:layout_marginLeft="-45dp"
+                    android:layout_marginRight="-50dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="-10dp"
+                    android:timePickerMode="spinner" />
 
             </LinearLayout>
 
