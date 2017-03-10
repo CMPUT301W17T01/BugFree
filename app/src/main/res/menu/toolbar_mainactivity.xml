@@ -5,7 +5,7 @@
     <item
         android:id="@+id/add_follow"
         android:icon="@drawable/add_follow"
-        android:title="add_follow"
+        android:title="Add Follow"
         app:showAsAction="never" />
 
 </menu>

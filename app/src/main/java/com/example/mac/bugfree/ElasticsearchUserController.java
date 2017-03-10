@@ -132,7 +132,7 @@ public class ElasticsearchUserController {
             }
             client.execute(new CreateIndex.Builder("cmput301w17t01").build());
         } catch (Exception e) {
-            Log.i("Error", "Somthing went wrong when we tried to communicate with the elasticsearch server!");
+            Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
         }
     }
 
