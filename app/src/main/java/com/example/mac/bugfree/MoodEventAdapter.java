@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
@@ -85,9 +86,9 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        MoodEvent moodEvent = mmoodEventArrayList.getMoodEvent(position);
+        final MoodEvent moodEvent = mmoodEventArrayList.getMoodEvent(position);
         holder.iconImage.setImageResource(moodEvent.getMoodIcon());
         //holder.usernameText.setText("Username");
         holder.usernameText.setText(moodEvent.getBelongsTo());
@@ -101,6 +102,19 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         if (!moodEvent.getBelongsTo().equals(currentUser)) {
             holder.eventHandleImage.setVisibility(View.INVISIBLE);
         }
+
+//        this.context.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                final MoodEvent moodEvent = mmoodEventArrayList.getMoodEvent(position);
+//                holder.iconImage.setImageResource(moodEvent.getMoodIcon());
+//                holder.usernameText.setText(moodEvent.getBelongsTo());
+//                holder.picImage.setImageResource(R.drawable.picture_text);
+//                holder.reasonText.setText(moodEvent.getTriggerText());
+//                holder.dateText.setText("Date");
+//                holder.eventHandleImage.setImageResource(R.drawable.point);
+//            }
+//        });
 
     }
 
