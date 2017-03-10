@@ -58,7 +58,7 @@ public class MoodEvent {
     private String moodState;
     private Integer moodColor;
     private Integer moodIcon;
-    private String dateOfRecord;
+    private GregorianCalendar dateOfRecord;
     private String triggerText;
     private String socialSituation;
     private String urlPic;
@@ -185,11 +185,11 @@ public class MoodEvent {
     }
     // Reference https://www.mkyong.com/java/java-date-and-calendar-examples/
     // At 2017-02-26 15:00
-    public String getDateOfRecord() {
+    public GregorianCalendar getDateOfRecord() {
         return dateOfRecord;
     }
 
-    public void setDateOfRecord(String dateOfRecord) {
+    public void setDateOfRecord(GregorianCalendar dateOfRecord) {
         this.dateOfRecord = dateOfRecord;
     }
 }

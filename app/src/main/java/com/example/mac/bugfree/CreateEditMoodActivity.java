@@ -216,7 +216,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setTriggerText(reason);
         }catch (TriggerTooLongException e){}
 
-        moodEvent.setDateOfRecord(date);
+        //moodEvent.setDateOfRecord(date);
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
