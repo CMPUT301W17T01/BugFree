@@ -28,15 +28,15 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signUpName = signUpText.getText().toString();
-                if (notExist(signUpName) ||!signUpName.equals("")){
+                if (notExist(signUpName) &&!signUpName.equals("")){
                     if (createUser(signUpName)) {
                         Toast.makeText(getApplicationContext(),
-                                "User " + signUpName + "created.",
+                                "User " + signUpName + " created.",
                                 Toast.LENGTH_SHORT).show();
                         finish();
                     }else{
                         Toast.makeText(getApplicationContext(),
-                                "Unknown error. User " + signUpName + "not created.",
+                                "Unknown error. User " + signUpName + " not created.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -53,7 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
                 return true;
             } else{
                 Toast.makeText(getApplicationContext(),
-                        "Not created, "+signUpName+"already exists.",
+                        "Not created, "+signUpName+" already exists.",
                         Toast.LENGTH_SHORT).show();
                 return false;}
         } catch (Exception e) {

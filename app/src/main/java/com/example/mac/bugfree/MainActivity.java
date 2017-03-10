@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.drawer_sign_out:
+                        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
+                        editor.putString("currentUser","");
+                        editor.apply();
                         intent = new Intent(MainActivity.this, SignInActivity.class);
                         startActivity(intent);
                         break;
