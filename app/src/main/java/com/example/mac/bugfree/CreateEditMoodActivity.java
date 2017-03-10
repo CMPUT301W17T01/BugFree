@@ -13,10 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author Mengyang Chen
@@ -24,14 +32,15 @@ import android.widget.Toast;
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     //Test
-    private String current_user, mood_state, social_situation, reason, mood_text, date;
-    //private Date date;
-
-    EditText create_edit_reason, create_edit_date;
+    private String current_user, mood_state, social_situation, reason;
+    Date date = null;
+    private String test;
+    private EditText create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
     ArrayAdapter<CharSequence> adapter2;
     ImageView add_pic, home_tab;
     Spinner mood_state_spinner, social_situation_spinner;
+    CheckBox current_time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +49,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
 
-        create_edit_date = (EditText)findViewById(R.id.create_edit_date);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
 
@@ -49,6 +56,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
         add_pic = (ImageView)findViewById(R.id.add_picture);
+        current_time = (CheckBox)findViewById(R.id.current_time);
 
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +131,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                reason = create_edit_reason.getText().toString();
+
+                if (create_edit_reason.getText().toString().split("\\s+").length>3){
+                    create_edit_reason.setError("Only the first 3 words will be recorded");
+
+                }
+                else {
+                    reason = create_edit_reason.getText().toString();
+                }
                 //TODO store the reason and limit the letters to 3
             }
 
@@ -133,23 +148,23 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-        create_edit_date.addTextChangedListener(new TextWatcher() {
+
+        current_time.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                date = create_edit_date.getText().toString();
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+            public void onClick(View v) {
+                GregorianCalendar dateOfRecord = new GregorianCalendar();
+                date = dateOfRecord.getTime();
+                SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
+                fmt.applyPattern("yyyy-MM-dd HH:mm");
+                try {
+                    date = fmt.parse(date.toString());
+                }catch (ParseException e){
+                    Log.i("error message","");
+                }
+                //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
+                Toast.makeText(getApplicationContext(), fmt.format(date), Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -168,14 +183,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 current_user = pref.getString("currentUser", "");
                 //current_user  = "0John";
-                try {
-                    setMoodEvent(current_user, mood_state, social_situation,reason, date);
-                }catch (MoodStateNotAvailableException e){
-
+                if(mood_state == null){
+                    Toast.makeText(getApplicationContext(), "Choose a mood state and a picture please", Toast.LENGTH_SHORT).show();
+                    break;
                 }
-                setResult(RESULT_OK);
-                finish();
+                else {
+                    try {
+                        setMoodEvent(current_user, mood_state, social_situation, reason, date);
+                    } catch (MoodStateNotAvailableException e) {
 
+                    }
+                    setResult(RESULT_OK);
+                    finish();
+                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -190,7 +210,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, String date)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason,Date date)
             throws MoodStateNotAvailableException{
         User user = new User();
 
@@ -205,16 +225,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             Log.i("Error", "Failed to get the User out of the async object");
         }
 
-        Log.d("Text", user.getMoodEventList().getMoodEvent(1).getMoodState());
+        //Log.d("Text", user.getMoodEventList().getMoodEvent(1).getMoodState());
         MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
 
-        try {
-            moodEvent.setSocialSituation(social_situation);
-        } catch (InvalidSSException e){}
-
-        try{
-            moodEvent.setTriggerText(reason);
-        }catch (TriggerTooLongException e){}
+        moodEvent.setSocialSituation(social_situation);
+        moodEvent.setTriggerText(reason);
+        //moodEvent.setDateOfRecord(date);
 
         //moodEvent.setDateOfRecord(date);
 
