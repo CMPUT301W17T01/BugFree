@@ -77,8 +77,7 @@ public class FilterActivity extends AppCompatActivity {
 
         User user = new User("John");
         String query = current_user;
-        ElasticsearchUserController.GetUserTask getUserTask =
-                new ElasticsearchUserController.GetUserTask();
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
 
         try{
@@ -91,7 +90,7 @@ public class FilterActivity extends AppCompatActivity {
         followeeList  = user.getFolloweeIDs();
         moodListBeforeFilterMy = user.getMoodEventList();
 
-        ElasticsearchUserController.GetUserTask getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+        ElasticsearchUserController.GetUserTask getUserTask1 = new ElasticsearchUserController.GetUserTask();
 
         for  (String followee : followeeList) {
             getUserTask1 = new  ElasticsearchUserController.GetUserTask();
