@@ -38,7 +38,7 @@ public class MoodEventList {
         this.moodEventArrayList.addAll(moodEventList.transferMoodEventListToArray());
     }
 
-    private ArrayList<MoodEvent> transferMoodEventListToArray(){
+    public ArrayList<MoodEvent> transferMoodEventListToArray(){
         return this.moodEventArrayList;
     }
 
