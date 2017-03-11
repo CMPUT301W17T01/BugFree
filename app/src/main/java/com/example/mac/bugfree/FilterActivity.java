@@ -73,10 +73,10 @@ public class FilterActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
 
-
-        User user = new User("1Sam");
-        String query = user.getUsr();
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        User user = new User();
+        String query = current_user;
+        ElasticsearchUserController.GetUserTask getUserTask =
+                new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
 
         try{
@@ -84,6 +84,7 @@ public class FilterActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Error", "Failed to get the User out of the async object");
         }
+
 
         followeeList  = user.getFolloweeIDs();
         moodListBeforeFilter = user.getMoodEventList();
@@ -196,7 +197,7 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
-        
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -294,14 +295,22 @@ public class FilterActivity extends AppCompatActivity {
         currentDATE = Calendar.getInstance();
         lowerBoundDATE = Calendar.getInstance();
         lowerBoundDATE.add(Calendar.DATE, -6);
+//        Calendar test0 = Calendar.getInstance();
+//        test0.add(Calendar.DATE, -6);
 
+        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
+            Calendar dateOfMood = moodListBeforeFilter.getMoodEvent(i).getDateOfRecord();
+            if ((dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) || dateOfMood.compareTo(currentDATE) == 0) {
+                moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
 
-        
-        if ((test0.compareTo(lowerBoundDATE) >= 0 && test0.compareTo(currentDATE) <= 0) || test0.compareTo(currentDATE) == 0) {
-            Toast.makeText(this, "test0 is True", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "test0 is False", Toast.LENGTH_LONG).show();
+            }
         }
+        
+//        if ((test0.compareTo(lowerBoundDATE) >= 0 && test0.compareTo(currentDATE) <= 0) || test0.compareTo(currentDATE) == 0) {
+//            Toast.makeText(this, "test0 is True", Toast.LENGTH_LONG).show();
+//        } else {
+//            Toast.makeText(this, "test0 is False", Toast.LENGTH_LONG).show();
+//        }
     }
 
     //TODO
