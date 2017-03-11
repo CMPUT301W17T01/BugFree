@@ -59,6 +59,7 @@ public class MoodEvent {
     private Integer moodColor;
     private Integer moodIcon;
     private GregorianCalendar dateOfRecord;
+    private GregorianCalendar realtime;
     private String triggerText;
     private String socialSituation;
     private String urlPic;
@@ -182,5 +183,13 @@ public class MoodEvent {
 
     public void setDateOfRecord(GregorianCalendar dateOfRecord) {
         this.dateOfRecord = dateOfRecord;
+    }
+
+    public GregorianCalendar getRealtime() {
+        return realtime;
+    }
+
+    public void setRealtime(GregorianCalendar realtime) {
+        this.realtime = realtime;
     }
 }
