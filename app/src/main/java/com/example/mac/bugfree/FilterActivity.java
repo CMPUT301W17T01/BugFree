@@ -194,6 +194,12 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        currentDATE = Calendar.getInstance();
+        currentDATE.add(Calendar.MONTH, 1);
+        lowerBoundDATE = Calendar.getInstance();
+        lowerBoundDATE.add(Calendar.MONTH, 1);
+        lowerBoundDATE.add(Calendar.DATE, -6);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -306,28 +312,12 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void filterByMyMostRece() {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        currentDATE = Calendar.getInstance();
-        //TEST
-        currentDATE.add(Calendar.DATE, 1);
-        lowerBoundDATE = Calendar.getInstance();
-        lowerBoundDATE.add(Calendar.DATE, -6);
-        int j = 0;
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
             dateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getDateOfRecord();
             if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
-                j = 1;
-                break;
             }
         }
-        Toast.makeText(this,"This is : " + fmt.format(dateOfMood.getTime()),Toast.LENGTH_LONG).show();
-        Toast.makeText(this,"This is : " +j,Toast.LENGTH_LONG).show();
-
-//        Toast.makeText(this,"This is : " + fmt.format(currentDATE.getTime()),Toast.LENGTH_LONG).show();
-
-
-
     }
 
     public void filterByMyDisplayAll(){
@@ -335,24 +325,16 @@ public class FilterActivity extends AppCompatActivity {
             moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
         }
     }
-    //TODO
-    public void filterByFoMostRece(){
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        currentDATE = Calendar.getInstance();
-        currentDATE.add(Calendar.DATE, 1);
-        lowerBoundDATE = Calendar.getInstance();
-        lowerBoundDATE.add(Calendar.DATE, -6);
 
+    public void filterByFoMostRece(){
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
-            Calendar dateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getDateOfRecord();
-            if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) < 0) {
+            dateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getDateOfRecord();
+            if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
-
     }
 
-    //TODO
     public void filterByFoDisplayAll(){
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
             moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
@@ -360,7 +342,6 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void filterByMyMoodState(String selectedMoodState){
-
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
             stateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getMoodState();
             if (stateOfMood.equals(selectedMoodState)) {
@@ -370,7 +351,6 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public void filterByFoMoodState(String selectedMoodState){
-
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
             stateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getMoodState();
             if (stateOfMood.equals(selectedMoodState)) {
