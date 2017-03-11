@@ -67,6 +67,7 @@ public class MoodEvent {
     //private User user;
     //private UserList userList;
 
+
     /* To create a mood event, two factors are needed.
         1. A mood state(happy/sad etc.)
         2. A creator ID (unique user ID, integer)
@@ -161,26 +162,17 @@ public class MoodEvent {
         return socialSituation;
     }
 
-    public void setSocialSituation(String socialSituation) throws InvalidSSException{
-        if (socialSituation.equals(alone)||socialSituation.equals(withOne)
-                ||socialSituation.equals(moreThanTwo)||socialSituation.equals(crowd)){
+    public void setSocialSituation(String socialSituation) {
             this.socialSituation = socialSituation;
-        }else{
-            throw new InvalidSSException();
-        }
+
     }
 
     public String getTriggerText() {
         return triggerText;
     }
 
-    public void setTriggerText(String triggerText) throws TriggerTooLongException {
-        if (triggerText.length() >20 ||triggerText.split("\\s+").length >3){
-            //\\W+ means all non-word (space, symbol like @ etc.)\\s+ means one or more space
-            //Refer to http://stackoverflow.com/questions/13225175/java-string-split-with-a-regex
-            //TODO:separate by space or symbol?
-            throw new TriggerTooLongException();
-        }else{this.triggerText = triggerText;}
+    public void setTriggerText(String triggerText) {
+        this.triggerText = triggerText;
     }
     // Reference https://www.mkyong.com/java/java-date-and-calendar-examples/
     // At 2017-02-26 15:00

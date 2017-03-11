@@ -61,4 +61,8 @@ public class ViewMoodActivity extends AppCompatActivity {
     public boolean load_mood_list(){
         return true;
     }
+
+    protected void onStart(){
+        super.onStart();
+    }
 }

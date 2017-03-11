@@ -64,24 +64,16 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/create_mood"
-                android:hint="Text Something(Reason)" />
-
             <ImageView
                 android:src="@drawable/ic_add_pic"
                 android:id="@+id/add_picture"
-                android:layout_height="50dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="50dp"
                 android:maxHeight="50dp"
                 android:scaleType="fitCenter"
                 android:layout_weight="0.16"
-                android:layout_width="50dp" />
+                android:layout_width="60dp"
+                android:layout_height="60dp" />
 
             <LinearLayout
             android:layout_marginTop="30dp"
@@ -152,13 +144,17 @@
                 android:textStyle="normal|bold"
                 android:layout_marginLeft="10dp" />
 
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/reason"
+                android:ems="20"
+                android:maxLength="20"
+                android:id="@+id/create_edit_reason"
                 android:inputType="text"
                 android:layout_marginLeft="10dp" />
+
+
         </LinearLayout>
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -176,14 +172,55 @@
                     android:textStyle="normal|bold"
                     android:layout_marginLeft="10dp" />
 
-                <EditText
-                    android:layout_width="173dp"
+            <TextView
+                android:text="(Use Current time?)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_weight="1.65" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/current_time"
+                android:layout_weight="1.65" />
+
+        </LinearLayout>
+
+            <LinearLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+                android:layout_weight="0.16">
+
+                <DatePicker
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:id="@+id/date"
-                    android:inputType="date"
-                    android:hint="DD/MM/YY" />
+                    android:id="@+id/datePicker"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:datePickerMode="spinner"
+                    android:calendarViewShown="false"
+                    android:layout_marginLeft="-30dp"
+                    android:layout_marginRight="-40dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="-10dp"/>
+
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker"
+                    android:scaleX="0.7"
+                    android:scaleY="0.7"
+                    android:layout_marginLeft="-45dp"
+                    android:layout_marginRight="-50dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="-10dp"
+                    android:timePickerMode="spinner" />
+
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
