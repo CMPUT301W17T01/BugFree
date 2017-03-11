@@ -34,8 +34,10 @@ public class SignInActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             signInName + " has just logged in on this device.",
                             Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    finish();
+                    //setResult(RESULT_OK);
+                    //finish();
+                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });
