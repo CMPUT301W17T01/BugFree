@@ -30,8 +30,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -56,6 +58,10 @@ public class FilterActivity extends AppCompatActivity {
     private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
 //    private MoodEventList moodListAfterFilter = new MoodEventList();
     private Calendar currentDATE;
+    private Calendar lowerBoundDATE;
+
+
+
 
 
     @Override
@@ -67,10 +73,10 @@ public class FilterActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
 
-
-        User user = new User("1Sam");
-        String query = user.getUsr();
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        User user = new User();
+        String query = current_user;
+        ElasticsearchUserController.GetUserTask getUserTask =
+                new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
 
         try{
@@ -78,6 +84,7 @@ public class FilterActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Error", "Failed to get the User out of the async object");
         }
+
 
         followeeList  = user.getFolloweeIDs();
         moodListBeforeFilter = user.getMoodEventList();
@@ -190,7 +197,7 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
-        
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -282,12 +289,28 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     //TODO
-    public void filterByMyMostRece(){
+    public void filterByMyMostRece() {
         //test
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         currentDATE = Calendar.getInstance();
-        Toast.makeText(this,"Date" + currentDATE,Toast.LENGTH_LONG).show();
+        lowerBoundDATE = Calendar.getInstance();
+        lowerBoundDATE.add(Calendar.DATE, -6);
+//        Calendar test0 = Calendar.getInstance();
+//        test0.add(Calendar.DATE, -6);
 
-//        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
+        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
+            Calendar dateOfMood = moodListBeforeFilter.getMoodEvent(i).getDateOfRecord();
+            if ((dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) || dateOfMood.compareTo(currentDATE) == 0) {
+                moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
+
+            }
+        }
+        
+//        if ((test0.compareTo(lowerBoundDATE) >= 0 && test0.compareTo(currentDATE) <= 0) || test0.compareTo(currentDATE) == 0) {
+//            Toast.makeText(this, "test0 is True", Toast.LENGTH_LONG).show();
+//        } else {
+//            Toast.makeText(this, "test0 is False", Toast.LENGTH_LONG).show();
+//        }
     }
 
     //TODO
