@@ -24,17 +24,10 @@ import java.util.ArrayList;
 
 public class FriendActivity extends AppCompatActivity {
 
-    //UserList userlist = new UserList();
-    //int currentUserID = userlist.getCurrentUserID();
-    //User currentUser = userlist.getUser(currentUserID);
-
-
-//    ArrayList followList = currentUser.getFolloweeIDs();
-//    ArrayList followerList = currentUser.getFollowerIDs();
-//    ArrayList notificationList = currentUser.getPendingPermission();
     ArrayList<String> followList;
     ArrayList<String> followerList;
     ArrayList<String> notificationList;
+    ArrayList<String> anotherfollowList;
     ListView followListView;
     ListView followerListView;
     ListView notificationListView;
@@ -209,6 +202,29 @@ public class FriendActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+
+
+
+                    //another user's follow list
+
+                    User anotherUser = new User(singleNotification);
+
+                    ElasticsearchUserController.GetUserTask getUserTask =
+                            new ElasticsearchUserController.GetUserTask();
+                    getUserTask.execute(singleNotification);
+                    try{
+                        anotherUser = getUserTask.get();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get the User out of the async object");
+                    }
+
+                    anotherfollowList = anotherUser.getFolloweeIDs();
+                    anotherfollowList.add(currentUserName);
+
+                    ElasticsearchUserController.AddUserTask addUserTask2 =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask2.execute(anotherUser);
+
 
                     Toast.makeText(getApplicationContext(), singleNotification+
                             " has been accepted", Toast.LENGTH_SHORT).show();
