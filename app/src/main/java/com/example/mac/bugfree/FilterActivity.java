@@ -62,6 +62,8 @@ public class FilterActivity extends AppCompatActivity {
     private Calendar currentDATE;
     private Calendar lowerBoundDATE;
     private Calendar dateOfMood;
+    private String stateOfMood;
+
 
 
     @Override
@@ -306,6 +308,7 @@ public class FilterActivity extends AppCompatActivity {
     public void filterByMyMostRece() {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         currentDATE = Calendar.getInstance();
+        //TEST
         currentDATE.add(Calendar.DATE, 1);
         lowerBoundDATE = Calendar.getInstance();
         lowerBoundDATE.add(Calendar.DATE, -6);
@@ -314,8 +317,13 @@ public class FilterActivity extends AppCompatActivity {
             dateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getDateOfRecord();
             if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
+                break;
             }
         }
+        Toast.makeText(this,"This is : " + fmt.format(dateOfMood.getTime()),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"This is : " + fmt.format(currentDATE.getTime()),Toast.LENGTH_LONG).show();
+
+
 
     }
 
@@ -348,16 +356,24 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    //TODO
     public void filterByMyMoodState(String selectedMoodState){
-        //test
-        Toast.makeText(this,"Myself Mood State: "+ selectedMoodState,Toast.LENGTH_LONG).show();
+
+        for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            stateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getMoodState();
+            if (stateOfMood.equals(selectedMoodState)) {
+                moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
+            }
+        }
     }
 
-    //TODO
     public void filterByFoMoodState(String selectedMoodState){
-        //test
-        Toast.makeText(this,"Following Mood State: " + selectedMoodState,Toast.LENGTH_LONG).show();
+
+        for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            stateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getMoodState();
+            if (stateOfMood.equals(selectedMoodState)) {
+                moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
+            }
+        }
     }
 
     //TODO
