@@ -41,7 +41,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //Test
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
-    private boolean is_checked = false;
+    //private boolean is_checked = false;
     private String test;
     private EditText create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
@@ -51,7 +51,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     CheckBox current_time_checkbox;
     List<Integer> date_time_list = new ArrayList<>();
     GregorianCalendar dateOfRecord;
-    GregorianCalendar realTime;
     DatePicker simpleDatePicker;
     TimePicker simpleTimePicker;
     @Override
@@ -72,7 +71,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox = (CheckBox)findViewById(R.id.current_time);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(timePicker);
-        realTime = real_time();
 
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,18 +163,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         });
 
 
-        current_time_checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(current_time_checkbox.isChecked()) {
-                    is_checked = true;
-                    Toast.makeText(getApplicationContext(), "Use Current time ", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    //TODO add spinner for the select date and time
-                }
-            }
-        });
+//        current_time_checkbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(current_time_checkbox.isChecked()) {
+//                    Toast.makeText(getApplicationContext(), "Use Current time ", Toast.LENGTH_LONG).show();
+//                }
+//                else{
+//                    //TODO add spinner for the select date and time
+//                }
+//            }
+//        });
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         simpleDatePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -253,11 +250,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setSocialSituation(social_situation);
         moodEvent.setTriggerText(reason);
 
-        moodEvent.setDateOfRecord(dateOfRecord);
+        //moodEvent.setRealtime(realTime);
+        //moodEvent.setDateOfRecord(dateOfRecord);
         if(current_time_checkbox.isChecked()) {
            dateOfRecord = real_time();
+           moodEvent.setRealtime(dateOfRecord);
+           moodEvent.setDateOfRecord(dateOfRecord);
+        } else {
+            moodEvent.setRealtime(real_time());
+            moodEvent.setDateOfRecord(dateOfRecord);
         }
-        moodEvent.setRealtime(realTime);
+
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
@@ -266,6 +269,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         addUserTask.execute(user);
     }
     private GregorianCalendar real_time(){
+        GregorianCalendar time;
         GregorianCalendar current = new GregorianCalendar();
         date = current.getTime();
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
@@ -310,9 +314,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         date_time_list.add(minute);
         date_time_list.add(second);
         //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
-        dateOfRecord = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
+        time = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
                 date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
-        return dateOfRecord;
+
+        return time;
     }
     protected void onStart(){
         super.onStart();
