@@ -35,6 +35,7 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
 
         usr.setFolloweeIDs(AL1);
         usr.setFollowerIDs(AL2);
+
         usr.setPendingPermissions(AL3);
 
         MoodEventList MEL = new MoodEventList();

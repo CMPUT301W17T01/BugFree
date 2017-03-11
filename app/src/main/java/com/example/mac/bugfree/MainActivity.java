@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         try{
             user = getUserTask.get();
         } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+            //Log.i("Error", "Failed to get the User out of the async object");
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -171,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                 User user_follow = getUserTask1.get();
                 moodEventList.addMoodEventList(user_follow.getMoodEventList());
             } catch (Exception e) {
-                Log.i("Error", "Failed to get the User out of the async object");
+                //Log.i("Error", "Failed to get the User out of the async object");
             }
         }
 
@@ -250,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "The user does not exist", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+            //Log.i("Error", "Failed to get the User out of the async object");
         }
 
     }
