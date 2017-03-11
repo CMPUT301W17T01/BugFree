@@ -54,14 +54,14 @@ public class FilterActivity extends AppCompatActivity {
     private String enteredFoReason;
     private int flag;
     private ArrayList<String> followeeList;
-    private MoodEventList moodListBeforeFilter = new MoodEventList();
+    private MoodEventList moodListBeforeFilterMy = new MoodEventList();
+    private MoodEventList moodListBeforeFilterFo = new MoodEventList();
+
     private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
 //    private MoodEventList moodListAfterFilter = new MoodEventList();
     private Calendar currentDATE;
     private Calendar lowerBoundDATE;
-
-
-
+    private Calendar dateOfMood;
 
 
     @Override
@@ -73,7 +73,7 @@ public class FilterActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
 
-        User user = new User();
+        User user = new User("John");
         String query = current_user;
         ElasticsearchUserController.GetUserTask getUserTask =
                 new ElasticsearchUserController.GetUserTask();
@@ -87,8 +87,20 @@ public class FilterActivity extends AppCompatActivity {
 
 
         followeeList  = user.getFolloweeIDs();
-        moodListBeforeFilter = user.getMoodEventList();
+        moodListBeforeFilterMy = user.getMoodEventList();
 
+        ElasticsearchUserController.GetUserTask getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+
+        for  (String followee : followeeList) {
+            getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+            getUserTask1.execute(followee);
+            try {
+                User user_follow = getUserTask1.get();
+                moodListBeforeFilterFo.addMoodEventList(user_follow.getMoodEventList());
+            } catch (Exception e) {
+                //Log.i("Error", "Failed to get the User out of the async object");
+            }
+        }
 
         // content of tab Myself
         myEmotionalStateSpinner = (Spinner) findViewById(R.id.spinner_myself);
@@ -147,6 +159,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+
         //spinner for myself
         adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -178,6 +191,7 @@ public class FilterActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
@@ -220,8 +234,12 @@ public class FilterActivity extends AppCompatActivity {
                     setErrorMessages();
                     break;
                 }
-
-                saveInFile();
+                if(flag == 1){
+                    saveInFile();
+                }
+                if (flag == 0){
+                    deleteFile("filter.sav");
+                }
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
 
@@ -284,54 +302,50 @@ public class FilterActivity extends AppCompatActivity {
         }
 
     }
-    public boolean filterList(){
-        return true;
-    }
 
-    //TODO
     public void filterByMyMostRece() {
-        //test
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         currentDATE = Calendar.getInstance();
+        currentDATE.add(Calendar.DATE, 1);
         lowerBoundDATE = Calendar.getInstance();
         lowerBoundDATE.add(Calendar.DATE, -6);
-//        Calendar test0 = Calendar.getInstance();
-//        test0.add(Calendar.DATE, -6);
 
-        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
-            Calendar dateOfMood = moodListBeforeFilter.getMoodEvent(i).getDateOfRecord();
-            if ((dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) || dateOfMood.compareTo(currentDATE) == 0) {
-                moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
-
+        for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            dateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getDateOfRecord();
+            if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
+                moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
-        
-//        if ((test0.compareTo(lowerBoundDATE) >= 0 && test0.compareTo(currentDATE) <= 0) || test0.compareTo(currentDATE) == 0) {
-//            Toast.makeText(this, "test0 is True", Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(this, "test0 is False", Toast.LENGTH_LONG).show();
-//        }
+
     }
 
-    //TODO
     public void filterByMyDisplayAll(){
-
-        //test
-        for (int i = 0; i < moodListBeforeFilter.getCount(); i++ ){
-            moodListAfterFilter.add(moodListBeforeFilter.getMoodEvent(i));
+        for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
         }
-//        Toast.makeText(this,"Myself Display All",Toast.LENGTH_LONG).show();
     }
     //TODO
     public void filterByFoMostRece(){
-        //test
-        Toast.makeText(this,"Following Most Recent Week",Toast.LENGTH_LONG).show();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        currentDATE = Calendar.getInstance();
+        currentDATE.add(Calendar.DATE, 1);
+        lowerBoundDATE = Calendar.getInstance();
+        lowerBoundDATE.add(Calendar.DATE, -6);
+
+        for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            Calendar dateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getDateOfRecord();
+            if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) < 0) {
+                moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
+            }
+        }
+
     }
 
     //TODO
     public void filterByFoDisplayAll(){
-        //test
-        Toast.makeText(this,"Following Display All",Toast.LENGTH_LONG).show();
+        for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
+        }
     }
 
     //TODO
