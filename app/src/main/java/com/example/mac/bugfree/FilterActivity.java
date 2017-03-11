@@ -30,8 +30,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class FilterActivity extends AppCompatActivity {
@@ -56,6 +58,10 @@ public class FilterActivity extends AppCompatActivity {
     private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
 //    private MoodEventList moodListAfterFilter = new MoodEventList();
     private Calendar currentDATE;
+    private Calendar lowerBoundDATE;
+
+
+
 
 
     @Override
@@ -284,10 +290,56 @@ public class FilterActivity extends AppCompatActivity {
     //TODO
     public void filterByMyMostRece(){
         //test
+        Date date = new Date();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         currentDATE = Calendar.getInstance();
-        Toast.makeText(this,"Date" + currentDATE,Toast.LENGTH_LONG).show();
+//        Toast.makeText(this,"Date " + fmt.format(currentDATE.getTime()),Toast.LENGTH_LONG).show();
+        lowerBoundDATE = Calendar.getInstance();
 
-//        Toast.makeText(this,"Myself Most Recent Week",Toast.LENGTH_LONG).show();
+        Calendar test0 = Calendar.getInstance();
+        Calendar test1 = Calendar.getInstance();
+        Calendar test2 = Calendar.getInstance();
+        Calendar test3 = Calendar.getInstance();
+        Calendar test4 = Calendar.getInstance();
+
+        lowerBoundDATE.add(Calendar.DATE, -6);
+//        Toast.makeText(this,"The lower " + fmt.format(lowerBoundDATE.getTime()),Toast.LENGTH_LONG).show();
+//
+        test0.add(Calendar.DATE, -5);//t
+        test1.add(Calendar.DATE, 1);//f
+        test2.add(Calendar.DATE, -7);//f
+        test4.add(Calendar.DATE, -6);//t
+
+
+        if((test0.compareTo(lowerBoundDATE)>= 0 && test0.compareTo(currentDATE)<= 0)||test0.compareTo(currentDATE)== 0){
+            Toast.makeText(this,"test0 is True" ,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"test0 is False" ,Toast.LENGTH_LONG).show();
+        }
+
+        if((test1.compareTo(lowerBoundDATE)>= 0 && test1.compareTo(currentDATE)<= 0)||test1.compareTo(currentDATE)== 0){
+            Toast.makeText(this,"test1 is True" ,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"test1 is False" ,Toast.LENGTH_LONG).show();
+        }
+
+        if((test2.compareTo(lowerBoundDATE)>= 0 && test2.compareTo(currentDATE)<= 0)||test2.compareTo(currentDATE)== 0){
+            Toast.makeText(this,"test2 is True" ,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"test2 is False" ,Toast.LENGTH_LONG).show();
+        }
+
+
+        if((test3.compareTo(lowerBoundDATE)>= 0 && test3.compareTo(currentDATE)<= 0)||test3.compareTo(currentDATE)== 0){
+            Toast.makeText(this,"test3 is True" ,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"test3 is False" ,Toast.LENGTH_LONG).show();
+        }
+        if((test4.compareTo(lowerBoundDATE)>= 0 && test4.compareTo(currentDATE)<= 0)||test4.compareTo(currentDATE)== 0){
+            Toast.makeText(this,"test4 is True" ,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this,"test4 is False" ,Toast.LENGTH_LONG).show();
+        }
     }
 
     //TODO
