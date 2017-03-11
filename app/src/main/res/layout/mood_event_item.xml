@@ -44,9 +44,18 @@
                 android:id="@+id/event_handle"
                 android:src="@drawable/point"
                 android:layout_marginTop="25dp"
-                android:layout_marginLeft="120dp"/>
+                android:layout_marginLeft="90dp"
+                />
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mood_color_text"
+            android:textSize="15dp"
+            android:layout_marginLeft="11dp"
+            android:text="Color" />
 
         <ImageView
             android:layout_width="match_parent"
