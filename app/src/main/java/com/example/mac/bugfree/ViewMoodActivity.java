@@ -9,6 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import com.google.gson.Gson;
 
@@ -30,6 +34,12 @@ public class ViewMoodActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_view);
         setSupportActionBar(toolbar);
+
+        TextView moodState = (TextView) findViewById(R.id.moodState_textView);
+        TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
+        TextView reason = (TextView) findViewById(R.id.reason_textView);
+        TextView date = (TextView) findViewById(R.id.date_textView);
+        ImageView image = (ImageView) findViewById(R.id.imageView);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
