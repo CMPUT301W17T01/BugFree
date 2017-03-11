@@ -312,16 +312,19 @@ public class FilterActivity extends AppCompatActivity {
         currentDATE.add(Calendar.DATE, 1);
         lowerBoundDATE = Calendar.getInstance();
         lowerBoundDATE.add(Calendar.DATE, -6);
-
+        int j = 0;
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
             dateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getDateOfRecord();
             if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
+                j = 1;
                 break;
             }
         }
         Toast.makeText(this,"This is : " + fmt.format(dateOfMood.getTime()),Toast.LENGTH_LONG).show();
-        Toast.makeText(this,"This is : " + fmt.format(currentDATE.getTime()),Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"This is : " +j,Toast.LENGTH_LONG).show();
+
+//        Toast.makeText(this,"This is : " + fmt.format(currentDATE.getTime()),Toast.LENGTH_LONG).show();
 
 
 
