@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -249,6 +250,31 @@ public class ElasticsearchUserControllerTest {
         addUserTask.execute(banana);
         addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(orange);
+    }
+
+    @Test
+    public void elasticsearchDisplayDate() {
+        ElasticsearchUserController.createIndex();
+        User user = new User("John");
+        GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12);
+        GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12);
+        MoodEventList moodEventList = new MoodEventList();
+
+        try {
+            MoodEvent moodEvent = new MoodEvent("Happy", user.getUsr());
+            moodEvent.setDateOfRecord(dateOfRecord);
+            MoodEvent moodEvent1 = new MoodEvent("Sad", user.getUsr());
+            moodEvent1.setDateOfRecord(dateOfRecord1);
+            moodEventList.addMoodEvent(moodEvent);
+            moodEventList.addMoodEvent(moodEvent1);
+            user.setMoodEventList(moodEventList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(user);
+
     }
 
 

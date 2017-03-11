@@ -61,8 +61,6 @@ public class ElasticsearchUserController {
             verifySettings();
 
             User user = new User();
-
-            Log.d("parma[0]", params[0]);
             Get get = new Get.Builder("cmput301w17t01", params[0]).type("user").build();
 
             try{

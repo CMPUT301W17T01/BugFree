@@ -5,8 +5,11 @@ import android.content.Context;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +27,6 @@ import com.google.gson.reflect.TypeToken;
 public class LoadFile{
     private static final String FILENAME = "file.sav";
     private static final String FILENAME2 = "filter.sav";
-    private static final String FILENAME3 = "whole.sav";
 
     private User user;
     public LoadFile(){}
@@ -48,22 +50,24 @@ public class LoadFile{
         }
     }
 
-//    public MoodEventList loadFilteredMoodEventList() {
-//        try {
-//
-//            FileInputStream fis = openFileInput(FILENAME2);
-//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-//
-//            Gson gson = new Gson();
-//
-//            personList = gson.fromJson(in, new TypeToken<List<>>(){}.getType());
-//
-//            fis.close();
-//
-//        } catch (FileNotFoundException e) {
-//            personList = new ArrayList<>();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public ArrayList<MoodEvent> loadFilteredMoodEventList(Context context) {
+        ArrayList<MoodEvent> moodEventList;
+
+        try {
+            FileInputStream fis = context.openFileInput(FILENAME2);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+
+            Gson gson = new Gson();
+
+            moodEventList = gson.fromJson(in, new TypeToken<ArrayList<MoodEvent>>(){}.getType());
+
+            fis.close();
+            return moodEventList;
+
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }
