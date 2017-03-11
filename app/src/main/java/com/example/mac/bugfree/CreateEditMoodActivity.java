@@ -41,7 +41,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //Test
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
-
+    private boolean is_checked = false;
     private String test;
     private EditText create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
@@ -51,6 +51,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     CheckBox current_time_checkbox;
     List<Integer> date_time_list = new ArrayList<>();
     GregorianCalendar dateOfRecord;
+    GregorianCalendar realTime;
     DatePicker simpleDatePicker;
     TimePicker simpleTimePicker;
     @Override
@@ -71,6 +72,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox = (CheckBox)findViewById(R.id.current_time);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(timePicker);
+        realTime = real_time();
 
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,52 +169,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(current_time_checkbox.isChecked()) {
-                    GregorianCalendar current = new GregorianCalendar();
-                    date = current.getTime();
-                    SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
-                    fmt.applyPattern("yyyy MM dd HH mm ss");
-                    try {
-                        date = fmt.parse(date.toString());
-                    } catch (ParseException e) {
-                        Log.i("error message", "");
-                    }
-                    test = fmt.format(date);
-                    String[] splited = test.split("\\s+");
-                    int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
-                    try {
-                        year = Integer.parseInt(splited[0]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        month = Integer.parseInt(splited[1]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        day = Integer.parseInt(splited[2]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        hour = Integer.parseInt(splited[3]);
-                    } catch (NumberFormatException nfe) {
-                    }
-
-                    try {
-                        minute = Integer.parseInt(splited[4]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        second = Integer.parseInt(splited[5]);
-                    } catch (NumberFormatException nfe){
-                    }
-                    date_time_list.add(year);
-                    date_time_list.add(month);
-                    date_time_list.add(day);
-                    date_time_list.add(hour);
-                    date_time_list.add(minute);
-                    date_time_list.add(second);
-                    //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
-                    dateOfRecord = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
-                            date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
+                    is_checked = true;
                     Toast.makeText(getApplicationContext(), "Use Current time ", Toast.LENGTH_LONG).show();
                 }
                 else{
@@ -297,14 +254,65 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setTriggerText(reason);
 
         moodEvent.setDateOfRecord(dateOfRecord);
-
-
+        if(current_time_checkbox.isChecked()) {
+           dateOfRecord = real_time();
+        }
+        moodEvent.setRealtime(realTime);
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
+    }
+    private GregorianCalendar real_time(){
+        GregorianCalendar current = new GregorianCalendar();
+        date = current.getTime();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
+        fmt.applyPattern("yyyy MM dd HH mm ss");
+        try {
+            date = fmt.parse(date.toString());
+        } catch (ParseException e) {
+            Log.i("error message", "");
+        }
+        test = fmt.format(date);
+        String[] splited = test.split("\\s+");
+        int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
+        try {
+            year = Integer.parseInt(splited[0]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            month = Integer.parseInt(splited[1]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            day = Integer.parseInt(splited[2]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            hour = Integer.parseInt(splited[3]);
+        } catch (NumberFormatException nfe) {
+        }
+
+        try {
+            minute = Integer.parseInt(splited[4]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            second = Integer.parseInt(splited[5]);
+        } catch (NumberFormatException nfe){
+        }
+        date_time_list.add(year);
+        date_time_list.add(month);
+        date_time_list.add(day);
+        date_time_list.add(hour);
+        date_time_list.add(minute);
+        date_time_list.add(second);
+        //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
+        dateOfRecord = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
+                date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
+        return dateOfRecord;
     }
     protected void onStart(){
         super.onStart();
