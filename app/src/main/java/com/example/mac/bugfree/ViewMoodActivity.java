@@ -35,7 +35,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date = (TextView) findViewById(R.id.date_textView);
-        ImageView image = (ImageView) findViewById(R, R.id.imageView);
+        ImageView image = (ImageView) findViewById(R.id.imageView);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
