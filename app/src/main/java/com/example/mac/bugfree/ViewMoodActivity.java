@@ -40,6 +40,8 @@ public class ViewMoodActivity extends AppCompatActivity {
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date = (TextView) findViewById(R.id.date_textView);
         ImageView image = (ImageView) findViewById(R.id.imageView);
+
+        image.setImageResource(R.drawable.picture_text);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
