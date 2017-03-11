@@ -41,7 +41,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //Test
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
-
+    //private boolean is_checked = false;
     private String test;
     private EditText create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
@@ -163,70 +163,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         });
 
 
-        current_time_checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(current_time_checkbox.isChecked()) {
-                    GregorianCalendar current = new GregorianCalendar();
-                    date = current.getTime();
-                    SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
-                    fmt.applyPattern("yyyy MM dd HH mm ss");
-                    try {
-                        date = fmt.parse(date.toString());
-                    } catch (ParseException e) {
-                        Log.i("error message", "");
-                    }
-                    test = fmt.format(date);
-                    String[] splited = test.split("\\s+");
-                    int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
-                    try {
-                        year = Integer.parseInt(splited[0]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        month = Integer.parseInt(splited[1]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        day = Integer.parseInt(splited[2]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        hour = Integer.parseInt(splited[3]);
-                    } catch (NumberFormatException nfe) {
-                    }
-
-                    try {
-                        minute = Integer.parseInt(splited[4]);
-                    } catch (NumberFormatException nfe) {
-                    }
-                    try {
-                        second = Integer.parseInt(splited[5]);
-                    } catch (NumberFormatException nfe){
-                    }
-                    date_time_list.add(year);
-                    date_time_list.add(month);
-                    date_time_list.add(day);
-                    date_time_list.add(hour);
-                    date_time_list.add(minute);
-                    date_time_list.add(second);
-                    //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
-                    dateOfRecord = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
-                            date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
-                    Toast.makeText(getApplicationContext(), "Use Current time ", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    //TODO add spinner for the select date and time
-                }
-            }
-        });
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         simpleDatePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                Log.d("Date", "Year=" + year + " Month=" + (month + 1) + " day=" + dayOfMonth);
+                int set_year = 0, set_month = 0, set_day = 0;
+                set_year = simpleDatePicker.getYear();
+                set_month = simpleDatePicker.getMonth();
+                set_day =  simpleDatePicker.getDayOfMonth();
+                dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day);
             }
         });
         
@@ -296,8 +243,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setSocialSituation(social_situation);
         moodEvent.setTriggerText(reason);
 
-        moodEvent.setDateOfRecord(dateOfRecord);
-
+        if(current_time_checkbox.isChecked()) {
+           dateOfRecord = real_time();
+           moodEvent.setRealtime(dateOfRecord);
+           moodEvent.setDateOfRecord(dateOfRecord);
+        } else {
+            moodEvent.setRealtime(real_time());
+            moodEvent.setDateOfRecord(dateOfRecord);
+        }
 
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -305,6 +258,57 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
+    }
+    private GregorianCalendar real_time(){
+        GregorianCalendar time;
+        GregorianCalendar current = new GregorianCalendar();
+        date = current.getTime();
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
+        fmt.applyPattern("yyyy MM dd HH mm ss");
+        try {
+            date = fmt.parse(date.toString());
+        } catch (ParseException e) {
+            Log.i("error message", "");
+        }
+        test = fmt.format(date);
+        String[] splited = test.split("\\s+");
+        int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
+        try {
+            year = Integer.parseInt(splited[0]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            month = Integer.parseInt(splited[1]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            day = Integer.parseInt(splited[2]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            hour = Integer.parseInt(splited[3]);
+        } catch (NumberFormatException nfe) {
+        }
+
+        try {
+            minute = Integer.parseInt(splited[4]);
+        } catch (NumberFormatException nfe) {
+        }
+        try {
+            second = Integer.parseInt(splited[5]);
+        } catch (NumberFormatException nfe){
+        }
+        date_time_list.add(year);
+        date_time_list.add(month);
+        date_time_list.add(day);
+        date_time_list.add(hour);
+        date_time_list.add(minute);
+        date_time_list.add(second);
+        //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
+        time = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
+                date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
+
+        return time;
     }
     protected void onStart(){
         super.onStart();
