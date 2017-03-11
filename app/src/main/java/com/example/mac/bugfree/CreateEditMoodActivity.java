@@ -163,24 +163,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         });
 
 
-//        current_time_checkbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(current_time_checkbox.isChecked()) {
-//                    Toast.makeText(getApplicationContext(), "Use Current time ", Toast.LENGTH_LONG).show();
-//                }
-//                else{
-//                    //TODO add spinner for the select date and time
-//                }
-//            }
-//        });
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         simpleDatePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                Log.d("Date", "Year=" + year + " Month=" + (month + 1) + " day=" + dayOfMonth);
+                int set_year = 0, set_month = 0, set_day = 0;
+                set_year = simpleDatePicker.getYear();
+                set_month = simpleDatePicker.getMonth();
+                set_day =  simpleDatePicker.getDayOfMonth();
+                dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day);
             }
         });
         
@@ -250,8 +243,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setSocialSituation(social_situation);
         moodEvent.setTriggerText(reason);
 
-        //moodEvent.setRealtime(realTime);
-        //moodEvent.setDateOfRecord(dateOfRecord);
         if(current_time_checkbox.isChecked()) {
            dateOfRecord = real_time();
            moodEvent.setRealtime(dateOfRecord);
