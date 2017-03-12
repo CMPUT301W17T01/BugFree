@@ -192,4 +192,18 @@ public class MoodEvent {
     public void setRealtime(GregorianCalendar realtime) {
         this.realtime = realtime;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(obj == this) return true;
+        if(!(obj instanceof MoodEvent)) return false;
+        MoodEvent other= (MoodEvent) obj;
+
+        if (this.getRealtime().equals(other.getRealtime())
+                && this.getBelongsTo().equals(other.getBelongsTo())) {
+            return true;
+        }
+        return false;
+    }
 }

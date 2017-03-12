@@ -274,7 +274,6 @@ public class ElasticsearchUserControllerTest {
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
-
     }
 
 
