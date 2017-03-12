@@ -1,6 +1,5 @@
 package com.example.mac.bugfree;
 
-
 import android.test.ActivityInstrumentationTestCase2;
 import com.robotium.solo.Solo;
 
