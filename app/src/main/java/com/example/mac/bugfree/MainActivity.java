@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     //private MoodEventList moodEventArrayList = new MoodEventList();
     private String currentUserName;
     private Context context;
+    private TextView drawer_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
-        TextView drawer_name = (TextView) header.findViewById(R.id.drawer_user_name);
-        drawer_name.setText(currentUserName);
+        drawer_name = (TextView) header.findViewById(R.id.drawer_user_name);
+        //drawer_name.setText(currentUserName);
 
         ActionBar actionBar = getSupportActionBar();
         if( actionBar != null) {
@@ -140,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
         } else {
+            drawer_name.setText(currentUserName);
             context = getApplicationContext();
             if (fileExists(context, FILENAME2)) {
                 loadFromFilterFile(context);
