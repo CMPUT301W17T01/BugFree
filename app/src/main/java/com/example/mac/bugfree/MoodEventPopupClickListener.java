@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 /**
  * Created by mac on 2017-02-21.
  */
@@ -31,7 +33,7 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         switch (item.getItemId()){
 
             case R.id.edit_card:
-                //Integer userId1 = this.moodEvent.getBelongsTo();
+                editMoodEvent();
                 break;
 
             case R.id.delete_card:
@@ -44,10 +46,8 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         return true;
     }
 
-    public void deleteMoodEvent() {
-        Log.d("MoodEventDetail", moodEvent.getBelongsTo());
-        Log.d("MoodEventDetail", moodEvent.getMoodState());
 
+    private void deleteMoodEvent() {
         User user = new User();
 
         SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
@@ -62,25 +62,25 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
             Log.i("Error", "Failed to get the User out of the async object");
         }
 
-        Log.d("Text in PopupClick", user.getUsr());
-
         MoodEventList moodEventList = user.getMoodEventList();
 
         Log.d("Compare", String.valueOf(moodEventList.getMoodEvent(0).equals(moodEvent)));
 
-        Log.d("Text in PopupClick-", String.valueOf(moodEventList.hasMoodEvent(moodEvent)));
-
         moodEventList.deleteMoodEvent(moodEvent);
-
-        Log.d("Text in PopupClick", String.valueOf(moodEventList.hasMoodEvent(moodEvent)));
-
         user.setMoodEventList(moodEventList);
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
+    }
 
-        ElasticsearchUserController.GetUserTask getUserTask2 = new ElasticsearchUserController.GetUserTask();
-        getUserTask2.execute(currentUserName);
+    private void editMoodEvent() {
+        User user = new User();
+
+        SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(currentUserName);
 
         try{
             user = getUserTask.get();
@@ -88,7 +88,11 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
             Log.i("Error", "Failed to get the User out of the async object");
         }
 
-        MoodEventList moodEventList2 = user.getMoodEventList();
-        Log.d("Text in PopupClick----", String.valueOf(moodEventList.hasMoodEvent(moodEvent)));
+        SharedPreferences.Editor editor = context.getSharedPreferences("editMoodEvent",Context.MODE_PRIVATE).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(moodEvent);
+        editor.putBoolean("flag", true);
+        editor.putString("moodevent",json);
+        editor.apply();
     }
 }
