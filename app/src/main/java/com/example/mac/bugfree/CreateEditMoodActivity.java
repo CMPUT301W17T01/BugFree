@@ -71,6 +71,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker = (TimePicker)findViewById(timePicker);
         simpleTimePicker.setIs24HourView(true);
         //TODO if its Edit load moodEvent and setText
+        //if
 
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override

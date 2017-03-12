@@ -44,7 +44,7 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         return true;
     }
 
-    private void deleteMoodEvent() {
+    public void deleteMoodEvent() {
         Log.d("MoodEventDetail", moodEvent.getBelongsTo());
         Log.d("MoodEventDetail", moodEvent.getMoodState());
 

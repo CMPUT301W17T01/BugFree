@@ -78,7 +78,8 @@ public class ViewMoodActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete:
-                return true;
+                setResult(RESULT_OK);
+                finish();
 
 
         }
