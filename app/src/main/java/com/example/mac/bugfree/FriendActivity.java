@@ -33,6 +33,10 @@ public class FriendActivity extends AppCompatActivity {
     private String currentUserName;
     private User user = new User();
 
+    public ListView getNotificationList(){
+        return notificationListView;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
