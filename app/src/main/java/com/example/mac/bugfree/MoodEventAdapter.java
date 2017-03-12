@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -116,7 +117,10 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.colorText.setText(" @" + moodEvent.getMoodState());
         holder.colorText.setTextColor(moodEvent.getMoodColor());
         //Log.d("Text onBind", moodEvent.getMoodState());
-        String time = format.format(moodEvent.getDateOfRecord().getTime());
+        //String time = format.format(moodEvent.getDateOfRecord().getTime());
+        Calendar ss = moodEvent.getDateOfRecord();
+        ss.add(Calendar.MONTH, -1);
+        String time = format.format(ss.getTime());
         holder.dateText.setText(time);
 
         // write code about authority

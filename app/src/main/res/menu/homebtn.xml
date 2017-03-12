@@ -4,6 +4,6 @@
     <item
         android:id="@+id/homeBtn"
         android:title="Home"
-        android:icon="@drawable/ic_action_name"
+        android:icon="@drawable/ic_homebtn"
         app:showAsAction="always"/>
 </menu>

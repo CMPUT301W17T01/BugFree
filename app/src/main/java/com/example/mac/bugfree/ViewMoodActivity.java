@@ -26,12 +26,9 @@ import java.util.GregorianCalendar;
  */
 
 public class ViewMoodActivity extends AppCompatActivity {
-    private String mood_state;
-    private String social_situation;
-    private String reason;
-    private Date date =null;
+
     private MoodEvent moodEvent;
-    GregorianCalendar dateOfRecord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,16 +60,9 @@ public class ViewMoodActivity extends AppCompatActivity {
             reason.setText(moodEvent.getTriggerText().toString());
         }
 
-        dateOfRecord = moodEvent.getDateOfRecord();
-        //date.setText(dateOfRecord.toString());
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
-        fmt.applyPattern("yyyy MM dd HH mm ss");
-        try {
-            date = fmt.parse(dateOfRecord.getTime().toString());
-        } catch (ParseException e) {
-            Log.i("error message", "");
-        }
-        date_text.setText(fmt.format(date));
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String time = fmt.format(moodEvent.getDateOfRecord().getTime());
+        date_text.setText(time);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,7 +73,7 @@ public class ViewMoodActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            //TODO change icon
+            //TODO finish functionality
             case R.id.action_edit:
                 return true;
 
