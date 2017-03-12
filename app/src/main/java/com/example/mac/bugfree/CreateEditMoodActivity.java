@@ -194,14 +194,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         //handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_add_tick:
 
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 current_user = pref.getString("currentUser", "");
-                //current_user  = "0John";
+                
                 if(mood_state == null){
                     Toast.makeText(getApplicationContext(), "Choose a mood state and a picture please", Toast.LENGTH_SHORT).show();
                     break;
