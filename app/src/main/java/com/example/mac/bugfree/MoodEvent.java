@@ -199,12 +199,11 @@ public class MoodEvent {
         if(obj == this) return true;
         if(!(obj instanceof MoodEvent)) return false;
         MoodEvent other= (MoodEvent) obj;
-        //if(otherUser.getUsr().compareTo(this.getUsr())  == 0) return true;
-        if (other.getRealtime().compareTo(((MoodEvent) obj).getRealtime()) == 0 &&
-                other.getBelongsTo().compareTo(((MoodEvent) obj).getBelongsTo()) == 0) {
+
+        if (this.getRealtime().equals(other.getRealtime())
+                && this.getBelongsTo().equals(other.getBelongsTo())) {
             return true;
         }
-
         return false;
     }
 }
