@@ -40,16 +40,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        currentUserName = pref.getString("currentUser", "");
-
-        if (currentUserName.equals("")) {
-            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-            startActivity(intent);
-        }
-
         setContentView(R.layout.activity_main);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -128,10 +119,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         context = getApplicationContext();
-        if (fileExists(context,FILENAME2)){
-             loadFromFilterFile(context);
-        } else {
-            loadList(currentUserName);
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (currentUserName.equals("")) {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        }else{
+            if (fileExists(context,FILENAME2)){
+                 loadFromFilterFile(context);
+            } else {
+                loadList(currentUserName);
+            }
         }
     }
 
