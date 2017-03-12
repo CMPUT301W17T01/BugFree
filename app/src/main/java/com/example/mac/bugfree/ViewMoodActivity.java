@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -76,12 +77,16 @@ public class ViewMoodActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             //TODO finish functionality
             case R.id.action_edit:
-                //editMoodEvent();
-
+                editMoodEvent();
+                Intent intent = new Intent(ViewMoodActivity.this, CreateEditMoodActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.action_delete:
-                //deleteMoodEvent();
+                deleteMoodEvent();
+                Toast.makeText(getApplicationContext(), "deleted",Toast.LENGTH_SHORT).show();
                 setResult(RESULT_OK);
                 finish();
+                return true;
 
 
         }
@@ -94,55 +99,52 @@ public class ViewMoodActivity extends AppCompatActivity {
         String json = sharedPreferences.getString("moodevent","");
         moodEvent=gson.fromJson(json,MoodEvent.class);
     }
-//
-//    private void deleteMoodEvent() {
-//        User user = new User();
-//
-//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//        currentUserName = pref.getString("currentUser", "");
-//
-//        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-//        getUserTask.execute(currentUserName);
-//
-//        try{
-//            user = getUserTask.get();
-//        } catch (Exception e) {
-//            Log.i("Error", "Failed to get the User out of the async object");
-//        }
-//
-//        MoodEventList moodEventList = user.getMoodEventList();
-//
-//        Log.d("Compare", String.valueOf(moodEventList.getMoodEvent(0).equals(moodEvent)));
-//
-//        moodEventList.deleteMoodEvent(moodEvent);
-//        user.setMoodEventList(moodEventList);
-//
-//        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-//        addUserTask.execute(user);
-//    }
-//
-//    private void editMoodEvent() {
-//        User user = new User();
-//
-//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//        currentUserName = pref.getString("currentUser", "");
-//
-//        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-//        getUserTask.execute(currentUserName);
-//
-//        try{
-//            user = getUserTask.get();
-//        } catch (Exception e) {
-//            Log.i("Error", "Failed to get the User out of the async object");
-//        }
-//
-//        SharedPreferences.Editor editor = getSharedPreferences("editMoodEvent", Context.MODE_PRIVATE).edit();
-//        Gson gson = new Gson();
-//        String json = gson.toJson(moodEvent);
-//        editor.putBoolean("flag", true);
-//        editor.putString("moodevent",json);
-//        editor.apply();
-//    }
+
+    private void deleteMoodEvent() {
+        User user = new User();
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(currentUserName);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+        MoodEventList moodEventList = user.getMoodEventList();
+
+        moodEventList.deleteMoodEvent(moodEvent);
+        user.setMoodEventList(moodEventList);
+
+        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+        addUserTask.execute(user);
+    }
+
+    private void editMoodEvent() {
+        User user = new User();
+
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+        getUserTask.execute(currentUserName);
+
+        try{
+            user = getUserTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+
+        SharedPreferences.Editor editor = getSharedPreferences("editMoodEvent", Context.MODE_PRIVATE).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(moodEvent);
+        editor.putBoolean("flag", true);
+        editor.putString("moodevent",json);
+        editor.apply();
+    }
 
     protected void onStart(){
         super.onStart();
