@@ -25,19 +25,20 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testStart() throws Exception {
-        Activity activity = getActivity();
 
-    }
     /**
      * Test filterList() in FilterActivity
      *
      * Should fail
      */
-    @Test
-    public void testCheckWhichIsChosen(){
+    public void testReason(){
         solo.assertCurrentActivity("Wrong Activity", FilterActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.edittext_reason_myself), "test...3");
+//        solo.enterText((EditText) solo.getView(R.id.edittext_reason_myself), "test...3");
+
+        solo.clickOnMenuItem("Filter");
+        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
+
+
     }
 
 }

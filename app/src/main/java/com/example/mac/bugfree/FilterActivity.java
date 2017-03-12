@@ -39,8 +39,10 @@ import java.util.Set;
 
 
 public class FilterActivity extends AppCompatActivity {
+
     private FilterActivity activity = this;
     private static final String FILENAME = "filter.sav";
+
     private Spinner myEmotionalStateSpinner;
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
@@ -49,19 +51,19 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
-    ArrayAdapter<CharSequence> adapter;
-    private ArrayList<MoodEventList> moodList;
+
+    private ArrayAdapter<CharSequence> adapter;
+
     private String selectedMyMoodState;
     private String selectedFoMoodState;
     private String enteredMyReason;
     private String enteredFoReason;
     private int flag;
+
     private ArrayList<String> followeeList;
     private MoodEventList moodListBeforeFilterMy = new MoodEventList();
     private MoodEventList moodListBeforeFilterFo = new MoodEventList();
-
     private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
-//    private MoodEventList moodListAfterFilter = new MoodEventList();
     private Calendar currentDATE;
     private Calendar lowerBoundDATE;
     private Calendar dateOfMood;
@@ -353,7 +355,6 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    //TODO
     public void filterByMyReason(String enteredReason){
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
             keyOfReason = moodListBeforeFilterMy.getMoodEvent(i).getTriggerText();
@@ -363,7 +364,6 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    //TODO
     public void filterByFoReason(String enteredReason){
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
             keyOfReason = moodListBeforeFilterFo.getMoodEvent(i).getTriggerText();
