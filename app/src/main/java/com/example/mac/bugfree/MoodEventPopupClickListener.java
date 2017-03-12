@@ -71,6 +71,14 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
+
+//        MoodEventList moodEventList = user.getMoodEventList();
+//        for (MoodEvent moodEvent1 : moodEventList.transferMoodEventListToArray()){
+//            Log.d("Error check in Popup", String.valueOf(moodEvent1.equals(moodEvent)) );
+//            Log.d("Error in belongs", String.valueOf(moodEvent1.getBelongsTo().equals(moodEvent.getBelongsTo())));
+//            Log.d("Error in realtime", String.valueOf(moodEvent1.getRealtime().equals(moodEvent.getRealtime())));
+//        }
+
     }
 
     private void editMoodEvent() {
