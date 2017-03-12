@@ -38,7 +38,6 @@ import static com.example.mac.bugfree.R.id.timePicker;
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
 
-    //Test
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
     private int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
@@ -53,6 +52,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     GregorianCalendar dateOfRecord;
     DatePicker simpleDatePicker;
     TimePicker simpleTimePicker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +60,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
         create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
-
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
@@ -72,6 +70,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(timePicker);
         simpleTimePicker.setIs24HourView(true);
+        //TODO if its Edit load moodEvent and setText
+
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,13 +128,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     social_situation=null;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
-
 
         create_edit_reason.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,20 +142,16 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 if (create_edit_reason.getText().toString().split("\\s+").length>3){
                     create_edit_reason.setError("Only the first 3 words will be recorded");
-
                 }
                 else {
                     reason = create_edit_reason.getText().toString();
                 }
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
@@ -187,7 +181,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 set_hour = simpleTimePicker.getHour();
                 set_minute = simpleTimePicker.getMinute();
-                //set_seconds =simpleTimePicke
+
             }
         });
         
@@ -231,10 +225,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public boolean save_mood_list(String mood_state, String social_situation,String reason){
         return true;
     }
-    public boolean load_mood_list(){
-        return true;
+    public void load_moodEvent(){
+        //TODO if its Edit load moodEvent and setText
     }
-
 
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, GregorianCalendar dateOfRecord)
             throws MoodStateNotAvailableException{

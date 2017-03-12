@@ -64,15 +64,9 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
 
         dateOfRecord = moodEvent.getDateOfRecord();
-        //date.setText(dateOfRecord.toString());
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
-        fmt.applyPattern("yyyy MM dd HH mm ss");
-        try {
-            date = fmt.parse(dateOfRecord.getTime().toString());
-        } catch (ParseException e) {
-            Log.i("error message", "");
-        }
-        date_text.setText(fmt.format(date));
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String time = fmt.format(moodEvent.getDateOfRecord().getTime());
+        date_text.setText(time);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
