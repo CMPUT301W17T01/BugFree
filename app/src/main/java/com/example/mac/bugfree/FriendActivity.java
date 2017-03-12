@@ -22,16 +22,20 @@ import java.util.ArrayList;
 
 public class FriendActivity extends AppCompatActivity {
 
-    ArrayList<String> followList;
-    ArrayList<String> followerList;
-    ArrayList<String> notificationList;
-    ArrayList<String> anotherfollowList;
-    ListView followListView;
-    ListView followerListView;
-    ListView notificationListView;
+    private ArrayList<String> followList;
+    private ArrayList<String> followerList;
+    private ArrayList<String> notificationList;
+    private ArrayList<String> anotherfollowList;
+    private ListView followListView;
+    private ListView followerListView;
+    private ListView notificationListView;
 
-    String currentUserName;
-    User user = new User();
+    private String currentUserName;
+    private User user = new User();
+
+    public ListView getNotificationList(){
+        return notificationListView;
+    }
 
 
     @Override
@@ -201,7 +205,6 @@ public class FriendActivity extends AppCompatActivity {
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
 
-                    
                     User anotherUser = new User(singleNotification);
 
                     ElasticsearchUserController.GetUserTask getUserTask =

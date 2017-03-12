@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -35,19 +36,36 @@ public class MainActivity extends AppCompatActivity {
     //private MoodEventList moodEventArrayList = new MoodEventList();
     private String currentUserName;
     private Context context;
+    private TextView drawer_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
+        //        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        currentUserName = pref.getString("currentUser", "");
+//
+//        if (currentUserName.equals("")) {
+//            Log.d("Error", "sdfsgdfgdfgdfgdfgdfgd");
+//            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//            startActivity(intent);
+//        }
+//        Log.d("Error2", "sdfsgdfgdfgdfgdfgdfgdfdsfds");
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
 
+
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        drawer_name = (TextView) header.findViewById(R.id.drawer_user_name);
+        //drawer_name.setText(currentUserName);
+
         ActionBar actionBar = getSupportActionBar();
         if( actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -112,22 +130,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        context = getApplicationContext();
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
-
         if (currentUserName.equals("")) {
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
-        }else{
-            if (fileExists(context,FILENAME2)){
-                 loadFromFilterFile(context);
+        } else {
+            drawer_name.setText(currentUserName);
+            context = getApplicationContext();
+            if (fileExists(context, FILENAME2)) {
+                loadFromFilterFile(context);
             } else {
                 loadList(currentUserName);
             }
@@ -173,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
-        ElasticsearchUserController.GetUserTask getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+        ElasticsearchUserController.GetUserTask getUserTask1;
 
         ArrayList<String> followeeList = user.getFolloweeIDs();
         for  (String followee : followeeList) {
@@ -187,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
+        moodEventList.sortByDate();
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -213,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         input.setLayoutParams(lp);
         alertDialog.setView(input);
-        alertDialog.setIcon(R.drawable.ic_action_name);
+        alertDialog.setIcon(R.drawable.ic_homebtn);
 
         alertDialog.setPositiveButton("Done",
                 new DialogInterface.OnClickListener() {

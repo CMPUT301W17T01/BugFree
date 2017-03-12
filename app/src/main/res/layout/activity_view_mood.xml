@@ -47,6 +47,7 @@
 
                 <TextView
                     android:text="Mood State:"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text1_mood"
@@ -56,6 +57,7 @@
                     android:textStyle="normal|bold" />
 
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/moodState_textView"
@@ -73,6 +75,7 @@
 
                 <TextView
                     android:text="Social Situation:"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text2_social"
@@ -82,6 +85,7 @@
                     android:textStyle="normal|bold" />
 
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/socialSituation_textView"
@@ -98,6 +102,7 @@
 
                 <TextView
                     android:text="Reason:"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text3_reason"
@@ -107,6 +112,7 @@
                     android:textStyle="normal|bold" />
 
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/reason_textView"
@@ -123,6 +129,7 @@
 
                 <TextView
                     android:text="Date:"
+                    android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/text3_date"
@@ -132,6 +139,7 @@
                     android:textStyle="normal|bold" />
 
                 <TextView
+                    android:layout_marginLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/date_textView"

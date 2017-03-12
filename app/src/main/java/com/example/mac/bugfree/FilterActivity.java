@@ -37,9 +37,32 @@ import java.util.Date;
 import java.util.Arrays;
 import java.util.Set;
 
-
+/**
+ * This class is aim to provides 8 filter options for user to choose. When the user select one option, it will
+ * filter the moodevent list which get from the elasticsearch, and store the mood event list into a "filter.sav"
+ * Gson file after finishing filtering.<br> In this class,
+ * user interaction and file manipulation is performed.
+ * All files are in the form of "json" files that are stored in Emulator's
+ * accessible from Android Device Monitor:
+ * <pre>
+ *     pre-formatted text: <br>
+ *         File Explorer -> data -> data -> ca.ualberta.cs.lonelytwitter -> files -> filter.sav.
+ * </pre>
+ * <code> begin <br>
+ * some pseduo code here <br>
+ * end.</code>
+ * The file name is indicated in the &nbsp &nbsp &nbsp FILENAME constant.
+ *
+ * @author Heyue Huang
+ * @version 1.4.2
+ * @since 1.0
+ */
 public class FilterActivity extends AppCompatActivity {
+
+    // gson file initial
+    private FilterActivity activity = this;
     private static final String FILENAME = "filter.sav";
+    // UI for myself and following initial set up
     private Spinner myEmotionalStateSpinner;
     private CheckBox myMostRecentWeekCheckbox;
     private EditText myReasonEditText;
@@ -48,36 +71,35 @@ public class FilterActivity extends AppCompatActivity {
     private CheckBox foMostRecentWeekCheckbox;
     private EditText foReasonEditText;
     private CheckBox foDisplayAllCheckbox;
-    ArrayAdapter<CharSequence> adapter;
-    private ArrayList<MoodEventList> moodList;
+    private ArrayAdapter<CharSequence> adapter;
+    // store the chosen content
     private String selectedMyMoodState;
     private String selectedFoMoodState;
     private String enteredMyReason;
     private String enteredFoReason;
+    // store the num of chosen options
     private int flag;
+    // store the moodevent list get from elasticsearch
     private ArrayList<String> followeeList;
     private MoodEventList moodListBeforeFilterMy = new MoodEventList();
     private MoodEventList moodListBeforeFilterFo = new MoodEventList();
-
+    // store the mood event list after filtering
     private ArrayList<MoodEvent> moodListAfterFilter = new ArrayList<>();
-//    private MoodEventList moodListAfterFilter = new MoodEventList();
+    // store the date, mood state, and the reason of each mood in the list
     private Calendar currentDATE;
     private Calendar lowerBoundDATE;
     private Calendar dateOfMood;
     private String stateOfMood;
     private String keyOfReason;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
+        // get current user's mood event list
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
-
         User user = new User("John");
         String query = current_user;
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
@@ -88,11 +110,11 @@ public class FilterActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.i("Error", "Failed to get the User out of the async object");
         }
-
-
-        followeeList  = user.getFolloweeIDs();
+        // store the user's mood event list and followee id list
         moodListBeforeFilterMy = user.getMoodEventList();
+        followeeList  = user.getFolloweeIDs();
 
+        // get current user following people's mood event list
         ElasticsearchUserController.GetUserTask getUserTask1 = new ElasticsearchUserController.GetUserTask();
 
         for  (String followee : followeeList) {
@@ -100,6 +122,7 @@ public class FilterActivity extends AppCompatActivity {
             getUserTask1.execute(followee);
             try {
                 User user_follow = getUserTask1.get();
+                // store the user's following people's mood event list
                 moodListBeforeFilterFo.addMoodEventList(user_follow.getMoodEventList());
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
@@ -196,18 +219,21 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        // set date 's format
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        // current time
         currentDATE = Calendar.getInstance();
         currentDATE.add(Calendar.MONTH, 1);
+        // one week ago
         lowerBoundDATE = Calendar.getInstance();
         lowerBoundDATE.add(Calendar.MONTH, 1);
         lowerBoundDATE.add(Calendar.DATE, -6);
 
+        // set up the tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
-
+        // set up the tab host
         TabHost tabHost = (TabHost)findViewById(R.id.filter_tabHost);
-
         tabHost.setup();
 
         //Tab Myself
@@ -221,191 +247,252 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
-
     }
 
+    // combine the menu and the layout
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
-
         return true;
-
     }
+
     // Determines if Action bar item was selected. If true then do corresponding action.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         //handle presses on the action bar items
         switch (item.getItemId()) {
-
+            // if the item in tool bar is selected
             case R.id.activity_filter:
-                checkWhichIsChoosen();
+                // check which option is selected
+                checkWhichIsChosen();
+                // if there are more than one options are selected, then braek
                 if(flag > 1){
                     Toast.makeText(this,"Warning: More than one option is chosen" ,Toast.LENGTH_LONG).show();
                     setErrorMessages();
                     break;
                 }
+                // if there is only one option is selected, then save the mood event list in the file
                 if(flag == 1){
                     saveInFile();
                 }
+                // if no option is selected, then delete the file.
                 if (flag == 0){
                     deleteFile("filter.sav");
                 }
+                // jump to main activity
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkWhichIsChoosen(){
+    /**
+     * Check which is option is chosen,
+     * if one option is selected, then flag plus one
+     */
+    public void checkWhichIsChosen(){
+        // reset all initial set up
         moodListAfterFilter.clear();
         deleteFile("filter.sav");
         flag = 0;
+        // key of reason and moos state which is entered by user
         enteredMyReason = myReasonEditText.getText().toString();
         enteredFoReason = foReasonEditText.getText().toString();
         selectedMyMoodState = myEmotionalStateSpinner.getSelectedItem().toString();
         selectedFoMoodState = foEmotionalStateSpinner.getSelectedItem().toString();
-
+        // if Myself Mood state is selected, then jump to its filter function
         if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
             filterByMyMoodState(selectedMyMoodState);
             flag ++;
         }
+        // if Following Mood state is selected, then jump to its filter function
         if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
             filterByFoMoodState(selectedFoMoodState);
             flag ++;
         }
-
+        // if Myself most recent week is selected, then jump to its filter function
         if (myMostRecentWeekCheckbox.isChecked()){
             filterByMyMostRece();
             flag ++;
         }
+        // if Following most recent week is selected, then jump to its filter function
         if (foMostRecentWeekCheckbox.isChecked()){
             filterByFoMostRece();
             flag ++;
         }
-
+        // if Myself display all is selected, then jump to its filter function
         if (myDisplayAllCheckbox.isChecked()){
             filterByMyDisplayAll();
             flag ++;
         }
+        // if Following display all is selected, then jump to its filter function
         if (foDisplayAllCheckbox.isChecked()){
             filterByFoDisplayAll();
             flag ++;
         }
-
+        // if Myself key of reason is entered, then jump to its filter function
         if(enteredMyReason != null && !enteredMyReason.isEmpty()){
             filterByMyReason(enteredMyReason);
             flag ++;
         }
-
+        // if Following key of reason is entered, then jump to its filter function
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
             filterByFoReason(enteredFoReason);
             flag ++;
         }
     }
 
-
+    /**
+     * Filter current user's own mood events by most recent week.
+     */
     public void filterByMyMostRece() {
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            // get the mood's date
             dateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getDateOfRecord();
+            // if it within the range, then add it to the new list
             if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
     }
-
+    /**
+     * Filter current user's all mood events.
+     */
     public void filterByMyDisplayAll(){
+        // add them into the new list
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
             moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
         }
     }
-
+    /**
+     * Filter current user's following people's mood events by most recent week.
+     */
     public void filterByFoMostRece(){
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            // get the mood's date
             dateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getDateOfRecord();
+            // if it within the range, then add it to the new list
             if (dateOfMood.compareTo(lowerBoundDATE) >= 0 && dateOfMood.compareTo(currentDATE) <= 0) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
     }
-
+    /**
+     * Filter current user's following people's all mood events.
+     */
     public void filterByFoDisplayAll(){
+        // add them into the new list
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
             moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
         }
     }
-
+    /**
+     * Filter current user's mood events by a specific mood state.
+     *
+     * @param selectedMoodState the mood state which user select in the Filter page
+     */
     public void filterByMyMoodState(String selectedMoodState){
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            // get the mood event's mood state
             stateOfMood = moodListBeforeFilterMy.getMoodEvent(i).getMoodState();
+            // if it equals the selected mood state, then add it to the new list
             if (stateOfMood.equals(selectedMoodState)) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
     }
-
+    /**
+     * Filter current user's following people's mood events by a specific mood state.
+     *
+     * @param selectedMoodState the mood state which user select in the Filter page
+     */
     public void filterByFoMoodState(String selectedMoodState){
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            // get the mood event's mood state
             stateOfMood = moodListBeforeFilterFo.getMoodEvent(i).getMoodState();
+            // if it equals the selected mood state, then add it to the new list
             if (stateOfMood.equals(selectedMoodState)) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
     }
-
-    //TODO
+    /**
+     * Filter current user's mood events by a specific key of reason.
+     *
+     * @param enteredReason the entered key of reason
+     */
     public void filterByMyReason(String enteredReason){
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterMy.getCount(); i++ ){
+            // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterMy.getMoodEvent(i).getTriggerText();
+            // if it contains the entered key of reason, then add it to the new list
             if (Arrays.asList(keyOfReason).contains(enteredReason)) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
     }
-
-    //TODO
+    /**
+     * Filter current user's following people's mood events by a specific key of reason.
+     *
+     * @param enteredReason the entered key of reason
+     */
     public void filterByFoReason(String enteredReason){
+        // for each mood event in the list
         for (int i = 0; i < moodListBeforeFilterFo.getCount(); i++ ){
+            // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterFo.getMoodEvent(i).getTriggerText();
+            // if it contains the entered key of reason, then add it to the new list
             if (Arrays.asList(keyOfReason).contains(enteredReason)) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
     }
 
+    /**
+     * Set error messages when there is more than option is selected.
+     */
     public void setErrorMessages(){
-
+        // if mood state in myself tab is chosen
         if(selectedMyMoodState != null && !selectedMyMoodState.isEmpty()){
             ((TextView)myEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
         }
+        // if mood state in following tab is chosen
         if(selectedFoMoodState != null && !selectedFoMoodState.isEmpty()){
             ((TextView)foEmotionalStateSpinner.getSelectedView()).setError("More than one option is chosen");
         }
-
+        // if most recent week in myself tab is chosen
         if (myMostRecentWeekCheckbox.isChecked()){
             myMostRecentWeekCheckbox.setError("More than one option is chosen");
         }
-
+        // if most recent week in foloowing tab is chosen
         if (foMostRecentWeekCheckbox.isChecked()){
             foMostRecentWeekCheckbox.setError("More than one option is chosen");
         }
-
+        // if display all in myself tab is chosen
         if (myDisplayAllCheckbox.isChecked()){
             myDisplayAllCheckbox.setError("More than one option is chosen");
         }
+        // if display all in following tab is chosen
         if (foDisplayAllCheckbox.isChecked()){
             foDisplayAllCheckbox.setError("More than one option is chosen");
         }
-
+        // if reason in myself tab is chosen
         if(enteredMyReason != null && !enteredMyReason.isEmpty()){
             myReasonEditText.setError("More than one option is chosen");
         }
-
+        // if reason in following tab is chosen
         if(enteredFoReason != null && !enteredFoReason.isEmpty()){
             foReasonEditText.setError("More than one option is chosen");
         }
     }
 
+    /**
+     * Save the filtered mood event list into "filter.sav"
+     */
     private void saveInFile() {
         try {
             FileOutputStream fos = openFileOutput(FILENAME,
