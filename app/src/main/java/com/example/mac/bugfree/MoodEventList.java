@@ -62,7 +62,7 @@ public class MoodEventList {
         Collections.sort(moodEventArrayList, new Comparator<MoodEvent>() {
             @Override
             public int compare(MoodEvent o1, MoodEvent o2) {
-                return o1.getDateOfRecord().compareTo(o2.getDateOfRecord());
+                return o2.getDateOfRecord().compareTo(o1.getDateOfRecord());
             }
         });
     }
