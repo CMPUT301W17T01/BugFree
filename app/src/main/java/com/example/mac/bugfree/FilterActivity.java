@@ -39,6 +39,7 @@ import java.util.Set;
 
 
 public class FilterActivity extends AppCompatActivity {
+    private FilterActivity activity = this;
     private static final String FILENAME = "filter.sav";
     private Spinner myEmotionalStateSpinner;
     private CheckBox myMostRecentWeekCheckbox;
@@ -238,7 +239,7 @@ public class FilterActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.activity_filter:
-                checkWhichIsChoosen();
+                checkWhichIsChosen();
                 if(flag > 1){
                     Toast.makeText(this,"Warning: More than one option is chosen" ,Toast.LENGTH_LONG).show();
                     setErrorMessages();
@@ -252,12 +253,11 @@ public class FilterActivity extends AppCompatActivity {
                 }
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void checkWhichIsChoosen(){
+    public void checkWhichIsChosen(){
         moodListAfterFilter.clear();
         deleteFile("filter.sav");
         flag = 0;
