@@ -1,10 +1,8 @@
 package com.example.mac.bugfree;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -133,8 +131,8 @@ public class FriendActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homeBtn:
-                Intent intent = new Intent(FriendActivity.this, MainActivity.class);
-                startActivity(intent);
+                setResult(RESULT_OK);
+                finish();
                 break;
 
             default:
@@ -203,10 +201,7 @@ public class FriendActivity extends AppCompatActivity {
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
 
-
-
-                    //another user's follow list
-
+                    
                     User anotherUser = new User(singleNotification);
 
                     ElasticsearchUserController.GetUserTask getUserTask =
