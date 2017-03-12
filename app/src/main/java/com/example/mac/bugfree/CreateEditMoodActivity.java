@@ -42,25 +42,25 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Date date = null;
     private int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
-    private EditText create_edit_reason, create_edit_date;
-    ArrayAdapter<CharSequence> adapter1;
-    ArrayAdapter<CharSequence> adapter2;
-    ImageView add_pic, home_tab;
-    Spinner mood_state_spinner, social_situation_spinner;
-    CheckBox current_time_checkbox;
-    List<Integer> date_time_list = new ArrayList<>();
-    GregorianCalendar dateOfRecord;
-    DatePicker simpleDatePicker;
-    TimePicker simpleTimePicker;
+    private EditText create_edit_reason;
 
+    private ImageView add_pic, home_tab;
+    private Spinner mood_state_spinner, social_situation_spinner;
+    private CheckBox current_time_checkbox;
+    private List<Integer> date_time_list = new ArrayList<>();
+    private GregorianCalendar dateOfRecord;
+    private DatePicker simpleDatePicker;
+    private TimePicker simpleTimePicker;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_mood);
 
-
+        ArrayAdapter<CharSequence> adapter1;
+        ArrayAdapter<CharSequence> adapter2;
         create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
@@ -173,7 +173,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 set_year = simpleDatePicker.getYear();
                 set_month = simpleDatePicker.getMonth();
                 set_day =  simpleDatePicker.getDayOfMonth();
-                //dateOfRecord = new GregorianCalendar(set_year, set_month, set_day);
+
             }
         });
         simpleTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -181,7 +181,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 set_hour = simpleTimePicker.getHour();
                 set_minute = simpleTimePicker.getMinute();
-
             }
         });
         
@@ -244,7 +243,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             Log.i("Error", "Failed to get the User out of the async object");
         }
 
-        //Log.d("Text", user.getMoodEventList().getMoodEvent(1).getMoodState());
         MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
 
         moodEvent.setSocialSituation(social_situation);
@@ -312,7 +310,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         date_time_list.add(hour);
         date_time_list.add(minute);
         date_time_list.add(second);
-        //GregorianCalendar dateOfRecord1 = new GregorianCalendar(fmt.format(date));
         time = new GregorianCalendar(date_time_list.get(0), date_time_list.get(1),
                 date_time_list.get(2), date_time_list.get(3), date_time_list.get(4), date_time_list.get(5));
 
