@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         input.setLayoutParams(lp);
         alertDialog.setView(input);
-        alertDialog.setIcon(R.drawable.ic_action_name);
+        alertDialog.setIcon(R.drawable.ic_homebtn);
 
         alertDialog.setPositiveButton("Done",
                 new DialogInterface.OnClickListener() {

@@ -1,6 +1,12 @@
 package com.example.mac.bugfree;
 
+import android.os.Build;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
 import com.robotium.solo.Solo;
 
 /**
@@ -26,6 +32,12 @@ public class FriendActivityUnitTest extends ActivityInstrumentationTestCase2<Fri
     public void testFollower(){
         solo.assertCurrentActivity("Wrong Activity", FriendActivity.class);
         solo.clickOnText("Follower");
+    }
+
+    public void testHomeBtn(){
+        solo.assertCurrentActivity("Wrong Activity", FriendActivity.class);
+        solo.clickOnActionBarItem(1);
+        //solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
     }
 
 }
