@@ -41,7 +41,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //Test
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
-    //private boolean is_checked = false;
+    private int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
     private EditText create_edit_reason, create_edit_date;
     ArrayAdapter<CharSequence> adapter1;
@@ -71,7 +71,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox = (CheckBox)findViewById(R.id.current_time);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(timePicker);
-
+        simpleTimePicker.setIs24HourView(true);
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,13 +84,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
        add_pic.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               //TODO allow user to add picture in part5
                //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
                //startActivity(intent);
                //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                //startActivityForResult(i, RESULT_LOAD_IMAGE);
            }
        });
-
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -125,7 +125,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), social_situation + " is selected.", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //TODO set tick to be disable
                     social_situation=null;
                 }
             }
@@ -162,6 +161,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
+        current_time_checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleDatePicker.setEnabled(!current_time_checkbox.isChecked());
+                simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
+            }
+        });
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -169,11 +175,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                int set_year = 0, set_month = 0, set_day = 0;
+
                 set_year = simpleDatePicker.getYear();
                 set_month = simpleDatePicker.getMonth();
                 set_day =  simpleDatePicker.getDayOfMonth();
-                dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day);
+                //dateOfRecord = new GregorianCalendar(set_year, set_month, set_day);
+            }
+        });
+        simpleTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                set_hour = simpleTimePicker.getHour();
+                set_minute = simpleTimePicker.getMinute();
+                //set_seconds =simpleTimePicke
             }
         });
         
@@ -248,6 +262,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
            moodEvent.setRealtime(dateOfRecord);
            moodEvent.setDateOfRecord(dateOfRecord);
         } else {
+            dateOfRecord = new GregorianCalendar(set_year, set_month, set_day, set_hour, set_minute);
             moodEvent.setRealtime(real_time());
             moodEvent.setDateOfRecord(dateOfRecord);
         }
