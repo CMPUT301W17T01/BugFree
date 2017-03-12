@@ -24,7 +24,7 @@ tools:context="com.example.mac.bugfree.FriendActivity">
     </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-<TabHost
+    <TabHost
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
