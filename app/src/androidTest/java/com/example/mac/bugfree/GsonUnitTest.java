@@ -21,12 +21,12 @@ public class GsonUnitTest {
     public ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void saveJsonFileTest(){
-        UserList userList = new UserList();
-        User user = new User();
-        Integer num = 1;
-        assertEquals(userList.getUserListSize(), num);
-    }
+//    @Test
+//    public void saveJsonFileTest(){
+//        UserList userList = new UserList();
+//        User user = new User();
+//        Integer num = 1;
+//        assertEquals(userList.getUserListSize(), num);
+//    }
 
 }
