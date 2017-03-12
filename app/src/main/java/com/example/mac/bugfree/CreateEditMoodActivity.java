@@ -208,7 +208,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 }
                 else {
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason, dateOfRecord);
+                        setMoodEvent(current_user, mood_state, social_situation, reason);
                     } catch (MoodStateNotAvailableException e) {
 
                     }
@@ -228,7 +228,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         //TODO if its Edit load moodEvent and setText
     }
 
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, GregorianCalendar dateOfRecord)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
             throws MoodStateNotAvailableException{
         User user = new User();
 
