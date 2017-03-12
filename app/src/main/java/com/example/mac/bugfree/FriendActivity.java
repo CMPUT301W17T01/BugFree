@@ -1,10 +1,8 @@
 package com.example.mac.bugfree;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,17 +22,10 @@ import java.util.ArrayList;
 
 public class FriendActivity extends AppCompatActivity {
 
-    //UserList userlist = new UserList();
-    //int currentUserID = userlist.getCurrentUserID();
-    //User currentUser = userlist.getUser(currentUserID);
-
-
-//    ArrayList followList = currentUser.getFolloweeIDs();
-//    ArrayList followerList = currentUser.getFollowerIDs();
-//    ArrayList notificationList = currentUser.getPendingPermission();
     ArrayList<String> followList;
     ArrayList<String> followerList;
     ArrayList<String> notificationList;
+    ArrayList<String> anotherfollowList;
     ListView followListView;
     ListView followerListView;
     ListView notificationListView;
@@ -140,8 +131,8 @@ public class FriendActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homeBtn:
-                Intent intent = new Intent(FriendActivity.this, MainActivity.class);
-                startActivity(intent);
+                setResult(RESULT_OK);
+                finish();
                 break;
 
             default:
@@ -209,6 +200,26 @@ public class FriendActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+
+                    
+                    User anotherUser = new User(singleNotification);
+
+                    ElasticsearchUserController.GetUserTask getUserTask =
+                            new ElasticsearchUserController.GetUserTask();
+                    getUserTask.execute(singleNotification);
+                    try{
+                        anotherUser = getUserTask.get();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get the User out of the async object");
+                    }
+
+                    anotherfollowList = anotherUser.getFolloweeIDs();
+                    anotherfollowList.add(currentUserName);
+
+                    ElasticsearchUserController.AddUserTask addUserTask2 =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask2.execute(anotherUser);
+
 
                     Toast.makeText(getApplicationContext(), singleNotification+
                             " has been accepted", Toast.LENGTH_SHORT).show();
