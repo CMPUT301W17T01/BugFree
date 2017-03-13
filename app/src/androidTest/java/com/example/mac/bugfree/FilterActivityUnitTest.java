@@ -46,7 +46,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.clickInList(4);
 
         final ArrayList<MoodEvent> moodEventList = getActivity().getMoodListAfterFilter();
-        asse
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
@@ -134,7 +133,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        final ArrayList<MoodEvent> moodEventList = getActivity().getMoodListAfterFilter();
 
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
