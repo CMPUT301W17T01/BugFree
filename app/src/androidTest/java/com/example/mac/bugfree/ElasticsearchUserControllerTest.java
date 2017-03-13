@@ -26,16 +26,21 @@ public class ElasticsearchUserControllerTest {
         public ActivityTestRule<MainActivity> mActivityRule =
                 new ActivityTestRule<>(MainActivity.class);
 
-
-
         @Test
         public void elasticSearchAddUserTest(){
             ElasticsearchUserController.createIndex();//clear our team index, everything will gone
             User newUser = new User("John");//create user named john
             MoodEventList moodEventList = new MoodEventList();
+            GregorianCalendar dateOfRecord = new GregorianCalendar(2017, 3, 1, 13, 12);
+            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 6, 28, 13, 12);
+
             try {
                 MoodEvent moodEvent = new MoodEvent("Happy", newUser.getUsr());
                 MoodEvent moodEvent1 = new MoodEvent("Anger", newUser.getUsr());
+                moodEvent.setDateOfRecord(dateOfRecord);
+                moodEvent.setRealtime(dateOfRecord);
+                moodEvent1.setDateOfRecord(dateOfRecord1);
+                moodEvent1.setRealtime(dateOfRecord1);
                 moodEventList.addMoodEvent(moodEvent);
                 moodEventList.addMoodEvent(moodEvent1);
                 newUser.setMoodEventList(moodEventList);
@@ -54,7 +59,6 @@ public class ElasticsearchUserControllerTest {
             followList.add("banana");
             followList.add("orange");
             newUser.setFolloweeIDs(followList);
-
 
 
             //these two lines uploads the user
@@ -107,9 +111,16 @@ public class ElasticsearchUserControllerTest {
             User user_get = new User("Sam");
 
             MoodEventList moodEventList = new MoodEventList();
+            GregorianCalendar dateOfRecord = new GregorianCalendar(2017, 3, 1, 13, 12);
+            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 6, 28, 13, 12);
+            GregorianCalendar dateOfRecord2 = new GregorianCalendar(2017, 5, 26, 13, 12);
             try {
                 MoodEvent moodEvent = new MoodEvent("Happy", user_1.getUsr());
                 MoodEvent moodEvent1 = new MoodEvent("Anger", user_1.getUsr());
+                moodEvent.setDateOfRecord(dateOfRecord);
+                moodEvent.setRealtime(dateOfRecord);
+                moodEvent1.setDateOfRecord(dateOfRecord1);
+                moodEvent1.setRealtime(dateOfRecord1);
                 moodEventList.addMoodEvent(moodEvent);
                 moodEventList.addMoodEvent(moodEvent1);
                 user_1.setMoodEventList(moodEventList);
@@ -135,17 +146,17 @@ public class ElasticsearchUserControllerTest {
             try {
                 MoodEventList moodEventList1 = user_get.getMoodEventList();
                 MoodEvent moodEvent2 = new MoodEvent("Sad", user_get.getUsr());
+                moodEvent2.setDateOfRecord(dateOfRecord2);
+                moodEvent2.setRealtime(dateOfRecord2);
                 moodEventList1.addMoodEvent(moodEvent2);
                 user_get.setMoodEventList(moodEventList1);
             } catch (MoodStateNotAvailableException e) {
                 Log.i("Error", "MoodEvent state is wrong" );
             }
 
-//            ElasticsearchUserController.AddUserTask addUserTask1 = new ElasticsearchUserController.AddUserTask();
-//            addUserTask1.execute(user_get);
             //the following two lines updates the online version
-            ElasticsearchUserController.UpdateUserTask updateUserTask = new ElasticsearchUserController.UpdateUserTask();
-            updateUserTask.execute(user_get);
+            ElasticsearchUserController.AddUserTask addUserTask1 = new ElasticsearchUserController.AddUserTask();
+            addUserTask1.execute(user_get);
 
             String query2 = user_get.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask2 = new ElasticsearchUserController.GetUserTask();
@@ -191,66 +202,6 @@ public class ElasticsearchUserControllerTest {
         ElasticsearchUserController.createIndex();
     }
 
-    @Test
-    public void elasticsearchAddData() {
-        ElasticsearchUserController.createIndex();//clear our team index, everything will gone
-
-        User newUser_1 = new User("John");//create user named john
-        MoodEventList moodEventList = new MoodEventList();
-        try {
-            MoodEvent moodEvent = new MoodEvent("Happy", newUser_1.getUsr());
-            try {
-                moodEvent.setTriggerText("Cake");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            MoodEvent moodEvent1 = new MoodEvent("Anger", newUser_1.getUsr());
-            moodEventList.addMoodEvent(moodEvent);
-            moodEventList.addMoodEvent(moodEvent1);
-            newUser_1.setMoodEventList(moodEventList);
-        } catch (MoodStateNotAvailableException e) {
-            Log.i("Error", "MoodEvent state is wrong" );
-        }
-
-        ArrayList<String> followerList = new ArrayList<>();
-        followerList.add("apple");
-        followerList.add("banana");
-        followerList.add("orange");
-        newUser_1.setFollowerIDs(followerList);
-
-        ArrayList<String> followList = new ArrayList<>();
-        followList.add("apple");
-        followList.add("banana");
-        followList.add("orange");
-        newUser_1.setFolloweeIDs(followList);
-
-
-        //these two lines uploads the user
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(newUser_1);
-
-        User user_2 = new User("apple");
-        MoodEventList moodEventList_1 = new MoodEventList();
-        try {
-            MoodEvent moodEvent = new MoodEvent("Happy", user_2.getUsr());
-            MoodEvent moodEvent1 = new MoodEvent("Anger", user_2.getUsr());
-            moodEventList_1.addMoodEvent(moodEvent);
-            moodEventList_1.addMoodEvent(moodEvent1);
-            user_2.setMoodEventList(moodEventList_1);
-        } catch (MoodStateNotAvailableException e) {
-            Log.i("Error", "MoodEvent state is wrong" );
-        }
-
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user_2);
-
-        User banana = new User("banana");
-        User orange = new User("orange");
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(banana);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(orange);
-    }
 
     @Test
     public void elasticsearchDisplayDate() {
@@ -263,8 +214,10 @@ public class ElasticsearchUserControllerTest {
         try {
             MoodEvent moodEvent = new MoodEvent("Happy", user.getUsr());
             moodEvent.setDateOfRecord(dateOfRecord);
+            moodEvent.setRealtime(dateOfRecord);
             MoodEvent moodEvent1 = new MoodEvent("Sad", user.getUsr());
             moodEvent1.setDateOfRecord(dateOfRecord1);
+            moodEvent1.setRealtime(dateOfRecord1);
             moodEventList.addMoodEvent(moodEvent);
             moodEventList.addMoodEvent(moodEvent1);
             user.setMoodEventList(moodEventList);
