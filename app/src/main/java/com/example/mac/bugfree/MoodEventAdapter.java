@@ -128,8 +128,11 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
                 SharedPreferences.Editor editor = v.getContext().getSharedPreferences("viewMoodEvent",Context.MODE_PRIVATE).edit();
                 Gson gson = new Gson();
+
                 String json = gson.toJson(moodEvent);
+                String json1 = gson.toJson(currentUser);
                 editor.putString("moodevent",json);
+                editor.putString("currentUser",json1);
                 editor.apply();
 
                 Intent intent = new Intent(v.getContext(), ViewMoodActivity.class);

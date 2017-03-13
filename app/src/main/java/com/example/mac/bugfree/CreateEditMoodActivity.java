@@ -44,7 +44,7 @@ import static com.example.mac.bugfree.R.id.timePicker;
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
 
-    private String current_user, mood_state, social_situation, reason;
+    private String current_user, mood_state , social_situation, reason;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -82,16 +82,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox.setChecked(true);
 
 
-//         //TODO if its Edit load moodEvent and setText
-
-//         if(is_edit){
-//             is_edit=false;
-//             Toast.makeText(getApplicationContext(), "1...test", Toast.LENGTH_SHORT).show();
-//             load_moodEvent(pass_mood_event);
-//         }
-
-
-
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
@@ -99,9 +89,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                setResult(RESULT_OK);
+                finish();
             }
         });
 
