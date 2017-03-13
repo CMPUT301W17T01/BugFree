@@ -77,7 +77,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         Gson gson =new Gson();
         String json = sharedPreferences.getString("moodevent","");
         MoodEvent pass_mood_event = gson.fromJson(json,MoodEvent.class);
-        boolean is_edit = sharedPreferences.getBoolean("flag", false)  ;
+        boolean is_edit = sharedPreferences.getBoolean("flag", false);
+
+
         //TODO if its Edit load moodEvent and setText
 
         if(is_edit){
