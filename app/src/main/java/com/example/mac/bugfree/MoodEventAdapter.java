@@ -25,7 +25,9 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by mac on 2017-02-21.
+ * This class is list adapter which help to display every element in list
+ * Reference: http://developer.android.com/training/material/lists-cards.html
+ * @author Xinlei Chen
  */
 
 public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.ViewHolder> {
@@ -33,15 +35,52 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     private MoodEventList mmoodEventArrayList = new MoodEventList();
     private String currentUser = "";
 
+    /**
+     * The type View holder.
+     * Provide a reference to the views for each data item
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
+
+        /**
+         * The IconImage in the card (top left)
+         */
         ImageView iconImage;
+
+        /**
+         * The Username in the card ( middle of top)
+         */
         TextView usernameText;
+
+        /**
+         * The Pic image in the card ( center of card )
+         */
         ImageView picImage;
+
+        /**
+         * The Reason text in the card (below the pic)
+         */
         TextView reasonText;
+
+        /**
+         * The Date text in the card (bottom)
+         */
         TextView dateText;
+
+        /**
+         * The pop uo menu in the card (top right)
+         */
         ImageView eventHandleImage;
+
+        /**
+         * The Color text in the card (display the mood state with different color)
+         */
         TextView colorText;
 
+        /**
+         * Instantiates a new View holder.
+         *
+         * @param view the view
+         */
         ViewHolder(View view) {
             super(view);
             iconImage = (ImageView) view.findViewById(R.id.mood_event_icon);
@@ -54,15 +93,25 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         }
     }
 
-    // Provide a suitable constructor
+    /**
+     * Instantiates a new Mood event adapter.
+     * Provide a suitable constructor
+     *
+     * @param moodEventArrayList the mood event array list
+     * @param currentUser        the current user
+     */
     public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser) {
         this.mmoodEventArrayList = moodEventArrayList;
         this.currentUser = currentUser;
-        //Log.d("Size of ArrayList", Integer.toString(mmoodEventArrayList.getCount()));
     }
 
-    // Create new views (invoked by the layout manager)
 
+    /**
+     * Create new views (invoked by the layout manager)
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         // create a new view
@@ -99,9 +148,11 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
-
-
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
@@ -128,11 +179,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         if (!moodEvent.getBelongsTo().equals(currentUser)) {
             holder.eventHandleImage.setVisibility(View.INVISIBLE);
         }
-
-
     }
 
-    // Return the size of your list
+    /**
+     * count the size of list
+     * @return size of list
+     */
     @Override
     public int getItemCount() {
         return mmoodEventArrayList.getCount();

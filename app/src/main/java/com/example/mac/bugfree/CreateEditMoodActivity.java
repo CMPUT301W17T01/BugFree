@@ -75,6 +75,22 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox.setChecked(true);
 
 
+//         SharedPreferences sharedPreferences =getSharedPreferences("viewMoodEvent", MODE_PRIVATE);
+//         Gson gson =new Gson();
+//         String json = sharedPreferences.getString("moodevent","");
+//         MoodEvent pass_mood_event = gson.fromJson(json,MoodEvent.class);
+//         boolean is_edit = sharedPreferences.getBoolean("flag", false);
+
+
+//         //TODO if its Edit load moodEvent and setText
+
+//         if(is_edit){
+//             is_edit=false;
+//             Toast.makeText(getApplicationContext(), "1...test", Toast.LENGTH_SHORT).show();
+//             load_moodEvent(pass_mood_event);
+//         }
+
+
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
