@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 /**
- *
+ * Please run DataForTest first
  * Please first signin with username == "John"
  * Then Test
  *
@@ -43,6 +43,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         context = getInstrumentation().getTargetContext();
     }
 
+    // test add follow who does not exist
     public void testAddFollowNotExist(){
         //from http://stackoverflow.com/questions/20611103/robotium-testing-on-options-menu-item-click
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
@@ -54,6 +55,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         assertEquals(true, actual);
     }
 
+    // test add follow who user already follow
     public void testAddFollowExist() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         int mode = context.MODE_PRIVATE;
@@ -70,6 +72,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         }
     }
 
+    // test add follow in normal situation
     public void testAddFollow() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         int mode = context.MODE_PRIVATE;
@@ -104,6 +107,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         }
     }
 
+    // test the drawer name
     public void testDrawerName(){
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
 
@@ -119,6 +123,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         }
     }
 
+    //test Click name on Card
     public void testClickNameInCard() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
@@ -130,29 +135,23 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         solo.assertCurrentActivity("Wrong Activity", ViewMoodActivity.class);
     }
 
-    public void testDelete() {
-        solo.assertCurrentActivity("Wrong", MainActivity.class);
-        RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
-        int before = recyclerView.getAdapter().getItemCount();
-        View view = recyclerView.getChildAt(0);
-        ImageView imageView = (ImageView) view.findViewById(R.id.event_handle);
-        //solo.clickOnView(imageView);
-        //solo.clickOnText("Delete");
+    //test pass to FriendsActivity
+    public void testIntentToFriendsActivity(){
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         solo.clickOnImage(0);
-
-
-        solo.clickOnText("Filter");
-        solo.assertCurrentActivity("Wrong", FilterActivity.class);
-//        ImageView imageView1 = (ImageView) view.findViewById(R.id.activity_filter);
-//        solo.clickOnView(imageView);
-        solo.clickOnMenuItem("activity_filter");
-
-        RecyclerView recyclerView2 = (RecyclerView) solo.getView(R.id.recycler_view);
-        int after = recyclerView2.getAdapter().getItemCount();
-
-        assertEquals(before, after+1);
+        solo.clickOnText("Friends");
+        solo.assertCurrentActivity("Wrong Activity", FriendActivity.class);
     }
 
+    //test pass to FilterActivity
+    public void testIntentToFilterActivity() {
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.clickOnImage(0);
+        solo.clickOnText("Filter");
+        solo.assertCurrentActivity("Wrong Activity", FilterActivity.class);
+    }
+
+    // test to click Edit on popup up menu which in Card
     public void testEdit() {
         solo.assertCurrentActivity("Wrong", MainActivity.class);
         RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
@@ -163,4 +162,16 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
         solo.clickOnText("Edit");
         solo.assertCurrentActivity("Wrong Activity", EditActivity.class);
     }
+
+    // test Sign out in drawer
+    public void testIntentSignout() {
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.clickOnImage(0);
+        solo.clickOnText("Sign Out");
+        solo.assertCurrentActivity("Wrong Activity", SignInActivity.class);
+        solo.enterText(0, "John");
+        solo.clickOnButton(0);
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+    }
+
 }
