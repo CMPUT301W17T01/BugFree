@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -154,10 +155,19 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     // test to click Edit on popup up menu which in Card
     public void testEdit() {
         solo.assertCurrentActivity("Wrong", MainActivity.class);
+        solo.clickOnImage(0);
+        solo.clickOnText("Filter");
+
+        solo.assertCurrentActivity("Wrong Activity", FilterActivity.class);
+        CheckBox mostRecentWeek = (CheckBox) solo.getView(R.id.checkbox_display_myself);
+        solo.clickOnView(mostRecentWeek);
+        View menu = solo.getView(R.id.activity_filter);
+        solo.clickOnView(menu);
+        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
+
         RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
         View view = recyclerView.getChildAt(0);
         ImageView imageView = (ImageView) view.findViewById(R.id.event_handle);
-
         solo.clickOnView(imageView);
         solo.clickOnText("Edit");
         solo.assertCurrentActivity("Wrong Activity", EditActivity.class);
