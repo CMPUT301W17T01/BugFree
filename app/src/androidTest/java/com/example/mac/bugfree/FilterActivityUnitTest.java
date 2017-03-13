@@ -45,6 +45,8 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.spinner_myself));
         solo.clickInList(4);
 
+        final ArrayList<MoodEvent> moodEventList = getActivity().getMoodListAfterFilter();
+        asse
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
