@@ -38,6 +38,10 @@ public class MoodEventList {
         this.moodEventArrayList.addAll(moodEventList.transferMoodEventListToArray());
     }
 
+    /**
+     * Change the MoodEventList into ArrayList<MoodEvent>
+     * @return ArrayList<MoodEvent>
+     */
     public ArrayList<MoodEvent> transferMoodEventListToArray(){
         return this.moodEventArrayList;
     }
@@ -46,6 +50,10 @@ public class MoodEventList {
         return this.moodEventArrayList.contains(moodEvent);
     }
 
+    /**
+     * delete the moodEvent
+     * @param moodEvent
+     */
     public void deleteMoodEvent(MoodEvent moodEvent) {
         this.moodEventArrayList.remove(moodEvent);
     }
@@ -58,6 +66,9 @@ public class MoodEventList {
         return this.moodEventArrayList.size();
     }
 
+    /**
+     * sort the moodEventList from newest to oldest
+     */
     public void sortByDate() {
         Collections.sort(moodEventArrayList, new Comparator<MoodEvent>() {
             @Override

@@ -21,13 +21,20 @@ import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
 
 /**
- * Created by mac on 2017-03-05.
+ * This class is the controller for storing data in Elastic search
+ * The whole framework is referenced with
+ * "https://github.com/Raymundo1/lonelyTwitter/blob/elasticsearch/app/src/main/java/ca/ualberta/cs/lonelytwitter/ElasticsearchTweetController.java"
+ *
+ * @author Xinlei Chen
  */
 
 public class ElasticsearchUserController {
     private static JestDroidClient client;
 
 
+    /**
+     * The function which add user to elastic search
+     */
     public static class AddUserTask extends AsyncTask<User, Void, Void> {
 
         @Override
@@ -55,6 +62,9 @@ public class ElasticsearchUserController {
         }
     }
 
+    /**
+     * The function which get user from elastic search
+     */
     public static class GetUserTask extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... params) {
@@ -73,6 +83,9 @@ public class ElasticsearchUserController {
         }
     }
 
+    /**
+     * The function which update user from elastic search
+     */
     public static class UpdateUserTask extends  AsyncTask<User, Void, Void> {
         @Override
         protected Void doInBackground(User... users) {
@@ -97,6 +110,9 @@ public class ElasticsearchUserController {
         }
     }
 
+    /**
+     * The function to judge if the user is stored in elastic search
+     */
     public static class IsExist extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params){
@@ -121,6 +137,9 @@ public class ElasticsearchUserController {
         }
     }
 
+    /**
+     * Create new Index with empty data
+     */
     public static void createIndex() {
         verifySettings();
         try {
@@ -134,6 +153,9 @@ public class ElasticsearchUserController {
         }
     }
 
+    /**
+     * Verify settings.
+     */
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
