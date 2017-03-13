@@ -11,7 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * This is the Sign Up view class of the project, <br> In this class, user interaction and Elastic Query action are performed
+ *<p>User input of user name is check by Elastic search, no duplicate is allowed.
+ * User will back to Signin screen when Sign up is finished</p>
+ * @author Zhi Li
+ * @version 2.0
+ * @see MainActivity
+ */
 public class SignInActivity extends AppCompatActivity {
     protected EditText loginText;
     private String signInName;
@@ -52,7 +59,11 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    //Validate user
+    /**
+     * This method validates if the user input of user name exist in Elastic search.
+     * @param name String of user id
+     * @return boolean
+     */
     private boolean validUser (String name){
         ElasticsearchUserController.IsExist isExist = new ElasticsearchUserController.IsExist();
         isExist.execute(name);
@@ -73,7 +84,11 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    //Stores current user name
+    /**
+     * This method stored the successfully login user's name in a local file
+     * File explorer -> data -> data -> com.example.mac.bugfree -> sharef_prefs -> data.xml
+     * @param name String of user name to be stored
+     */
     private void storePreference(String name){
         SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
         editor.putString("currentUser",name);

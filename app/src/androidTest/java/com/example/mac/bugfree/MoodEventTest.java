@@ -82,28 +82,6 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         }
     }
 
-//Test using a bad initialization parameters.
-//    public void testIllegalInit() throws MoodStateNotAvailableException,EmptyInputException,TriggerTooLongException,
-//            ImageTooBigException,InvalidSSException{
-//        //Initialize a normal MoodEvent
-//        User usr = new User("John");
-//        MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
-//        mood.setUrlPic("fake.png");
-//        mood.setSocialSituation("Alone");
-//        mood.setTriggerText("School");
-//        mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
-////         Test illegal moodState
-////        this is an initialization issue, therefore it should be done in CreateEditMoodActivity
-////        It will fail at this time being
-//        try {
-//            MoodEvent mood1 = new MoodEvent("what",0);
-//            fail();
-//        }
-//        catch (MoodStateNotAvailableException e) {
-//            assertTrue(true);
-//        }
-//
-//    }
 
 //Test if a moodEvent saves a improper trigger
     public void testTrigger() throws MoodStateNotAvailableException,EmptyInputException,TriggerTooLongException,
@@ -116,17 +94,10 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         mood.setTriggerText("School");
         mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
 
-        // Test trigger length
-//        try {
-//            mood.setTriggerText("a b c d");
-//            mood.setTriggerText("Thisisaveryveryveryveylongtrigger");
-//            fail();
-//        }catch (TriggerTooLongException e){
-//            assertTrue(true);
-//        }
     }
 
     //Check if an oversized image can be stored
+    // This function is not ready yet
     //will pass after implement
 //    public void testImage() throws MoodStateNotAvailableException,EmptyInputException,TriggerTooLongException,
 //            ImageTooBigException,InvalidSSException{
@@ -160,12 +131,5 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         mood.setTriggerText("School");
         mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
 
-        // Test social situation
-//        try {
-//            mood.setSocialSituation("Alone!!!!");
-//            fail();
-//        }catch (IOException e){
-//            assertTrue(true);
-//        }
     }
 }
