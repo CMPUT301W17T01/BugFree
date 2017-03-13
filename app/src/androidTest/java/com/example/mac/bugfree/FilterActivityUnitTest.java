@@ -31,6 +31,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    // Taken from http://bitbar.com/automated-ui-testing-android-applications-robotium/
     /**
      * Test a item in mood state spinner in myself tab can be selected and
      * jump back to main activity after clicking filter menu item.
@@ -47,6 +48,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
+    // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
     /**
      * Test most recent week checkbox in myself tab can be clicked and
      * jump back to main activity after clicking filter menu item.
@@ -78,6 +80,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
+    // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
     /**
      * Test display all checkbox in myself can be clicked and
      * jump back to main activity after clicking filter menu item.
@@ -92,6 +95,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
+    // Taken from http://bitbar.com/automated-ui-testing-android-applications-robotium/
     /**
      * Test a item in mood state spinner in following tab can be selected and
      * jump back to main activity after clicking filter menu item.
@@ -110,6 +114,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
+    // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
     /**
      * Test most recent week checkbox in following tab can be clicked and
      * jump back to main activity after clicking filter menu item.
@@ -144,7 +149,8 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.clickOnView(menu);
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
-
+    
+    // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
     /**
      * Test display all checkbox in following can be clicked and
      * jump back to main activity after clicking filter menu item.
