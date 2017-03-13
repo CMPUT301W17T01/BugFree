@@ -83,17 +83,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        ImageView earth_tab = (ImageView) findViewById(R.id.earth_tab_home);
-//        earth_tab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(intent);
-//            }
-//        });
-
-
         /**
          * Set the Listener for drawer in MainActivity
          */
