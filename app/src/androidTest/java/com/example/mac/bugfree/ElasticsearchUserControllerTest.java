@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -229,7 +230,11 @@ public class ElasticsearchUserControllerTest {
         addUserTask.execute(user);
     }
 
-
+    @After
+    public void recouverData() {
+        DataForTest dataForTest = new DataForTest();
+        dataForTest.testDataCreation();
+    }
 
 }
 
