@@ -12,7 +12,7 @@ import static junit.framework.Assert.fail;
  */
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
-    private String name0 = "0John";
+    private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
     private String name3 = "3Watson";
@@ -46,8 +46,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             String md5 = "Sad";
             String md6 = "Shame";
             String md7 = "Surprise";
+
             String ss0 = "Alone";
-            ;
             String ss1 = "With one other person";
             String ss2 = "Two to several people";
             String ss3 = "With a crowd";
@@ -71,7 +71,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello");
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -102,7 +104,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello1");
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -133,7 +137,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello2");
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -164,7 +170,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello3");
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -195,7 +203,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello4");
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -226,7 +236,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello5");
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -257,7 +269,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello6");
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -288,7 +302,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello7");
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -319,7 +335,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello8");
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -349,7 +367,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setTriggerText("Hello9");
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
-                mood.setDateOfRecord(dateOfRecord1);
+                mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
