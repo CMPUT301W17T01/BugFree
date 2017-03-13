@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -91,6 +92,9 @@ public class FilterActivity extends AppCompatActivity {
     private Calendar dateOfMood;
     private String stateOfMood;
     private String keyOfReason;
+    public ArrayList<MoodEvent> getMoodListAfterFilter(){
+        return moodListAfterFilter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
