@@ -319,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
 
         moodEventArrayList = loadFile.loadFilteredMoodEventList(context);
         MoodEventList moodEventList = new MoodEventList(moodEventArrayList);
+        moodEventList.sortByDate();
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

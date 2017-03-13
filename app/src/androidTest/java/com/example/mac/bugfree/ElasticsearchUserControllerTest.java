@@ -231,7 +231,7 @@ public class ElasticsearchUserControllerTest {
     }
 
     @After
-    public void recouverData() {
+    public void recoverData() {
         DataForTest dataForTest = new DataForTest();
         dataForTest.testDataCreation();
     }

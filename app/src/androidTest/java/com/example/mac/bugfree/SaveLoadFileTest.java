@@ -29,15 +29,17 @@ public class SaveLoadFileTest extends ActivityInstrumentationTestCase2 {
         AL1.add("Lily");
         AL2.add("Ray");
         MoodEventList MEL = new MoodEventList();
-        GregorianCalendar dateOfRecord = new GregorianCalendar();
-        GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017,2,28,13,12);
+        GregorianCalendar dateOfRecord = new GregorianCalendar(2017,2,28,13,12,30);
+        GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017,3,28,13,12, 30);
         try{
             MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
             MoodEvent mood1 = new MoodEvent("Sad",usr.getUsr());
             mood.setTriggerText("Hello");
             mood.setSocialSituation("Alone");
             mood.setDateOfRecord(dateOfRecord);
-            mood.setDateOfRecord(dateOfRecord1);
+            mood1.setDateOfRecord(dateOfRecord1);
+            mood.setRealtime(dateOfRecord);
+            mood1.setRealtime(dateOfRecord1);
             MEL.addMoodEvent(mood);
             MEL.addMoodEvent(mood1);
         }

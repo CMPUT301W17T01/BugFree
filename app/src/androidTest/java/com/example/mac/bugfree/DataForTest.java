@@ -12,8 +12,6 @@ import java.util.GregorianCalendar;
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
 
-    //Please do not run this test, it will clear our index
-
     private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
@@ -70,6 +68,13 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             MoodEventList MEL = new MoodEventList();
             GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
             GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12,30);
+            GregorianCalendar dateOfRecord2 = new GregorianCalendar(2016, 2, 27, 13, 12,30);
+            GregorianCalendar dateOfRecord3 = new GregorianCalendar(2017, 2, 28, 13, 12,30);
+            GregorianCalendar dateOfRecord4 = new GregorianCalendar(2016, 1, 1, 13, 12,30);
+            GregorianCalendar dateOfRecord5 = new GregorianCalendar(2017, 1, 2, 13, 12,30);
+            GregorianCalendar dateOfRecord6 = new GregorianCalendar(2016, 2, 1, 13, 12,30);
+            GregorianCalendar dateOfRecord7 = new GregorianCalendar(2017, 2, 2, 13, 12,30);
+
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
                 MoodEvent mood1 = new MoodEvent(md1, usr0.getUsr());
@@ -82,6 +87,43 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
+
+                mood = new MoodEvent(md2, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord2);
+                mood.setRealtime(dateOfRecord2);
+                mood.setTriggerText("Surstromming");
+                MEL.addMoodEvent(mood);
+
+                mood = new MoodEvent(md3, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord3);
+                mood.setRealtime(dateOfRecord3);
+                mood.setTriggerText("Bungee-jumping");
+                MEL.addMoodEvent(mood);
+
+                mood = new MoodEvent(md4, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord4);
+                mood.setRealtime(dateOfRecord4);
+                mood.setTriggerText("Full mark");
+                MEL.addMoodEvent(mood);
+
+                mood = new MoodEvent(md5, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord5);
+                mood.setRealtime(dateOfRecord5);
+                mood.setTriggerText("Break Up");
+                MEL.addMoodEvent(mood);
+
+                mood = new MoodEvent(md6, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord6);
+                mood.setRealtime(dateOfRecord6);
+                mood.setTriggerText("Public speaking");
+                MEL.addMoodEvent(mood);
+
+                mood = new MoodEvent(md7, usr0.getUsr());
+                mood.setDateOfRecord(dateOfRecord7);
+                mood.setRealtime(dateOfRecord7);
+                mood.setTriggerText("Birthday surprise");
+                MEL.addMoodEvent(mood);
+
             } catch (Exception e) {
                 fail();
             }
