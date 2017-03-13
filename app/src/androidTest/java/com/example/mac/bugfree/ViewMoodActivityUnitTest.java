@@ -3,6 +3,9 @@ package com.example.mac.bugfree;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
+
+import com.robotium.solo.Solo;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,17 +19,27 @@ import static org.junit.Assert.assertEquals;
  * Created by mengyangchen on 2017-02-23.
  */
 
-@RunWith(AndroidJUnit4.class)
-public class ViewMoodActivityUnitTest{
+public class ViewMoodActivityUnitTest extends ActivityInstrumentationTestCase2<ViewMoodActivity> {
+    private Solo solo;
 
-    @Rule
-    public ActivityTestRule<ViewMoodActivity> mActivityRule =
-            new ActivityTestRule<>(ViewMoodActivity.class);
-
-    @Test
-    public void test_load_mood_list() throws MoodStateNotAvailableException{
-        User usr = new User("John");
-        MoodEvent moodEvent = new MoodEvent("Happy",usr.getUsr());
-        assertEquals(moodEvent.getMoodState(), "Happy");
+    public ViewMoodActivityUnitTest(){
+        super(com.example.mac.bugfree.ViewMoodActivity.class);
     }
+
+    public void setUp() throws Exception{
+        solo = new Solo(getInstrumentation(), getActivity());
+    }
+
+    public void testedit(){
+        solo.assertCurrentActivity("Wrong Activity", ViewMoodActivity.class);
+        View edit = solo.getView(R.id.action_edit);
+        solo.clickOnView(edit);
+    }
+
+    public void testdelete(){
+        solo.assertCurrentActivity("Wrong Activity", ViewMoodActivity.class);
+        View edit = solo.getView(R.id.action_delete);
+        solo.clickOnView(edit);
+    }
+
 }
