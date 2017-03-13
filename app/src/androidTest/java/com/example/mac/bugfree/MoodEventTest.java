@@ -1,7 +1,6 @@
 package com.example.mac.bugfree;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.GregorianCalendar;
@@ -66,6 +65,7 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
         mood.setSocialSituation("Alone");
         mood.setTriggerText("School");
         mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
+        mood.setRealtime(new GregorianCalendar(2017,2,2,15,16,17));
 
         //test the setters & getters
         try{
@@ -76,24 +76,11 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
             // Reference to http://javarevisited.blogspot.ca/2012/02/3-example-to-compare-two-dates-in-java.html
             //2017-2-26-19:25
             assertTrue((mood.getDateOfRecord()).compareTo(date1) ==0);
+            assertTrue((mood.getRealtime()).compareTo(date1) ==0);
         }
         catch(Exception e){
             fail();
         }
-    }
-
-
-//Test if a moodEvent saves a improper trigger
-    public void testTrigger() throws MoodStateNotAvailableException,EmptyInputException,TriggerTooLongException,
-            ImageTooBigException,InvalidSSException{
-        //Initialize a normal MoodEvent
-        User usr = new User("John");
-        MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
-        mood.setUrlPic("fake.png");
-        mood.setSocialSituation("Alone");
-        mood.setTriggerText("School");
-        mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
-
     }
 
     //Check if an oversized image can be stored
@@ -120,16 +107,4 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 //
 //    }
 
-//  Test if Social Situation setter allows bad parameter
-    public void testSocialSituation() throws MoodStateNotAvailableException,EmptyInputException,TriggerTooLongException,
-            ImageTooBigException,InvalidSSException{
-        //Initialize a normal MoodEvent
-        User usr = new User("John");
-        MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
-        mood.setUrlPic("fake.png");
-        mood.setSocialSituation("Alone");
-        mood.setTriggerText("School");
-        mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
-
-    }
 }
