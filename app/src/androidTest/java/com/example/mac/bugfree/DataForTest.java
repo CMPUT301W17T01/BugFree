@@ -6,13 +6,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import static junit.framework.Assert.fail;
-
 /**
  * Created by Zhi Li on 2017/3/8.
  */
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
+
+    //Please do not run this test, it will clear our index
+
     private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
@@ -37,7 +38,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
     public DataForTest() {super(MainActivity.class);}
 
     public void testDataCreation() {
-        //Can only add first 4 user because of unknown reason
+
         try {
             String md0 = "Anger";
             String md1 = "Confusion";
@@ -47,8 +48,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             String md5 = "Sad";
             String md6 = "Shame";
             String md7 = "Surprise";
+
             String ss0 = "Alone";
-            ;
             String ss1 = "With one other person";
             String ss2 = "Two to several people";
             String ss3 = "With a crowd";
@@ -64,8 +65,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             AL3.add(name4);
 
             MoodEventList MEL = new MoodEventList();
-            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12);
-            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12);
+            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
+            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12,30);
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
                 MoodEvent mood1 = new MoodEvent(md1, usr0.getUsr());
@@ -73,6 +74,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
+
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -104,6 +108,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -135,6 +141,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -166,6 +174,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -197,6 +207,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -228,6 +240,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -259,6 +273,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -290,6 +306,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -321,6 +339,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -351,6 +371,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -363,23 +385,23 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             //Add all users to Elastic Search
             //Clear Online data
-            ElasticsearchUserController.createIndex();
+//            ElasticsearchUserController.createIndex();
 
             //Add
-            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr0);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr1);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr2);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr3);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr4);
+//            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr0);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr1);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr2);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr3);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr4);
 //            SystemClock.sleep(3000);
 //            addUserTask = new ElasticsearchUserController.AddUserTask();
 //            addUserTask.execute(usr5);

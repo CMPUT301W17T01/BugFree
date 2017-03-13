@@ -61,7 +61,7 @@ public class ElasticsearchUserControllerTest {
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(newUser);
 
-            //get user name
+            //get user
             String query = newUser.getUsr();
             ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
             getUserTask.execute(query);
