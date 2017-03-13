@@ -11,7 +11,9 @@ import java.util.GregorianCalendar;
  */
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
+
     //Please do not run this test, it will clear our index
+
     private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
@@ -46,8 +48,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             String md5 = "Sad";
             String md6 = "Shame";
             String md7 = "Surprise";
+
             String ss0 = "Alone";
-            ;
             String ss1 = "With one other person";
             String ss2 = "Two to several people";
             String ss3 = "With a crowd";
@@ -72,6 +74,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
+
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -103,6 +108,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -134,6 +141,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -165,6 +174,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -196,6 +207,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -227,6 +240,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -258,6 +273,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -289,6 +306,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -320,6 +339,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss0);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -350,6 +371,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
                 mood1.setDateOfRecord(dateOfRecord1);
+                mood.setRealtime(dateOfRecord);
+                mood1.setRealtime(dateOfRecord1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {

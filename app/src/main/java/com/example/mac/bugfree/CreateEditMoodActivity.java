@@ -1,6 +1,6 @@
 package com.example.mac.bugfree;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +38,8 @@ import static com.example.mac.bugfree.R.id.reason_textView;
 import static com.example.mac.bugfree.R.id.timePicker;
 
 /**
+ * This class allow users to create a new mood event
+ *
  * @author Mengyang Chen
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
@@ -53,7 +55,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
-    private Toolbar toolbar;
+
+
+    /**
+     * onCreate begins from here
+     * set the spinners, pickers and EditText, store them whenever changed
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +69,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter1;
         ArrayAdapter<CharSequence> adapter2;
         create_edit_reason = (EditText)findViewById(R.id.create_edit_reason);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
@@ -75,13 +82,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox.setChecked(true);
 
 
-//         SharedPreferences sharedPreferences =getSharedPreferences("viewMoodEvent", MODE_PRIVATE);
-//         Gson gson =new Gson();
-//         String json = sharedPreferences.getString("moodevent","");
-//         MoodEvent pass_mood_event = gson.fromJson(json,MoodEvent.class);
-//         boolean is_edit = sharedPreferences.getBoolean("flag", false);
-
-
 //         //TODO if its Edit load moodEvent and setText
 
 //         if(is_edit){
@@ -89,7 +89,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 //             Toast.makeText(getApplicationContext(), "1...test", Toast.LENGTH_SHORT).show();
 //             load_moodEvent(pass_mood_event);
 //         }
-
 
 
 
@@ -213,12 +212,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         
     }
 
+    /**
+     * Set the tool bar
+     * tick on right up corner
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_create_edit_mood, menu);
 
         return true;
 
     }
+    /**
+     * whenever the right up corner's tick is clicked
+     * get the real_time() use as the "ID"
+     * call the setMoodEvent function
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle presses on the action bar items
@@ -251,6 +259,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //TODO add location in part 5
     public boolean add_location(){
         return true;
     }
@@ -258,6 +268,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * pass the data in
+     * @param current_user
+     * @param mood_state
+     * @param social_situation
+     * @param reason
+     * set the mood event and push it to online server
+     * @throws MoodStateNotAvailableException
+     */
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
             throws MoodStateNotAvailableException{
         User user = new User();
@@ -287,6 +306,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
     }
+
+    /**
+     * This class allow the user to get the real time
+     * @return time
+     */
     public GregorianCalendar real_time(){
         GregorianCalendar time;
         GregorianCalendar current = new GregorianCalendar();
@@ -304,27 +328,32 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         try {
             year = Integer.parseInt(splited[0]);
         } catch (NumberFormatException nfe) {
+            Log.i("Error message","NumberFormatException");
         }
         try {
             month = Integer.parseInt(splited[1]);
         } catch (NumberFormatException nfe) {
+            Log.i("Error message","NumberFormatException");
         }
         try {
             day = Integer.parseInt(splited[2]);
         } catch (NumberFormatException nfe) {
+            Log.i("Error message","NumberFormatException");
         }
         try {
             hour = Integer.parseInt(splited[3]);
         } catch (NumberFormatException nfe) {
+            Log.i("Error message","NumberFormatException");
         }
-
         try {
             minute = Integer.parseInt(splited[4]);
         } catch (NumberFormatException nfe) {
+            Log.i("Error message","NumberFormatException");
         }
         try {
             second = Integer.parseInt(splited[5]);
         } catch (NumberFormatException nfe){
+            Log.i("Error message","NumberFormatException");
         }
 
         time = new GregorianCalendar(year, month, day, hour, minute, second);
