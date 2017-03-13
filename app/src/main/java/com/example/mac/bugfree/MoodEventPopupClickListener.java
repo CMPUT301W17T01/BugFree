@@ -110,8 +110,8 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         SharedPreferences.Editor editor = context.getSharedPreferences("editMoodEvent",Context.MODE_PRIVATE).edit();
         Gson gson = new Gson();
         String json = gson.toJson(moodEvent);
-        editor.putBoolean("flag", true);
         editor.putString("moodevent",json);
+        //editor.putString("")
         editor.apply();
 
         Intent intent = new Intent(context, EditActivity.class);
