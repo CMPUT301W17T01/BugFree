@@ -20,6 +20,23 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * This is the Friend Activity of this porject.
+ * In this activity, user can view their follows, followers and notifications
+ * Also, user can choose to accept or decline other user's friend application.
+ * It use elastic search to get the informations of the user and get their
+ * friend lists. If the user clicked accept button in the notifications,
+ * the applier will be added to the follower list of the current user and
+ * the data will be uploaded.
+ *<pre>
+ *     pre-formatted text: <br>
+ *         File Explorer -> data -> data -> com.example.mac.BugFree -> files -> filter.sav
+ *</pre>
+ *
+ * @Author Yipeng Zhou
+ */
+
+
 public class FriendActivity extends AppCompatActivity {
 
     private ArrayList<String> followList;
@@ -37,6 +54,11 @@ public class FriendActivity extends AppCompatActivity {
         return notificationListView;
     }
 
+    /** Called when the activity is first created.
+     * Create a tab view for the follow, follower and notifications
+     * and list the informations in the tab view.
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +147,26 @@ public class FriendActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Call when the activity is first created.
+     * Create a home button on the action bar of the activity
+     * which allows user to click on it and return to the
+     * main activity.
+     * @param menu
+     * @return
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.homebtn, menu);
         return true;
     }
+
+    /**
+     * Set the action of the home button.
+     * @param item
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,6 +181,11 @@ public class FriendActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * This is the FollowList adapter for the activity.
+     * It adapts the list view whenever the view has been changed,
+     * i.e. the user added a new follow.
+     */
 
     private class FollowListAdapter extends ArrayAdapter<User> {
         public FollowListAdapter(Context context, ArrayList followList) {
@@ -162,6 +204,12 @@ public class FriendActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This is the FollowerList adapter for the activity.
+     * It adapts the list view whenever the view has been changed,
+     * i.e. a new follower has been added in to the follower list.
+     */
+
     private class FollowerListAdapter extends ArrayAdapter<User> {
         public FollowerListAdapter(Context context, ArrayList followerList) {
             super(context, R.layout.list_friend_item, followerList);
@@ -177,6 +225,19 @@ public class FriendActivity extends AppCompatActivity {
             return view;
         }
     }
+
+    /**
+     * This is the NotificationList adapter for the activity.
+     * It adapts the list view whenever the view has been changed,
+     * i.e. a new notification has been added into the list. And It
+     * also includes two buttons which are acceptBtn and declineBtn,
+     * If the user click on the accept button in the list view item,
+     * a new follower will be added in to the follower list of the
+     * current user, and current user will be added to the sender's
+     * follow list. If the user choose to click on the decline button
+     * on the list item, the application will be deleted from the
+     * pending permission in the elastic search.
+     */
 
     private class NotificationListAdapter extends ArrayAdapter<User> {
         public NotificationListAdapter(Context context, ArrayList notificationList) {

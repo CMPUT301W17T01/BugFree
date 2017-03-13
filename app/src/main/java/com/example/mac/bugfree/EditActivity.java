@@ -24,6 +24,11 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ *This activity is a sub class of CreateEditMoodActivity
+ *Allow users to edit the mood events that they have already created
+ * @author Mengyang Chen
+ */
 public class EditActivity extends CreateEditMoodActivity {
 
     private MoodEvent edit_mood_event;
@@ -32,14 +37,17 @@ public class EditActivity extends CreateEditMoodActivity {
     private Spinner mood_state_spinner, social_situation_spinner;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
-    private Toolbar toolbar;
     private CheckBox current_time_checkbox;
+
+    /**
+     * onCreate begins from here
+     * set the spinners, pickers and EditText, store them whenever changed
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         ArrayAdapter<CharSequence> adapter1;
         ArrayAdapter<CharSequence> adapter2;
@@ -157,7 +165,9 @@ public class EditActivity extends CreateEditMoodActivity {
 
 
     }
-
+    /**
+     * local functions that allow users to load the mood events
+     */
 
     public void load_moodEvent(MoodEvent edit_mood_event ){
 
@@ -188,6 +198,8 @@ public class EditActivity extends CreateEditMoodActivity {
         }
         return index;
     }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle presses on the action bar items

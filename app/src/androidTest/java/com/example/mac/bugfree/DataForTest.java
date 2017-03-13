@@ -1,17 +1,19 @@
 package com.example.mac.bugfree;
 
+import android.os.SystemClock;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-
-import static junit.framework.Assert.fail;
 
 /**
  * Created by Zhi Li on 2017/3/8.
  */
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
+
+    //Please do not run this test, it will clear our index
+
     private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
@@ -36,7 +38,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
     public DataForTest() {super(MainActivity.class);}
 
     public void testDataCreation() {
-        //Can only add first 4 user because of unknown reason
+
         try {
             String md0 = "Anger";
             String md1 = "Confusion";
@@ -63,8 +65,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             AL3.add(name4);
 
             MoodEventList MEL = new MoodEventList();
-            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12);
-            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12);
+            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
+            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12,30);
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
                 MoodEvent mood1 = new MoodEvent(md1, usr0.getUsr());
@@ -74,6 +76,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood1.setDateOfRecord(dateOfRecord1);
                 mood.setRealtime(dateOfRecord);
                 mood1.setRealtime(dateOfRecord1);
+
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -382,38 +385,42 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             //Add all users to Elastic Search
             //Clear Online data
-            ElasticsearchUserController.createIndex();
+//            ElasticsearchUserController.createIndex();
 
             //Add
-            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr0);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr1);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr2);
+//            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr0);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr1);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr2);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr3);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr4);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr5);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr6);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr7);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr8);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr9);
 
             assertTrue(true);
         } catch (Exception e){
             assertTrue(false);
         }
-    }
-    public void testDataCreation2(){
-
-        //Add
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr3);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr4);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr5);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr6);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr7);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr8);
-        addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(usr9);
     }
 }
