@@ -13,6 +13,8 @@ import org.junit.Test;
 import java.util.Random;
 
 /**
+ * After running this test, if there are more test to do, please open the app in Emulator
+ * and sign out and resignin as John. Other wise other test will fail.
  * Created by Zhi Li on 2017/2/25.
  */
 
