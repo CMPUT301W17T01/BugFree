@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_mood"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mac.bugfree.EditActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/toolbar_create_edit"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <!--<ImageView-->
+                <!--android:src="@drawable/ic_add_pic"-->
+                <!--android:id="@+id/add_picture"-->
+                <!--android:adjustViewBounds="true"-->
+                <!--android:maxWidth="50dp"-->
+                <!--android:maxHeight="50dp"-->
+                <!--android:scaleType="fitCenter"-->
+                <!--android:layout_weight="0.16"-->
+                <!--android:layout_width="60dp"-->
+                <!--android:layout_height="60dp" />-->
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    app:srcCompat="@drawable/picture_text"
+                    android:id="@+id/pic_preview"
+                    android:layout_height="100dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:text="Mood State:"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/text1_mood"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal|bold"
+                    android:fontFamily="serif"
+                    android:layout_marginLeft="10dp" />
+
+                <Spinner
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit_mood_state_spinner"
+                    android:layout_weight="1.65"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:text="Social Situation:"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/text2_social"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
+                    android:textStyle="normal|bold"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="sans-serif" />
+
+
+                <Spinner
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit_social_situation_spinner"
+                    android:layout_weight="1.65"
+                    android:layout_width="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:dropDownWidth="match_parent"
+                    android:layout_marginLeft="10dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:text="Reason:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text3_reason"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold"
+                    android:layout_marginLeft="10dp" />
+
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="20"
+                    android:maxLength="20"
+                    android:id="@+id/edit_reason"
+                    android:inputType="text"
+                    android:layout_marginLeft="10dp" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:text="Date:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text3_date"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:textStyle="normal|bold"
+                    android:layout_marginLeft="10dp" />
+
+                <TextView
+                    android:text="(Use Current time?)"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:layout_weight="1.65" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/current_time"
+                    android:layout_weight="1.65" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="0.16">
+
+                <DatePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/datePicker"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:datePickerMode="spinner"
+                    android:calendarViewShown="false"
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginRight="-40dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="0dp"/>
+
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timePicker"
+                    android:scaleX="0.75"
+                    android:scaleY="0.75"
+                    android:layout_marginLeft="-30dp"
+                    android:layout_marginRight="-40dp"
+                    android:layout_marginTop="-50dp"
+                    android:layout_marginBottom="0dp"
+                    android:timePickerMode="spinner" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

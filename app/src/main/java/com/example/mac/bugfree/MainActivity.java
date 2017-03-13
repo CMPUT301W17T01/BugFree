@@ -28,6 +28,18 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * This Class is the main view class of the project.
+ * In this Class, user interaction and file manipulation is performed
+ *<pre>
+ *     pre-formatted text: <br>
+ *         File Explorer -> data -> data -> com.example.mac.BugFree -> files -> filter.sav
+ *</pre>
+ *
+ * some reference: http://developer.android.com/training/material/lists-cards.html
+ *
+ * @author  Xinlei Chen
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String FILENAME2 = "filter.sav";
@@ -42,18 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//        currentUserName = pref.getString("currentUser", "");
-//
-//        if (currentUserName.equals("")) {
-//            Log.d("Error", "sdfsgdfgdfgdfgdfgdfgd");
-//            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//            startActivity(intent);
-//        }
-//        Log.d("Error2", "sdfsgdfgdfgdfgdfgdfgdfdsfds");
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -94,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
 
-        //navigationView.setCheckedItem(R.id.drawer_filter);
+        /**
+         * Set the Listener for drawer in MainActivity
+         */
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -151,12 +153,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_mainactivity, menu);
         return true;
     }
 
+    /**
+     * Set the listener for the toolbar(Action Bar)
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -175,6 +183,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Get whole mood events from user and the user's follow when "filter.sav" is not exist
+     * Get the data from the elastic search
+     * @param currentUserName the current user name
+     */
     public void loadList(String currentUserName) {
         // load List to UI
 
@@ -207,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         moodEventList.sortByDate();
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
+        // Take from: http://developer.android.com/training/material/lists-cards.html
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -219,6 +233,9 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * The function will be invoked when user click Add Follow from tool bar menu
+     */
     public void followDialogue() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setTitle("Follow");
@@ -252,6 +269,11 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * To send the request of following
+     * Add the user to other user's pending permission
+     * @param followName
+     */
     private void addFollow(String followName) {
         // if followName = currentUserName
         if (followName.equals(currentUserName)) {
@@ -284,6 +306,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * To check if the file "filter.sav" is exist
+     * @param context
+     * @param filename
+     * @return if it exists, return true. Vice Versa
+     */
     private boolean fileExists(Context context, String filename) {
         File file = context.getFileStreamPath(filename);
         if (file == null || !file.exists()) {
@@ -292,6 +320,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * If the "filter.sav" is exist, load moodEventList from the file
+     * @param context
+     */
     private void loadFromFilterFile(Context context) {
         LoadFile loadFile = new LoadFile();
         ArrayList<MoodEvent> moodEventArrayList = new ArrayList<>();
@@ -301,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
+        // Take from: http://developer.android.com/training/material/lists-cards.html
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
