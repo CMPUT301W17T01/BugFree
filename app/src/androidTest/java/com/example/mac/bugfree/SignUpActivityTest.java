@@ -9,6 +9,8 @@ import java.util.Random;
 
 import com.robotium.solo.Solo;
 
+import org.junit.Test;
+
 /**
  * Created by Zhi Li on 2017/2/25.
  */
@@ -19,14 +21,18 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
 
     public SignUpActivityTest(){ super(SignUpActivity.class);}
 
+    @Test
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    @Test
     public void testStart() throws Exception{
         AppCompatActivity activity = getActivity();
     }
 
+    @Test
+    // Test if a user is allowed to be sign up with a name already exist in the Elastic Search
     public void testDuplicate(){
         Random rand = new Random();
         boolean Exist = true;
@@ -63,6 +69,8 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
 
     }
 
+    @Test
+    //Test Sign up function of Sign up UI.
     public void testSignUp(){
         SignUpActivity activity = (SignUpActivity) solo.getCurrentActivity();
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);

@@ -14,22 +14,34 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-/**This is a method class, the main purpose is to load the UserList From a Json file.
+/**
+ * This is a method class, the main purpose is to load the UserList From a Json file.
  * (Version 1.0 contains load file locally only, load from online function will be added later.)
  * To use this class,use the following steps:
- *  (need to declare: [private UserList userList;] on top)
+ * (need to declare: [private UserList userList;] on top)
  * 1. LoadFile load = new LoadFile();
  * 2. user = load.loadFile();
- * @version2.0
+ *
  * @author Zhi Li
+ * @version2.0
  */
-
 public class LoadFile{
     private static final String FILENAME = "file.sav";
     private static final String FILENAME2 = "filter.sav";
 
     private User user;
+
+    /**
+     * Instantiates a new Load file.
+     */
     public LoadFile(){}
+
+    /**
+     * Load CurrentUser Json file
+     *
+     * @param context the context
+     * @return the user
+     */
     public User loadUser(Context context) {
         try {
             //Taken fron https://static.javadoc.io/com.google.code.gson/gson/2.6.2/com/google/gson/Gson.html
@@ -50,6 +62,12 @@ public class LoadFile{
         }
     }
 
+    /**
+     * Load filtered mood event list array list.
+     *
+     * @param context the context
+     * @return the array list
+     */
     public ArrayList<MoodEvent> loadFilteredMoodEventList(Context context) {
         ArrayList<MoodEvent> moodEventList;
 

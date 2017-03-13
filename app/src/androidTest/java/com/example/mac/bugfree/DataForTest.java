@@ -37,7 +37,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
     public DataForTest() {super(MainActivity.class);}
 
     public void testDataCreation() {
-        //Can only add first 4 user because of unknown reason
+        //Please do not run this test, it will clear our index
         try {
             String md0 = "Anger";
             String md1 = "Confusion";
@@ -64,8 +64,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             AL3.add(name4);
 
             MoodEventList MEL = new MoodEventList();
-            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12);
-            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12);
+            GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
+            GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12,30);
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
                 MoodEvent mood1 = new MoodEvent(md1, usr0.getUsr());
@@ -363,7 +363,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             //Add all users to Elastic Search
             //Clear Online data
-            ElasticsearchUserController.createIndex();
+//            ElasticsearchUserController.createIndex();
 
             //Add
 //            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();

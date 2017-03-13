@@ -1,6 +1,5 @@
 package com.example.mac.bugfree;
 
-import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.test.ActivityInstrumentationTestCase2;
@@ -9,9 +8,9 @@ import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
-import java.util.Random;
+import org.junit.Test;
 
-import static android.content.Context.MODE_PRIVATE;
+import java.util.Random;
 
 /**
  * Created by Zhi Li on 2017/2/25.
@@ -23,14 +22,18 @@ public class SignInActivityTest extends ActivityInstrumentationTestCase2<SignInA
 
     public SignInActivityTest(){ super(SignInActivity.class);}
 
+    @Test
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+    @Test
     public void testStart() throws Exception{
         AppCompatActivity activity = getActivity();
     }
 
+    @Test
+    //Test if the user can enter main page after login using a valid user name
     public void testSignIn(){
         SignInActivity activity = (SignInActivity) solo.getCurrentActivity();
         solo.assertCurrentActivity("Wrong Activity", SignInActivity.class);
@@ -68,6 +71,8 @@ public class SignInActivityTest extends ActivityInstrumentationTestCase2<SignInA
 
     }
 
+    @Test
+    //Test if user can jump to SignUp page when user click the Create Account button
     public void testRegister(){
         solo.clickOnButton("Create Account");
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
