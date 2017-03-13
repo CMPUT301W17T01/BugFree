@@ -54,6 +54,10 @@ public class FriendActivity extends AppCompatActivity {
         return notificationListView;
     }
 
+    public ListView getFollowerListView(){
+        return followerListView;
+    }
+
     /** Called when the activity is first created.
      * Create a tab view for the follow, follower and notifications
      * and list the informations in the tab view.
