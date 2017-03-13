@@ -78,7 +78,7 @@ public class ViewMoodActivity extends AppCompatActivity {
             //TODO finish functionality
             case R.id.action_edit:
                 editMoodEvent();
-                Intent intent = new Intent(ViewMoodActivity.this, CreateEditMoodActivity.class);
+                Intent intent = new Intent(ViewMoodActivity.this, EditActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_delete:
@@ -141,7 +141,6 @@ public class ViewMoodActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences("editMoodEvent", Context.MODE_PRIVATE).edit();
         Gson gson = new Gson();
         String json = gson.toJson(moodEvent);
-        editor.putBoolean("flag", true);
         editor.putString("moodevent",json);
         editor.apply();
     }
