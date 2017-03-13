@@ -204,6 +204,7 @@ public class FilterActivity extends AppCompatActivity {
         });
 
         //spinner for following
+        // Take from http://stackoverflow.com/questions/16204372/the-type-new-adapterview-onitemselectedlistener-must-implement-the-inherited
         adapter = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         foEmotionalStateSpinner.setAdapter(adapter);
@@ -219,6 +220,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        // Taken from http://stackoverflow.com/questions/19726115/comparing-user-input-date-with-current-date
         // set date 's format
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         // current time
@@ -232,6 +234,7 @@ public class FilterActivity extends AppCompatActivity {
         // set up the tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_filter);
         setSupportActionBar(toolbar);
+        // Taken from http://www.androidhive.info/2015/09/android-material-design-working-with-tabs/
         // set up the tab host
         TabHost tabHost = (TabHost)findViewById(R.id.filter_tabHost);
         tabHost.setup();
@@ -249,12 +252,14 @@ public class FilterActivity extends AppCompatActivity {
         tabHost.addTab(tab2);
     }
 
+    // Taken from http://stackoverflow.com/questions/35648913/how-to-set-menu-to-toolbar-in-android
     // combine the menu and the layout
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_filter, menu);
         return true;
     }
 
+    // Taken from http://stackoverflow.com/questions/7479992/handling-a-menu-item-click-event-android
     // Determines if Action bar item was selected. If true then do corresponding action.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -490,6 +495,7 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
+    // Taken from LonelyTwiiter lab
     /**
      * Save the filtered mood event list into "filter.sav"
      */

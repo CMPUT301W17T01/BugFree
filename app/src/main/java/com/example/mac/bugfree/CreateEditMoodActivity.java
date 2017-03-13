@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -43,13 +44,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     private String current_user, mood_state, social_situation, reason;
     private Date date = null;
-    private int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
+    public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
     private EditText create_edit_reason;
-    private ImageView add_pic, home_tab;
+    private ImageView pic_preview, home_tab;
     private Spinner mood_state_spinner, social_situation_spinner;
     private CheckBox current_time_checkbox;
-    private GregorianCalendar dateOfRecord;
+    public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
     private Toolbar toolbar;
@@ -66,27 +67,29 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
-        add_pic = (ImageView)findViewById(R.id.add_picture);
+        pic_preview = (ImageView)findViewById(R.id.pic_preview);
         current_time_checkbox = (CheckBox)findViewById(R.id.current_time);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(timePicker);
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
 
-        SharedPreferences sharedPreferences =getSharedPreferences("viewMoodEvent", MODE_PRIVATE);
-        Gson gson =new Gson();
-        String json = sharedPreferences.getString("moodevent","");
-        MoodEvent pass_mood_event = gson.fromJson(json,MoodEvent.class);
-        boolean is_edit = sharedPreferences.getBoolean("flag", false);
+
+//         SharedPreferences sharedPreferences =getSharedPreferences("viewMoodEvent", MODE_PRIVATE);
+//         Gson gson =new Gson();
+//         String json = sharedPreferences.getString("moodevent","");
+//         MoodEvent pass_mood_event = gson.fromJson(json,MoodEvent.class);
+//         boolean is_edit = sharedPreferences.getBoolean("flag", false);
 
 
-        //TODO if its Edit load moodEvent and setText
+//         //TODO if its Edit load moodEvent and setText
 
-        if(is_edit){
-            is_edit=false;
-            Toast.makeText(getApplicationContext(), "1...test", Toast.LENGTH_SHORT).show();
-            load_moodEvent(pass_mood_event);
-        }
+//         if(is_edit){
+//             is_edit=false;
+//             Toast.makeText(getApplicationContext(), "1...test", Toast.LENGTH_SHORT).show();
+//             load_moodEvent(pass_mood_event);
+//         }
+
 
 
 
@@ -103,17 +106,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-       add_pic.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               //TODO allow user to add picture in part5
-               add_pic.setImageResource(R.drawable.picture_text);
-               //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-               //startActivity(intent);
-               //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-               //startActivityForResult(i, RESULT_LOAD_IMAGE);
-           }
-       });
+        //TODO allow user to add picture in part5
+//       add_pic.setOnClickListener(new View.OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               add_pic.setImageResource(R.drawable.picture_text);
+//               //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
+//               //startActivity(intent);
+//               //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//               //startActivityForResult(i, RESULT_LOAD_IMAGE);
+//           }
+//       });
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -226,10 +229,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 current_user = pref.getString("currentUser", "");
                 
                 if(mood_state == null){
-                    Toast.makeText(getApplicationContext(), "Choose a mood state and a picture please", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 else {
+                    if(current_time_checkbox.isChecked()) {
+                        dateOfRecord = real_time();
+
+                    } else {
+                        dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
+
+                    }
                     try {
                         setMoodEvent(current_user, mood_state, social_situation, reason);
                     } catch (MoodStateNotAvailableException e) {
@@ -246,14 +256,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
     public boolean save_mood_list(String mood_state, String social_situation,String reason){
         return true;
-    }
-    public void load_moodEvent(MoodEvent pass_mood_event ){
-
-        if(pass_mood_event.getTriggerText()==null){//do nothing
-        }
-        else {
-            create_edit_reason.setText(pass_mood_event.getTriggerText().toString());
-        }
     }
 
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
@@ -276,16 +278,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setSocialSituation(social_situation);
         moodEvent.setTriggerText(reason);
 
-        if(current_time_checkbox.isChecked()) {
-           dateOfRecord = real_time();
-           moodEvent.setRealtime(dateOfRecord);
-           moodEvent.setDateOfRecord(dateOfRecord);
-        } else {
-            dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
-            moodEvent.setRealtime(real_time());
-            moodEvent.setDateOfRecord(dateOfRecord);
-        }
-
+        moodEvent.setRealtime(real_time());
+        moodEvent.setDateOfRecord(dateOfRecord);
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
@@ -293,7 +287,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
     }
-    private GregorianCalendar real_time(){
+    public GregorianCalendar real_time(){
         GregorianCalendar time;
         GregorianCalendar current = new GregorianCalendar();
         date = current.getTime();

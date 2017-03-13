@@ -113,5 +113,8 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         editor.putBoolean("flag", true);
         editor.putString("moodevent",json);
         editor.apply();
+
+        Intent intent = new Intent(context, EditActivity.class);
+        context.startActivity(intent);
     }
 }
