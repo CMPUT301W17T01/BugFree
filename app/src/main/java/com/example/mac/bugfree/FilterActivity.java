@@ -288,10 +288,9 @@ public class FilterActivity extends AppCompatActivity {
                     deleteFile("filter.sav");
                 }
                 // jump to main activity
-                //startActivity(new Intent(this, MainActivity.class));
-                //return true;
-                setResult(RESULT_OK);
-                finish();
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
