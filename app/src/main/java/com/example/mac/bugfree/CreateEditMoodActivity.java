@@ -76,7 +76,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
 
-
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
