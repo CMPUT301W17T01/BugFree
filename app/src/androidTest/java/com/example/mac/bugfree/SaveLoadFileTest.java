@@ -3,6 +3,8 @@ package com.example.mac.bugfree;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -49,6 +51,7 @@ public class SaveLoadFileTest extends ActivityInstrumentationTestCase2 {
     }
 
     //Test if a user file can be properly saved
+    @Test
     public void testSaveUser(){
         Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
         save = new SaveFile(context,usr);
@@ -56,7 +59,7 @@ public class SaveLoadFileTest extends ActivityInstrumentationTestCase2 {
         User user = load.loadUser(context);
         assertEquals(usr,user);
     }
-//
+// This function is not available yet
 //    public void testDeleteUser(){
 //        Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
 //        delete = new DeleteFile();

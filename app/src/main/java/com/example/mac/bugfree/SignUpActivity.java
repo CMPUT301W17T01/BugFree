@@ -1,6 +1,6 @@
 package com.example.mac.bugfree;
 
-import android.content.Intent;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,10 +10,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * This is the Sign In view class of the project, <br> In this class, user interaction and Elastic Query action are performed
+ * <p>User input of user name is check by Elastic search, no duplicate is allowed.
+ * User will back to Signin screen when Sign up is finished</p>
+ *
+ * @author Zhi Li
+ * @version 2.0
+ * @see SignInActivity
+ */
 public class SignUpActivity extends AppCompatActivity {
+    /**
+     * The Sign up text.
+     */
     protected EditText signUpText;
     private String signUpName;
-    //private UserList userList= new UserList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +56,11 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    //Check duplicate user name
+    /**
+     * This method validates if the user input of user name exist in Elastic search.
+     * @param newName String of user name needed to be validate
+     * @return boolean of if the user does not exist in Elastic search
+     */
     private boolean notExist(String newName){
         ElasticsearchUserController.IsExist isExist = new ElasticsearchUserController.IsExist();
         isExist.execute(newName);
@@ -65,7 +81,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    //create a user using elastic search
+    /**
+     * This method creates a user in Elastic Search
+     * @param usr String of user name needed to be created.
+     * @return boolean of if user created online
+     */
     private boolean createUser(String usr){
         try {
             User user = new User(usr);
