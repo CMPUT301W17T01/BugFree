@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import static org.junit.Assert.assertEquals;
  * Please first signin with username == "John"
  * Then Test
  *
+ * ALERT: It wiil be all failed when it is in Signin or Signup Activity
  * @author Xinlei Chen
  */
 
@@ -127,12 +129,15 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     public void testClickNameInCard() {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
-        View view = recyclerView.getChildAt(0);
-        TextView textView = (TextView) view.findViewById(R.id.mood_event_username);
-
-        String input = textView.getText().toString();
-        solo.clickOnView(textView);
-        solo.assertCurrentActivity("Wrong Activity", ViewMoodActivity.class);
+        if (recyclerView.getAdapter().getItemCount() != 0) {
+            View view = recyclerView.getChildAt(0);
+            TextView textView = (TextView) view.findViewById(R.id.mood_event_username);
+            String input = textView.getText().toString();
+            solo.clickOnView(textView);
+            solo.assertCurrentActivity("Wrong Activity", ViewMoodActivity.class);
+        } else {
+            assertTrue(true);
+        }
     }
 
     //test pass to FriendsActivity
@@ -154,13 +159,26 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     // test to click Edit on popup up menu which in Card
     public void testEdit() {
         solo.assertCurrentActivity("Wrong", MainActivity.class);
-        RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
-        View view = recyclerView.getChildAt(0);
-        ImageView imageView = (ImageView) view.findViewById(R.id.event_handle);
+        solo.clickOnImage(0);
+        solo.clickOnText("Filter");
 
-        solo.clickOnView(imageView);
-        solo.clickOnText("Edit");
-        solo.assertCurrentActivity("Wrong Activity", EditActivity.class);
+        solo.assertCurrentActivity("Wrong Activity", FilterActivity.class);
+        CheckBox mostRecentWeek = (CheckBox) solo.getView(R.id.checkbox_display_myself);
+        solo.clickOnView(mostRecentWeek);
+        View menu = solo.getView(R.id.activity_filter);
+        solo.clickOnView(menu);
+        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
+
+        RecyclerView recyclerView = (RecyclerView) solo.getView(R.id.recycler_view);
+        if (recyclerView.getAdapter().getItemCount() != 0) {
+            View view = recyclerView.getChildAt(0);
+            ImageView imageView = (ImageView) view.findViewById(R.id.event_handle);
+            solo.clickOnView(imageView);
+            solo.clickOnText("Edit");
+            solo.assertCurrentActivity("Wrong Activity", EditActivity.class);
+        } else {
+            assertTrue(true);
+        }
     }
 
     // test Sign out in drawer
