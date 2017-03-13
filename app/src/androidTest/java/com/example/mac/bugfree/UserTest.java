@@ -3,6 +3,7 @@ package com.example.mac.bugfree;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -34,6 +35,9 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
         try{MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
             MEL.addMoodEvent(mood);
             MoodEvent mood1 = new MoodEvent("Sad",usr.getUsr());
+            mood1.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
+            mood1.setRealtime(new GregorianCalendar(2017,2,2,15,16,17));
+
             MEL.addMoodEvent(mood1);
         }
         catch (MoodStateNotAvailableException e){}
