@@ -12,7 +12,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 /**
- * Created by mac on 2017-02-21.
+ * This is the listener for popup menu which in card view
+ * Reference: http://stackoverflow.com/questions/34641240/toolbar-inside-cardview-to-create-a-popup-menu-overflow-icon
+ *
+ * @author Xinlei Chen
  */
 
 public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickListener {
@@ -22,6 +25,13 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
     private Context context;
     private String currentUserName;
 
+    /**
+     * Instantiates a new Mood event popup click listener.
+     *
+     * @param position  the position
+     * @param moodEvent the mood event
+     * @param context   the context
+     */
     public MoodEventPopupClickListener(int position, MoodEvent moodEvent, Context context) {
         this.position = position;
         this.moodEvent = moodEvent;
@@ -46,7 +56,10 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         return true;
     }
 
-
+    /**
+     * The function will be invoked when click delete in pop up menu
+     * Delete moodEvent
+     */
     private void deleteMoodEvent() {
         User user = new User();
 
@@ -72,15 +85,13 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
 
-//        MoodEventList moodEventList = user.getMoodEventList();
-//        for (MoodEvent moodEvent1 : moodEventList.transferMoodEventListToArray()){
-//            Log.d("Error check in Popup", String.valueOf(moodEvent1.equals(moodEvent)) );
-//            Log.d("Error in belongs", String.valueOf(moodEvent1.getBelongsTo().equals(moodEvent.getBelongsTo())));
-//            Log.d("Error in realtime", String.valueOf(moodEvent1.getRealtime().equals(moodEvent.getRealtime())));
-//        }
-
     }
 
+    /**
+     * The function will be invoked when click edit in pop up menu
+     * Edit the moodEvent
+     * go to EditActivity
+     */
     private void editMoodEvent() {
         User user = new User();
 
