@@ -104,7 +104,7 @@ public class FilterActivity extends AppCompatActivity {
         // get current user's mood event list
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
-        User user = new User("John");
+        User user = new User();
         String query = current_user;
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);
