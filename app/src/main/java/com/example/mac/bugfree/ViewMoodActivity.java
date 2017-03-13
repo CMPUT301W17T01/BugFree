@@ -93,6 +93,7 @@ public class ViewMoodActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
+
                 if (moodEvent.getBelongsTo().equals(currentUserName)) {
                     editMoodEvent();
                     Intent intent = new Intent(ViewMoodActivity.this, EditActivity.class);
@@ -100,7 +101,7 @@ public class ViewMoodActivity extends AppCompatActivity {
                     return true;
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Your can only edit your own messages",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Your can only edit your own mood events",Toast.LENGTH_SHORT).show();
                     break;
                 }
             case R.id.action_delete:
@@ -112,7 +113,7 @@ public class ViewMoodActivity extends AppCompatActivity {
                     return true;
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Your can only delete your own messages",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You can only delete your own mood events",Toast.LENGTH_SHORT).show();
                     break;
                 }
         }
@@ -128,7 +129,8 @@ public class ViewMoodActivity extends AppCompatActivity {
         Gson gson =new Gson();
         String json = sharedPreferences.getString("moodevent","");
         moodEvent=gson.fromJson(json,MoodEvent.class);
-        currentUserName = sharedPreferences.getString("currentUser", "");
+        currentUserName = sharedPreferences.getString("currentUser", "").replace("\"", "");
+
 
     }
 
@@ -137,7 +139,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         User user = new User();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        currentUserName = pref.getString("currentUser", "");
+        currentUserName = pref.getString("currentUser", "").replace("\"", "");
 
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(currentUserName);
@@ -160,7 +162,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         User user = new User();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        currentUserName = pref.getString("currentUser", "");
+        currentUserName = pref.getString("currentUser", "").replace("\"", "");
 
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(currentUserName);

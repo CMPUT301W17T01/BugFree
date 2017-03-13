@@ -61,7 +61,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name1);
             AL1.add(name2);
+            AL1.add(name7);
             AL2.add(name3);
+            AL2.add(name8);
+            AL2.add(name9);
             AL3.add(name4);
 
             MoodEventList MEL = new MoodEventList();
@@ -94,7 +97,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name2);
             AL1.add(name3);
+            AL1.add(name8);
             AL2.add(name4);
+            AL2.add(name0);
+            AL2.add(name9);
             AL3.add(name5);
 
             MEL = new MoodEventList();
@@ -127,7 +133,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name3);
             AL1.add(name4);
+            AL1.add(name9);
             AL2.add(name5);
+            AL2.add(name0);
+            AL2.add(name1);
             AL3.add(name6);
 
             MEL = new MoodEventList();
@@ -160,7 +169,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name4);
             AL1.add(name5);
+            AL1.add(name0);
             AL2.add(name6);
+            AL2.add(name1);
+            AL2.add(name2);
             AL3.add(name7);
 
             MEL = new MoodEventList();
@@ -193,7 +205,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name5);
             AL1.add(name6);
+            AL1.add(name1);
             AL2.add(name7);
+            AL2.add(name2);
+            AL2.add(name3);
             AL3.add(name8);
 
             MEL = new MoodEventList();
@@ -226,7 +241,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name6);
             AL1.add(name7);
+            AL1.add(name2);
             AL2.add(name8);
+            AL2.add(name3);
+            AL2.add(name4);
             AL3.add(name9);
 
             MEL = new MoodEventList();
@@ -259,7 +277,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name7);
             AL1.add(name8);
+            AL1.add(name3);
             AL2.add(name9);
+            AL2.add(name4);
+            AL2.add(name5);
             AL3.add(name0);
 
             MEL = new MoodEventList();
@@ -292,7 +313,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name8);
             AL1.add(name9);
+            AL1.add(name4);
             AL2.add(name0);
+            AL2.add(name5);
+            AL2.add(name6);
             AL3.add(name1);
 
             MEL = new MoodEventList();
@@ -325,7 +349,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name9);
             AL1.add(name0);
+            AL1.add(name5);
             AL2.add(name1);
+            AL2.add(name7);
+            AL2.add(name6);
             AL3.add(name2);
 
             MEL = new MoodEventList();
@@ -358,7 +385,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name0);
             AL1.add(name1);
+            AL1.add(name6);
+            AL2.add(name7);
             AL2.add(name2);
+            AL2.add(name8);
             AL3.add(name3);
 
             MEL = new MoodEventList();
@@ -385,38 +415,38 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             //Add all users to Elastic Search
             //Clear Online data
-//            ElasticsearchUserController.createIndex();
+            ElasticsearchUserController.createIndex();
 
             //Add
-//            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr0);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr1);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr2);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr3);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr4);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr5);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr6);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr7);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr8);
-//            SystemClock.sleep(3000);
-//            addUserTask = new ElasticsearchUserController.AddUserTask();
-//            addUserTask.execute(usr9);
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr0);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr1);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr2);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr3);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr4);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr5);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr6);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr7);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr8);
+            SystemClock.sleep(3000);
+            addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(usr9);
 
             assertTrue(true);
         } catch (Exception e){

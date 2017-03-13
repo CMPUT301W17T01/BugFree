@@ -44,4 +44,19 @@ public class FriendActivityUnitTest extends ActivityInstrumentationTestCase2<Fri
         solo.clickOnView(menu);
         solo.assertCurrentActivity("Wrong Activity", FriendActivity.class);
     }
+
+    public void testaccept(){
+        solo.assertCurrentActivity("Wrong Activity", FriendActivity.class);
+        solo.clickOnText("Notification");
+        final ListView notificationList = getActivity().getNotificationList();
+        final ListView followerList = getActivity().getFollowerListView();
+        if (notificationList.getAdapter().getCount() == 0){
+            solo.clickOnText("Follow");
+        }
+        else {
+            solo.clickOnText("Accept");
+            solo.clickOnText("Follower");
+            assertTrue(followerList.getAdapter().getCount() != 0);
+        }
+    }
 }
