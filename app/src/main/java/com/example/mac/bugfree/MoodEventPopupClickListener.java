@@ -46,6 +46,7 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         return true;
     }
 
+
     private void deleteMoodEvent() {
         User user = new User();
 
