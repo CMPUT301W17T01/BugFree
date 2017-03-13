@@ -366,20 +366,20 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             ElasticsearchUserController.createIndex();
 
             //Add
-            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr0);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr1);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr2);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr3);
-            SystemClock.sleep(3000);
-            addUserTask = new ElasticsearchUserController.AddUserTask();
-            addUserTask.execute(usr4);
+//            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr0);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr1);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr2);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr3);
+//            SystemClock.sleep(3000);
+//            addUserTask = new ElasticsearchUserController.AddUserTask();
+//            addUserTask.execute(usr4);
 //            SystemClock.sleep(3000);
 //            addUserTask = new ElasticsearchUserController.AddUserTask();
 //            addUserTask.execute(usr5);

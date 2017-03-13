@@ -10,10 +10,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * This is the Sign Up view class of the project, <br> In this class, user interaction and Elastic Query action if performed
+ *<p>User input of user name is check by Elastic search, no duplicate is allowed.
+ * User will back to Signin screen when Sign up is finished</p>
+ * @author Zhi Li
+ * @version 1.0
+ * @see SignInActivity
+ */
 public class SignUpActivity extends AppCompatActivity {
     protected EditText signUpText;
     private String signUpName;
-    //private UserList userList= new UserList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
