@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -91,6 +92,9 @@ public class FilterActivity extends AppCompatActivity {
     private Calendar dateOfMood;
     private String stateOfMood;
     private String keyOfReason;
+    public ArrayList<MoodEvent> getMoodListAfterFilter(){
+        return moodListAfterFilter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +104,7 @@ public class FilterActivity extends AppCompatActivity {
         // get current user's mood event list
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         String current_user = pref.getString("currentUser", "");
-        User user = new User("John");
+        User user = new User();
         String query = current_user;
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);

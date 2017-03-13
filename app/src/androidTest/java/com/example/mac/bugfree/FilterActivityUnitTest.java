@@ -9,6 +9,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import com.robotium.solo.Solo;
@@ -43,6 +45,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.spinner_myself));
         solo.clickInList(4);
 
+        final ArrayList<MoodEvent> moodEventList = getActivity().getMoodListAfterFilter();
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
@@ -130,6 +133,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
+
         solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
