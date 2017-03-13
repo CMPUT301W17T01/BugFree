@@ -55,53 +55,45 @@ public class User {
     }
 
     /**
-     * Gets followee i ds.
+     * Gets followee array.
      *
-     * @return the followee i ds
+     * @return the followee array
      */
     public ArrayList<String> getFolloweeIDs() {
         return this.followeeIDs;
     }
 
     /**
-     * Sets followee i ds.
+     * Sets followee array
      *
-     * @param followeeIDs the followee i ds
+     * @param followeeIDs the followee array
      */
     public void setFolloweeIDs(ArrayList<String> followeeIDs) {
         this.followeeIDs.addAll(followeeIDs);
     }
 
-//    public void setFolloweeID(String followeeID) {
-//        this.followeeIDs.add(followeeID);
-//    }
-
     /**
-     * Gets follower i ds.
+     * Gets follower array
      *
-     * @return the follower i ds
+     * @return the follower array
      */
     public ArrayList<String> getFollowerIDs() {
         return followerIDs;
     }
 
     /**
-     * Sets follower i ds.
+     * Sets follower array
      *
-     * @param followerIDs the follower i ds
+     * @param followerIDs the follower array
      */
     public void setFollowerIDs(ArrayList<String> followerIDs) {
         this.followerIDs.addAll(followerIDs);
     }
 
-//    public void setFollowerID(String followerID) {
-//        this.followerIDs.add(followerID);
-//    }
-
     /**
-     * Gets pending permission.
+     * Gets pending permission array.
      *
-     * @return the pending permission
+     * @return the pending permission array
      */
     public ArrayList<String> getPendingPermission() {
         return pendingPermissions;
@@ -116,9 +108,6 @@ public class User {
         this.pendingPermissions = pendingPermissions;
     }
 
-//    public void setPendingPermission(String pendingPermission) {
-//        this.pendingPermissions.add(pendingPermission);
-//    }
 
     /**
      * Gets mood event list.
@@ -139,6 +128,11 @@ public class User {
     }
 
     @Override
+    /**
+     * This method check if the object passed in is equals to this User object.
+     * @param obj Object (User object expected)
+     * @returns boolean
+     */
     public boolean equals(Object obj) {
         if(obj == null) return false;
         if(obj == this) return true;

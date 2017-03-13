@@ -6,13 +6,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-import static junit.framework.Assert.fail;
-
 /**
  * Created by Zhi Li on 2017/3/8.
  */
 
 public class DataForTest extends ActivityInstrumentationTestCase2 {
+    //Please do not run this test, it will clear our index
     private String name0 = "John";
     private String name1 = "1Sam";
     private String name2 = "2Mike";
@@ -37,7 +36,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
     public DataForTest() {super(MainActivity.class);}
 
     public void testDataCreation() {
-        //Please do not run this test, it will clear our index
+
         try {
             String md0 = "Anger";
             String md1 = "Confusion";

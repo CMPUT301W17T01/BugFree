@@ -1,11 +1,6 @@
 package com.example.mac.bugfree;
 
-import android.content.Intent;
-import android.widget.Toast;
 
-import java.util.Calendar;
-import java.io.IOException;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -364,7 +359,7 @@ public class MoodEvent {
     @Override
     /**
      * This method check if the object passed in is equals to this moodEvent object.
-     * @param obj Object (User object)
+     * @param obj Object (MoodEvent object expected)
      * @returns boolean
      */
     public boolean equals(Object obj) {
