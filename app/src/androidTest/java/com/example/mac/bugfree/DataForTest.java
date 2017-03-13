@@ -59,7 +59,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name1);
             AL1.add(name2);
+            AL1.add(name7);
             AL2.add(name3);
+            AL2.add(name8);
+            AL2.add(name9);
             AL3.add(name4);
 
             MoodEventList MEL = new MoodEventList();
@@ -91,7 +94,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name2);
             AL1.add(name3);
+            AL1.add(name8);
             AL2.add(name4);
+            AL2.add(name0);
+            AL2.add(name9);
             AL3.add(name5);
 
             MEL = new MoodEventList();
@@ -124,7 +130,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name3);
             AL1.add(name4);
+            AL1.add(name9);
             AL2.add(name5);
+            AL2.add(name0);
+            AL2.add(name1);
             AL3.add(name6);
 
             MEL = new MoodEventList();
@@ -157,7 +166,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name4);
             AL1.add(name5);
+            AL1.add(name0);
             AL2.add(name6);
+            AL2.add(name1);
+            AL2.add(name2);
             AL3.add(name7);
 
             MEL = new MoodEventList();
@@ -190,7 +202,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name5);
             AL1.add(name6);
+            AL1.add(name0);
             AL2.add(name7);
+            AL2.add(name2);
+            AL2.add(name3);
             AL3.add(name8);
 
             MEL = new MoodEventList();
@@ -223,7 +238,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name6);
             AL1.add(name7);
+            AL1.add(name2);
             AL2.add(name8);
+            AL2.add(name3);
+            AL2.add(name4);
             AL3.add(name9);
 
             MEL = new MoodEventList();
@@ -256,7 +274,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name7);
             AL1.add(name8);
+            AL1.add(name3);
             AL2.add(name9);
+            AL2.add(name4);
+            AL2.add(name5);
             AL3.add(name0);
 
             MEL = new MoodEventList();
@@ -289,7 +310,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name8);
             AL1.add(name9);
+            AL1.add(name4);
             AL2.add(name0);
+            AL2.add(name5);
+            AL2.add(name6);
             AL3.add(name1);
 
             MEL = new MoodEventList();
@@ -322,7 +346,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name9);
             AL1.add(name0);
+            AL1.add(name5);
             AL2.add(name1);
+            AL2.add(name7);
+            AL2.add(name6);
             AL3.add(name2);
 
             MEL = new MoodEventList();
@@ -355,7 +382,10 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
 
             AL1.add(name0);
             AL1.add(name1);
+            AL1.add(name6);
+            AL2.add(name7);
             AL2.add(name2);
+            AL2.add(name8);
             AL3.add(name3);
 
             MEL = new MoodEventList();
