@@ -284,12 +284,13 @@ public class FriendActivity extends AppCompatActivity {
                     anotherfollowList = anotherUser.getFolloweeIDs();
                     anotherfollowList.add(currentUserName);
 
+
                     ElasticsearchUserController.AddUserTask addUserTask2 =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask2.execute(anotherUser);
 
 
-                    Toast.makeText(getApplicationContext(), singleNotification+
+                    Toast.makeText(getApplicationContext(), singleNotification +
                             " has been accepted", Toast.LENGTH_SHORT).show();
                 }
             });
