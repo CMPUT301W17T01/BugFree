@@ -440,7 +440,7 @@ public class FilterActivity extends AppCompatActivity {
             // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterMy.getMoodEvent(i).getTriggerText();
             // if it contains the entered key of reason, then add it to the new list
-            if (Arrays.asList(keyOfReason).contains(enteredReason)) {
+            if (keyOfReason != null && keyOfReason.toLowerCase().contains(enteredReason.toLowerCase())) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
@@ -456,7 +456,7 @@ public class FilterActivity extends AppCompatActivity {
             // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterFo.getMoodEvent(i).getTriggerText();
             // if it contains the entered key of reason, then add it to the new list
-            if (Arrays.asList(keyOfReason).contains(enteredReason)) {
+            if (keyOfReason != null && keyOfReason.toLowerCase().contains(enteredReason.toLowerCase())) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
