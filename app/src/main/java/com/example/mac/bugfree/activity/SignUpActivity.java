@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 /**
  * This is the Sign In view class of the project, <br> In this class, user interaction and Elastic Query action are performed

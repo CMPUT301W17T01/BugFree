@@ -7,6 +7,9 @@ import android.util.Log;
 import android.widget.EditText;
 import java.util.Random;
 
+import com.example.mac.bugfree.activity.SignUpActivity;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.User;
 import com.robotium.solo.Solo;
 
 import org.junit.Test;
