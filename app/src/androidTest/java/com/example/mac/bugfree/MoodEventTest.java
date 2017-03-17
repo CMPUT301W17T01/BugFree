@@ -2,6 +2,11 @@ package com.example.mac.bugfree;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.example.mac.bugfree.activity.MainActivity;
+import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.User;
+
 import java.io.IOException;
 import java.util.GregorianCalendar;
 

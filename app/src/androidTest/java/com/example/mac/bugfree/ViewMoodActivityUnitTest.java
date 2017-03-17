@@ -1,17 +1,10 @@
 package com.example.mac.bugfree;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 
+import com.example.mac.bugfree.activity.ViewMoodActivity;
 import com.robotium.solo.Solo;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.lang.reflect.Method;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,7 +16,7 @@ public class ViewMoodActivityUnitTest extends ActivityInstrumentationTestCase2<V
     private Solo solo;
 
     public ViewMoodActivityUnitTest(){
-        super(com.example.mac.bugfree.ViewMoodActivity.class);
+        super(ViewMoodActivity.class);
     }
 
     public void setUp() throws Exception{

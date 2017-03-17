@@ -1,7 +1,9 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.mac.bugfree.R;
 
 public class MapActivity extends AppCompatActivity {
 

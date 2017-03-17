@@ -6,6 +6,11 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.example.mac.bugfree.activity.MainActivity;
+import com.example.mac.bugfree.activity.SignInActivity;
+import com.example.mac.bugfree.activity.SignUpActivity;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.User;
 import com.robotium.solo.Solo;
 
 import org.junit.Test;

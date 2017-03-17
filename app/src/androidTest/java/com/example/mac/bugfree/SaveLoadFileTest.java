@@ -3,6 +3,14 @@ package com.example.mac.bugfree;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.example.mac.bugfree.activity.MainActivity;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.DeleteFile;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

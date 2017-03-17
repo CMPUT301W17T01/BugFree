@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.module;
 
 import java.util.ArrayList;
 import java.util.Collections;
