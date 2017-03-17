@@ -268,29 +268,32 @@ public class MainActivity extends AppCompatActivity {
         if (followName.equals(currentUserName)) {
             Toast.makeText(this, "You enter wrong username", Toast.LENGTH_SHORT).show();
         }
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(followName);
 
-        try {
-            User user = getUserTask.get();
-            if(user != null){
-                ArrayList<String> pendingList = user.getPendingPermission();
-                ArrayList<String> followerList = user.getFollowerIDs();
+        else {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(followName);
 
-                if ( followerList.contains(currentUserName)) {
-                    Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+            try {
+                User user = getUserTask.get();
+                if(user != null){
+                    ArrayList<String> pendingList = user.getPendingPermission();
+                    ArrayList<String> followerList = user.getFollowerIDs();
+
+                    if ( followerList.contains(currentUserName)) {
+                        Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                    } else {
+                        pendingList.add(currentUserName);
+                        user.setPendingPermissions(pendingList);
+                        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                        addUserTask.execute(user);
+                    }
+
                 } else {
-                    pendingList.add(currentUserName);
-                    user.setPendingPermissions(pendingList);
-                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                    addUserTask.execute(user);
+                    Toast.makeText(this, "The user does not exist", Toast.LENGTH_SHORT).show();
                 }
-
-            } else {
-                Toast.makeText(this, "The user does not exist", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                //Log.i("Error", "Failed to get the User out of the async object");
             }
-        } catch (Exception e) {
-            //Log.i("Error", "Failed to get the User out of the async object");
         }
 
     }
