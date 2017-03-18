@@ -48,7 +48,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
     private EditText create_edit_reason;
-    private ImageView pic_preview, home_tab;
+    private ImageView pic_preview, home_tab, earth_tab;
     private Spinner mood_state_spinner, social_situation_spinner;
     private CheckBox current_time_checkbox;
     public GregorianCalendar dateOfRecord;
@@ -71,6 +71,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
+        earth_tab = (ImageView) findViewById(R.id.earth_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
         pic_preview = (ImageView)findViewById(R.id.pic_preview);
@@ -85,6 +86,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
         }
+
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +94,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        earth_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
 
         //TODO allow user to add picture in part5
 //       add_pic.setOnClickListener(new View.OnClickListener() {

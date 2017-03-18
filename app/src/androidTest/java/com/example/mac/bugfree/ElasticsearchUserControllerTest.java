@@ -237,11 +237,11 @@ public class ElasticsearchUserControllerTest {
         addUserTask.execute(user);
     }
 
-    @After
-    public void recoverData() {
-        DataForTest dataForTest = new DataForTest();
-        dataForTest.testDataCreation();
-    }
+//    @After
+//    public void recoverData() {
+//        DataForTest dataForTest = new DataForTest();
+//        dataForTest.testDataCreation();
+//    }
 
 }
 
