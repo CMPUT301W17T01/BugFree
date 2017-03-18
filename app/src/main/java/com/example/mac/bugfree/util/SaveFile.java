@@ -1,7 +1,8 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.util;
 
 import android.content.Context;
 
+import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;

@@ -3,10 +3,9 @@ package com.example.mac.bugfree;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 
+import com.example.mac.bugfree.activity.CreateEditMoodActivity;
 import com.robotium.solo.Solo;
 
 
@@ -19,7 +18,7 @@ public class CreateEditMoodActivityUnitTest  extends ActivityInstrumentationTest
     private Solo solo;
 
     public CreateEditMoodActivityUnitTest(){
-        super(com.example.mac.bugfree.CreateEditMoodActivity.class);
+        super(CreateEditMoodActivity.class);
     }
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());

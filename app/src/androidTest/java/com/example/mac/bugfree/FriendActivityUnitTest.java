@@ -3,6 +3,8 @@ package com.example.mac.bugfree;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.ListView;
+
+import com.example.mac.bugfree.activity.FriendActivity;
 import com.robotium.solo.Solo;
 
 /**
@@ -14,7 +16,7 @@ public class FriendActivityUnitTest extends ActivityInstrumentationTestCase2<Fri
 
     
     public FriendActivityUnitTest(){
-        super(com.example.mac.bugfree.FriendActivity.class);
+        super(FriendActivity.class);
     }
 
     public void setUp() throws Exception{

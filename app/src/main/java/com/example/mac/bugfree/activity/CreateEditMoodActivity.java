@@ -1,7 +1,6 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,26 +14,26 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import static com.example.mac.bugfree.R.id.reason_textView;
 import static com.example.mac.bugfree.R.id.timePicker;
 
 /**
@@ -49,7 +48,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
     private EditText create_edit_reason;
-    private ImageView pic_preview, home_tab;
+    private ImageView pic_preview, home_tab, earth_tab;
     private Spinner mood_state_spinner, social_situation_spinner;
     private CheckBox current_time_checkbox;
     public GregorianCalendar dateOfRecord;
@@ -72,6 +71,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
+        earth_tab = (ImageView) findViewById(R.id.earth_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
         pic_preview = (ImageView)findViewById(R.id.pic_preview);
@@ -86,6 +86,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
         }
+
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +94,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        earth_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
 
         //TODO allow user to add picture in part5
 //       add_pic.setOnClickListener(new View.OnClickListener() {

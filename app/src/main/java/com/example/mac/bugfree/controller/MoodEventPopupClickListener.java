@@ -1,14 +1,18 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.activity.EditActivity;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
 /**

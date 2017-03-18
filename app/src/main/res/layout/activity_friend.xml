@@ -6,7 +6,7 @@ android:id="@+id/activity_friend"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-tools:context="com.example.mac.bugfree.FriendActivity">
+tools:context="com.example.mac.bugfree.activity.FriendActivity">
 
 
     <android.support.design.widget.AppBarLayout
