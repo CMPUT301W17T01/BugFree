@@ -40,7 +40,6 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:src="@drawable/add_tab_select"
-                android:id="@+id/add_tab_home"
                 />
 
             <ImageView
