@@ -125,7 +125,9 @@ public class FilterActivity extends AppCompatActivity {
             try {
                 User user_follow = getUserTask1.get();
                 // store the user's following people's mood event list
-                moodListBeforeFilterFo.addMoodEventList(user_follow.getMoodEventList());
+                MoodEventList moodList = user_follow.getMoodEventList();
+                moodList.sortByDate();
+                moodListBeforeFilterFo.addMoodEvent(moodList.getMoodEvent(0));
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
             }

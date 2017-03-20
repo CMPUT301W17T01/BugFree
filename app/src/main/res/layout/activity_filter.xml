@@ -208,7 +208,7 @@
 
                         <CheckBox
                             android:id="@+id/checkbox_recent_following"
-                            android:layout_marginLeft="100dp"
+                            android:layout_marginLeft="70dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -255,7 +255,7 @@
 
                         <CheckBox
                             android:id="@+id/checkbox_display_following"
-                            android:layout_marginLeft="100dp"
+                            android:layout_marginLeft="50dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
