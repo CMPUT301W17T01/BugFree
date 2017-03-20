@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.util;
 
 /**
  * Created by Zhi Li on 2017/3/8.

@@ -98,10 +98,10 @@ var activeTableTab = "activeTableTab";
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&gt;</li>
+<li>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&gt;</li>
 <li>
 <ul class="inheritance">
-<li>com.example.mac.bugfree.MoodEventAdapter</li>
+<li>com.example.mac.bugfree.controller.MoodEventAdapter</li>
 </ul>
 </li>
 </ul>
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">MoodEventAdapter</span>
-extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&gt;</pre>
+extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&gt;</pre>
 <div class="block">Created by mac on 2017-02-21.</div>
 </li>
 </ul>
@@ -133,7 +133,7 @@ extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfre
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/example/mac/bugfree/MoodEventAdapter.html#MoodEventAdapter-com.example.mac.bugfree.MoodEventList-java.lang.String-">MoodEventAdapter</a></span>(<a href="../../../../com/example/mac/bugfree/MoodEventList.html" title="class in com.example.mac.bugfree">MoodEventList</a>&nbsp;moodEventArrayList,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../com/example/mac/bugfree/MoodEventAdapter.html#MoodEventAdapter-com.example.mac.bugfree.module.MoodEventList-java.lang.String-">MoodEventAdapter</a></span>(<a href="../../../../com/example/mac/bugfree/MoodEventList.html" title="class in com.example.mac.bugfree">MoodEventList</a>&nbsp;moodEventArrayList,
                 java.lang.String&nbsp;currentUser)</code>&nbsp;</td>
 </tr>
 </table>
@@ -157,11 +157,11 @@ extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfre
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/mac/bugfree/MoodEventAdapter.html#onBindViewHolder-com.example.mac.bugfree.MoodEventAdapter.ViewHolder-int-">onBindViewHolder</a></span>(com.example.mac.bugfree.MoodEventAdapter.ViewHolder&nbsp;holder,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/mac/bugfree/MoodEventAdapter.html#onBindViewHolder-com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder-int-">onBindViewHolder</a></span>(com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&nbsp;holder,
                 int&nbsp;position)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>com.example.mac.bugfree.MoodEventAdapter.ViewHolder</code></td>
+<td class="colFirst"><code>com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../com/example/mac/bugfree/MoodEventAdapter.html#onCreateViewHolder-android.view.ViewGroup-int-">onCreateViewHolder</a></span>(android.view.ViewGroup&nbsp;parent,
                   int&nbsp;viewType)</code>&nbsp;</td>
 </tr>
@@ -194,7 +194,7 @@ extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfre
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="MoodEventAdapter-com.example.mac.bugfree.MoodEventList-java.lang.String-">
+<a name="MoodEventAdapter-com.example.mac.bugfree.module.MoodEventList-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -218,25 +218,25 @@ extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfre
 <ul class="blockList">
 <li class="blockList">
 <h4>onCreateViewHolder</h4>
-<pre>public&nbsp;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&nbsp;onCreateViewHolder(android.view.ViewGroup&nbsp;parent,
+<pre>public&nbsp;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&nbsp;onCreateViewHolder(android.view.ViewGroup&nbsp;parent,
                                                                               int&nbsp;viewType)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>onCreateViewHolder</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&gt;</code></dd>
+<dd><code>onCreateViewHolder</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="onBindViewHolder-com.example.mac.bugfree.MoodEventAdapter.ViewHolder-int-">
+<a name="onBindViewHolder-com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>onBindViewHolder</h4>
-<pre>public&nbsp;void&nbsp;onBindViewHolder(com.example.mac.bugfree.MoodEventAdapter.ViewHolder&nbsp;holder,
+<pre>public&nbsp;void&nbsp;onBindViewHolder(com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&nbsp;holder,
                              int&nbsp;position)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>onBindViewHolder</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&gt;</code></dd>
+<dd><code>onBindViewHolder</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -249,7 +249,7 @@ extends android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfre
 <pre>public&nbsp;int&nbsp;getItemCount()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>getItemCount</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.MoodEventAdapter.ViewHolder&gt;</code></dd>
+<dd><code>getItemCount</code>&nbsp;in class&nbsp;<code>android.support.v7.widget.RecyclerView.Adapter&lt;com.example.mac.bugfree.controller.MoodEventAdapter.ViewHolder&gt;</code></dd>
 </dl>
 </li>
 </ul>

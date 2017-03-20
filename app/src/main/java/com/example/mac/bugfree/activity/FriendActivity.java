@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +17,10 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 import java.util.ArrayList;
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.mac.bugfree.FilterActivity">
+    tools:context="com.example.mac.bugfree.activity.FilterActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -47,8 +47,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
-
                 <LinearLayout
                     android:id="@+id/myself"
                     android:layout_width="match_parent"
@@ -71,7 +69,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/emotional_state" />
+                            android:text="@string/emotional_state_my" />
 
                         <Spinner
                             android:id="@+id/spinner_myself"
@@ -98,7 +96,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/recent_week"/>
+                            android:text="@string/recent_week_my"/>
 
                         <CheckBox
                             android:id="@+id/checkbox_recent_myself"
@@ -145,11 +143,11 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/display_all"/>
+                            android:text="@string/display_all_my"/>
 
                         <CheckBox
                             android:id="@+id/checkbox_display_myself"
-                            android:layout_marginLeft="180dp"
+                            android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -179,7 +177,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/emotional_state" />
+                            android:text="@string/emotional_state_fo" />
 
                         <Spinner
                             android:id="@+id/spinner_following"
@@ -206,7 +204,7 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/recent_week"/>
+                            android:text="@string/recent_week_fo"/>
 
                         <CheckBox
                             android:id="@+id/checkbox_recent_following"
@@ -253,11 +251,11 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:textStyle="bold"
-                            android:text="@string/display_all"/>
+                            android:text="@string/display_all_fo"/>
 
                         <CheckBox
                             android:id="@+id/checkbox_display_following"
-                            android:layout_marginLeft="180dp"
+                            android:layout_marginLeft="100dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>

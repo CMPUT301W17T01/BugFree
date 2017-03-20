@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,8 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.R;
+
 /**
  * This is the Sign Up view class of the project, <br> In this class, user interaction and Elastic Query action are performed
  *<p>User input of user name is check by Elastic search, no duplicate is allowed.

@@ -12,6 +12,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mac.bugfree.activity.EditActivity;
+import com.example.mac.bugfree.activity.FilterActivity;
+import com.example.mac.bugfree.activity.FriendActivity;
+import com.example.mac.bugfree.activity.MainActivity;
+import com.example.mac.bugfree.activity.SignInActivity;
+import com.example.mac.bugfree.activity.ViewMoodActivity;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.User;
 import com.robotium.solo.Solo;
 
 import java.util.ArrayList;
@@ -33,7 +41,7 @@ public class MainActivityUnitTest extends ActivityInstrumentationTestCase2<MainA
     private Context context;
 
     public MainActivityUnitTest() {
-        super(com.example.mac.bugfree.MainActivity.class);
+        super(MainActivity.class);
     }
 
     public void setUp() throws Exception {

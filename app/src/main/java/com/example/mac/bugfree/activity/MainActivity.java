@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +24,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.controller.MoodEventAdapter;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,6 +85,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
+
+        ImageView earth_tab = (ImageView) findViewById(R.id.earth_tab_home);
+        earth_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
