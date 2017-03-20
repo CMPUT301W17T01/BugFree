@@ -20,6 +20,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -50,7 +51,7 @@ public class MapActivity extends AppCompatActivity {
         mOpenMapView.setMultiTouchControls(true);
 
         IMapController mapController = mOpenMapView.getController();
-        mapController.setZoom(9);
+        mapController.setZoom(14);
         GeoPoint startPoint = new GeoPoint(45.4, -75.666667);
         mapController.setCenter(startPoint);
 
@@ -62,8 +63,7 @@ public class MapActivity extends AppCompatActivity {
         //Add MyLocationOverlay
         this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this) , mOpenMapView);
         this.myLocationOverlay.enableMyLocation();
-        this.mOpenMapView.getOverlays().add(this.myLocationOverlay);
-        mOpenMapView.postInvalidate();
+        mOpenMapView.getOverlays().add(this.myLocationOverlay);
 
         ImageView add_tab = (ImageView) findViewById(R.id.add_tab_map);
         add_tab.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +82,28 @@ public class MapActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //your items
+        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+        items.add(new OverlayItem("Canada", "Canada", startPoint)); // Lat/Lon decimal degrees
+
+
+        //the overlay
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        //do something
+                        return true;
+                    }
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                });
+        mOverlay.setFocusItemsOnTap(true);
+
+        mOpenMapView.getOverlays().add(mOverlay);
     }
 
 
