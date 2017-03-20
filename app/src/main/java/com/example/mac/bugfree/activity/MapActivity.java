@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity {
 
         IMapController mapController = mOpenMapView.getController();
         mapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(45.4, -75.666667);
+        GeoPoint startPoint = new GeoPoint(53.56, -113.50);
         mapController.setCenter(startPoint);
 
 
@@ -85,7 +85,9 @@ public class MapActivity extends AppCompatActivity {
 
         //your items
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Canada", "Canada", startPoint)); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Canada", "Canada", new GeoPoint(45.4, -75.666667))); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Calgary", "Calgary", new GeoPoint(51.03, -114.05))); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Edmonton", "Edmonton", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
 
 
         //the overlay
@@ -94,6 +96,9 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         //do something
+                        Toast.makeText(MapActivity.this, item.getTitle() + "\n"
+                                        + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
+                                Toast.LENGTH_LONG).show();
                         return true;
                     }
                     @Override
