@@ -1,5 +1,9 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.module;
 
+
+import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.exception.ImageTooBigException;
 
 import java.util.GregorianCalendar;
 

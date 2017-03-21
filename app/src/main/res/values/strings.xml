@@ -6,10 +6,15 @@
 
     <string name="activity_filter">Filter</string>
     <string name="activity_map">Map</string>
-    <string name="emotional_state">Emotional State</string>
-    <string name="recent_week">The most recent week</string>
+    <string name="emotional_state_my">My Emotional State</string>
+    <string name="emotional_state_fo">Others Emotional State</string>
+
+    <string name="recent_week_my">My most recent week</string>
+    <string name="recent_week_fo">Others most recent week</string>
+
     <string name="reason">Reason</string>
-    <string name="display_all">Display All</string>
+    <string name="display_all_my">Display All My Moods</string>
+    <string name="display_all_fo">Display All Following Moods</string>
 
 
     <string name="action_edit">edit</string>

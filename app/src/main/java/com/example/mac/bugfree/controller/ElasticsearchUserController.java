@@ -1,20 +1,17 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.controller;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 
+import com.example.mac.bugfree.module.User;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import io.searchbox.client.JestResult;
-import io.searchbox.core.Bulk;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
-import io.searchbox.core.Search;
-import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;

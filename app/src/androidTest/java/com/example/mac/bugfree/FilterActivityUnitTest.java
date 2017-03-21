@@ -1,18 +1,15 @@
 package com.example.mac.bugfree;
 
-import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
-
-import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
+import com.example.mac.bugfree.activity.FilterActivity;
+import com.example.mac.bugfree.activity.MainActivity;
+import com.example.mac.bugfree.module.MoodEvent;
 import com.robotium.solo.Solo;
 
 /**
@@ -26,7 +23,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
      * Instantiates a new Filter activity unit test.
      */
     public FilterActivityUnitTest() {
-        super(com.example.mac.bugfree.FilterActivity.class);
+        super(FilterActivity.class);
     }
 
     public void setUp() throws Exception{
@@ -48,7 +45,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         final ArrayList<MoodEvent> moodEventList = getActivity().getMoodListAfterFilter();
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
@@ -65,7 +61,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     /**
@@ -80,7 +75,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
@@ -95,7 +89,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     // Taken from http://bitbar.com/automated-ui-testing-android-applications-robotium/
@@ -114,7 +107,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
@@ -133,8 +125,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
     /**
@@ -151,7 +141,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
     
     // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
@@ -168,7 +157,6 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
-        solo.assertCurrentActivity("Wrong Acticity", MainActivity.class);
     }
 
 

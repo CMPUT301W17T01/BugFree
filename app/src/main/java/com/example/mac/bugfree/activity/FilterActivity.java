@@ -1,21 +1,16 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -24,6 +19,11 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -34,9 +34,7 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Arrays;
-import java.util.Set;
 
 /**
  * This class is aim to provides 8 filter options for user to choose. When the user select one option, it will
@@ -127,7 +125,9 @@ public class FilterActivity extends AppCompatActivity {
             try {
                 User user_follow = getUserTask1.get();
                 // store the user's following people's mood event list
-                moodListBeforeFilterFo.addMoodEventList(user_follow.getMoodEventList());
+                MoodEventList moodList = user_follow.getMoodEventList();
+                moodList.sortByDate();
+                moodListBeforeFilterFo.addMoodEvent(moodList.getMoodEvent(0));
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
             }
@@ -440,7 +440,7 @@ public class FilterActivity extends AppCompatActivity {
             // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterMy.getMoodEvent(i).getTriggerText();
             // if it contains the entered key of reason, then add it to the new list
-            if (Arrays.asList(keyOfReason).contains(enteredReason)) {
+            if (keyOfReason != null && keyOfReason.toLowerCase().contains(enteredReason.toLowerCase())) {
                 moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
             }
         }
@@ -456,7 +456,7 @@ public class FilterActivity extends AppCompatActivity {
             // get the mood event's trigger text
             keyOfReason = moodListBeforeFilterFo.getMoodEvent(i).getTriggerText();
             // if it contains the entered key of reason, then add it to the new list
-            if (Arrays.asList(keyOfReason).contains(enteredReason)) {
+            if (keyOfReason != null && keyOfReason.toLowerCase().contains(enteredReason.toLowerCase())) {
                 moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
             }
         }
