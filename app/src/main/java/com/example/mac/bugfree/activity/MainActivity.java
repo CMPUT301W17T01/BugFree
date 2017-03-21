@@ -218,7 +218,9 @@ public class MainActivity extends AppCompatActivity {
             getUserTask1.execute(followee);
             try {
                 User user_follow = getUserTask1.get();
-                moodEventList.addMoodEventList(user_follow.getMoodEventList());
+                MoodEventList userFollowMoodList = user_follow.getMoodEventList();
+                userFollowMoodList.sortByDate();
+                moodEventList.addMoodEvent(userFollowMoodList.getMoodEvent(0));
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
             }
