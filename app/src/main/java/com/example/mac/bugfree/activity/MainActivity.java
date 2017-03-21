@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserName;
     private Context context;
     private TextView drawer_name;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +140,27 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (fileExists(context, FILENAME2)) {
+                    loadFromFilterFile(context);
+                } else {
+                    loadList(currentUserName);
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 
