@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -44,27 +48,6 @@ public class MapActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mOpenMapView = (MapView) findViewById(R.id.map);
-        mOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
-
-        mOpenMapView.setBuiltInZoomControls(true);
-        mOpenMapView.setMultiTouchControls(true);
-
-        IMapController mapController = mOpenMapView.getController();
-        mapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(53.56, -113.50);
-        mapController.setCenter(startPoint);
-
-
-        //Add Scale Bar
-        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
-        mOpenMapView.getOverlays().add(myScaleBarOverlay);
-
-        //Add MyLocationOverlay
-        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(this) , mOpenMapView);
-        this.myLocationOverlay.enableMyLocation();
-        mOpenMapView.getOverlays().add(this.myLocationOverlay);
-
         ImageView add_tab = (ImageView) findViewById(R.id.add_tab_map);
         add_tab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,11 +66,34 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
+        mOpenMapView = (MapView) findViewById(R.id.map);
+        mOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
+
+        mOpenMapView.setBuiltInZoomControls(true);
+        mOpenMapView.setMultiTouchControls(true);
+
+        IMapController mapController = mOpenMapView.getController();
+        mapController.setZoom(14);
+        GeoPoint startPoint = new GeoPoint(53.56, -113.50);
+        mapController.setCenter(startPoint);
+
+
+        //Add Scale Bar
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
+        mOpenMapView.getOverlays().add(myScaleBarOverlay);
+
+        //Add MyLocationOverlay
+        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context) , mOpenMapView);
+        this.myLocationOverlay.enableMyLocation();
+        mOpenMapView.getOverlays().add(this.myLocationOverlay);
+
+
         //your items
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Canada", "Canada", new GeoPoint(45.4, -75.666667))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Calgary", "Calgary", new GeoPoint(51.03, -114.05))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Edmonton", "Edmonton", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Canada", "Country", new GeoPoint(45.4, -75.666667))); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Calgary", "City", new GeoPoint(51.03, -114.05))); // Lat/Lon decimal degrees
+        items.add(new OverlayItem("Edmonton", "City", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
+
 
 
         //the overlay
@@ -109,6 +115,8 @@ public class MapActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);
 
         mOpenMapView.getOverlays().add(mOverlay);
+
+
     }
 
 
