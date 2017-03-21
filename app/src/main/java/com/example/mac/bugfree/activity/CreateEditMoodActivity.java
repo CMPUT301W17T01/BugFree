@@ -62,7 +62,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
-    private GeoPoint location;
+    private GeoPoint currentLocation;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -278,8 +278,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     //TODO add location in part 5
     public void add_location(){
         if (currentLocationCheckbox.isChecked()) {
-//            CurrentLocation currentLocation = new CurrentLocation(getApplicationContext());
-//            location = currentLocation.getCurrentLocation();
+            try {
+                CurrentLocation locationListener = new CurrentLocation();
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if( location != null ) {
+                    int latitude = (int) (location.getLatitude() * 1E6);
+                    int longitude = (int) (location.getLongitude() * 1E6);
+                    currentLocation =  new GeoPoint(latitude, longitude);
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -321,7 +332,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         // Test for the location
         add_location();
-        Log.d("Test for location", Double.toString(location.getLongitude()));
+        if (currentLocation != null) {
+            moodEvent.setLocation(currentLocation);
+        }
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
