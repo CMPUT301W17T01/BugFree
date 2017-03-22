@@ -10,7 +10,9 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.audiofx.BassBoost;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -100,6 +102,9 @@ public class MapActivity extends AppCompatActivity {
 
         addMyLocationPin();
         addMoodEventPin();
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
+
 
     }
 
