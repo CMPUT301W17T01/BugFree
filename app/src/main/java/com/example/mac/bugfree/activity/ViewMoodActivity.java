@@ -80,7 +80,7 @@ public class ViewMoodActivity extends AppCompatActivity {
     }
 
     /**
-     * If selet the delete or edit icons
+     * If select the delete or edit icons
      * check if this event belongs to current user first
      * if not, it will not allow the users to change it
      *
