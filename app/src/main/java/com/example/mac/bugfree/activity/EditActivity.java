@@ -30,8 +30,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- *This activity is a sub class of CreateEditMoodActivity
- *Allow users to edit the mood events that they have already created
+ * This activity is a sub class of CreateEditMoodActivity
+ * Allow users to edit the mood events that they have already created
  * @author Mengyang Chen
  */
 public class EditActivity extends CreateEditMoodActivity {
