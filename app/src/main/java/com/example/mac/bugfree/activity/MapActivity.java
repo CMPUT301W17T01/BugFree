@@ -1,8 +1,10 @@
 package com.example.mac.bugfree.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -18,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.util.LoadFile;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -31,7 +36,10 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 public class MapActivity extends AppCompatActivity {
+    private static final String FILENAME2 = "filter.sav";
+
     private MapView mOpenMapView;
+    //private String currentUserName;
 
     ArrayList<OverlayItem> anotherOverlayItemArray;
 
@@ -66,6 +74,10 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
+        // get the current user name
+//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        currentUserName = pref.getString("currentUser", "");
+
         mOpenMapView = (MapView) findViewById(R.id.map);
         mOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
 
@@ -77,26 +89,63 @@ public class MapActivity extends AppCompatActivity {
         GeoPoint startPoint = new GeoPoint(53.56, -113.50);
         mapController.setCenter(startPoint);
 
-
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
 
+        addMyLocationPin();
+        addMoodEventPin();
+
+    }
+
+
+    public void onResume() {
+        super.onResume();
+        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+
+    }
+
+    public void addMyLocationPin() {
         //Add MyLocationOverlay
-        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context) , mOpenMapView);
+        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()) , mOpenMapView);
         this.myLocationOverlay.enableMyLocation();
         mOpenMapView.getOverlays().add(this.myLocationOverlay);
+    }
 
+    public void addMoodEventPin() {
+        if (fileExists(getApplicationContext(), FILENAME2)) {
+            loadFromFilterFile(getApplicationContext());
+        } else {
+            // TODO: add all participate's moodEvent in 5km
+        }
+    }
 
-        //your items
+    private boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if (file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void loadFromFilterFile(Context context) {
+        LoadFile loadFile = new LoadFile();
+        ArrayList<MoodEvent> moodEventArrayList = new ArrayList<>();
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Canada", "Country", new GeoPoint(45.4, -75.666667))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Calgary", "City", new GeoPoint(51.03, -114.05))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Edmonton", "City", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
 
+        moodEventArrayList = loadFile.loadFilteredMoodEventList(context);
+        MoodEventList moodEventList = new MoodEventList(moodEventArrayList);
 
+        int len = moodEventList.getCount();
+        for (int i = 0; i<len; i++) {
+            MoodEvent moodEvent = moodEventList.getMoodEvent(i);
+            GeoPoint geoPoint = moodEvent.getLocation();
 
-        //the overlay
+            if (geoPoint != null) {
+                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+            }
+        }
+
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
@@ -115,25 +164,5 @@ public class MapActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);
 
         mOpenMapView.getOverlays().add(mOverlay);
-
-
     }
-
-
-    public void onResume() {
-        super.onResume();
-        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-
-    }
-
-    public boolean showPin(){
-        return true;
-    }
-
-    public boolean showDetail(){
-        return true;
-    }
-
-
-
 }
