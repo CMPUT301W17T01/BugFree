@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.util.CurrentLocation;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -30,11 +31,12 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 public class MapActivity extends AppCompatActivity {
     private MapView mOpenMapView;
-
-    ArrayList<OverlayItem> anotherOverlayItemArray;
-
+    GeoPoint currentPoint;
+    GeoPoint startPoint;
     MyLocationNewOverlay myLocationOverlay = null;
 
     @Override
@@ -74,8 +76,9 @@ public class MapActivity extends AppCompatActivity {
 
         IMapController mapController = mOpenMapView.getController();
         mapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(53.56, -113.50);
+        startPoint = new GeoPoint(53.56, -113.50);
         mapController.setCenter(startPoint);
+
 
 
         //Add Scale Bar
@@ -83,7 +86,7 @@ public class MapActivity extends AppCompatActivity {
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
 
         //Add MyLocationOverlay
-        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context) , mOpenMapView);
+        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), mOpenMapView);
         this.myLocationOverlay.enableMyLocation();
         mOpenMapView.getOverlays().add(this.myLocationOverlay);
 
@@ -95,27 +98,29 @@ public class MapActivity extends AppCompatActivity {
         items.add(new OverlayItem("Edmonton", "City", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
 
 
-
         //the overlay
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this, items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         //do something
+//                        double a = distanceBetweenPoints();
+
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
                                         + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
-                                Toast.LENGTH_LONG).show();
+                                LENGTH_LONG).show();
                         return true;
                     }
+
                     @Override
                     public boolean onItemLongPress(final int index, final OverlayItem item) {
+
                         return false;
                     }
                 });
         mOverlay.setFocusItemsOnTap(true);
 
         mOpenMapView.getOverlays().add(mOverlay);
-
 
     }
 
@@ -125,6 +130,34 @@ public class MapActivity extends AppCompatActivity {
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
 
     }
+
+    public double distanceBetweenPoints(GeoPoint moodPoint) {
+        try {
+            CurrentLocation locationListener = new CurrentLocation();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                int latitude = (int) (location.getLatitude() * 1E6);
+                int longitude = (int) (location.getLongitude() * 1E6);
+                currentPoint = new GeoPoint(latitude, longitude);
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        Location currentLocation = new Location("Current Location");
+        currentLocation.setLatitude(currentPoint.getLatitudeE6() / 1E6);
+        currentLocation.setLongitude(currentPoint.getLongitudeE6() / 1E6);
+
+        Location moodLocation = new Location("Mood's location");
+
+        moodLocation.setLatitude(moodPoint.getLatitudeE6() / 1E6);
+        moodLocation.setLongitude(moodPoint.getLongitudeE6() / 1E6);
+        double distance = currentLocation.distanceTo(moodLocation);
+        return distance;
+    }
+
+
 
     public boolean showPin(){
         return true;
