@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Arrays;
+import java.util.prefs.Preferences;
 
 /**
  * This class is aim to provides 8 filter options for user to choose. When the user select one option, it will
@@ -145,6 +146,7 @@ public class FilterActivity extends AppCompatActivity {
         foReasonEditText = (EditText) findViewById(R.id.edittext_reason_following);
         foDisplayAllCheckbox = (CheckBox) findViewById(R.id.checkbox_display_following);
 
+
         // checkbox for myself most recent week
         myMostRecentWeekCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +256,8 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
+        displayPrevious();
+
     }
 
     // Taken from http://stackoverflow.com/questions/35648913/how-to-set-menu-to-toolbar-in-android
@@ -282,9 +286,11 @@ public class FilterActivity extends AppCompatActivity {
                 // if there is only one option is selected, then save the mood event list in the file
                 if(flag == 1){
                     saveInFile();
+                    saveOption();
                 }
                 // if no option is selected, then delete the file.
                 if (flag == 0){
+                    saveOption();
                     deleteFile("filter.sav");
                 }
                 // jump to main activity
@@ -520,6 +526,38 @@ public class FilterActivity extends AppCompatActivity {
             throw new RuntimeException();
         } catch (IOException e) {
             throw new RuntimeException();
+        }
+    }
+
+    private void saveOption() {
+        SharedPreferences filterSetting = getSharedPreferences("filterSetting",0);
+        SharedPreferences.Editor editor = filterSetting.edit();
+        editor.putBoolean("myMostRecent",myMostRecentWeekCheckbox.isChecked());
+        editor.putBoolean("myDisplayAll",myDisplayAllCheckbox.isChecked());
+        editor.putBoolean("foMostRecent",foMostRecentWeekCheckbox.isChecked());
+        editor.putBoolean("foDisplayAll",foDisplayAllCheckbox.isChecked());
+        editor.putString("myReason",myReasonEditText.getText().toString());
+        editor.putString("foReason",foReasonEditText.getText().toString());
+        editor.putInt("mySpinner",myEmotionalStateSpinner.getSelectedItemPosition());
+        editor.putInt("foSpinner",foEmotionalStateSpinner.getSelectedItemPosition());
+
+        editor.commit();
+    }
+    private void displayPrevious() {
+        SharedPreferences filterSetting = getSharedPreferences("filterSetting",0);
+        myMostRecentWeekCheckbox.setChecked(filterSetting.getBoolean("myMostRecent",false));
+        myDisplayAllCheckbox.setChecked(filterSetting.getBoolean("myDisplayAll",false));
+        foMostRecentWeekCheckbox.setChecked(filterSetting.getBoolean("foMostRecent",false));
+        foDisplayAllCheckbox.setChecked(filterSetting.getBoolean("foDisplayAll",false));
+        myReasonEditText.setText(filterSetting.getString("myReason",null));
+        foReasonEditText.setText(filterSetting.getString("foReason",null));
+        int mySpinner = filterSetting.getInt("mySpinner",0);
+        if (mySpinner != 0){
+            myEmotionalStateSpinner.setSelection(mySpinner);
+        }
+        int foSpinner = filterSetting.getInt("foSpinner",0);
+        if (foSpinner != 0){
+            foEmotionalStateSpinner.setSelection(foSpinner);
         }
     }
 }
