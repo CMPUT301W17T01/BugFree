@@ -288,7 +288,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 }
             case R.id.action_camera:
 
-                takeAPhoto();
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 12345);
+
+                }
+                else{
+                    takeAPhoto();
+                }
+
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -435,13 +443,29 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 12345) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takeAPhoto();
+                // Now user should be able to use camera
+            }
+            else {
+                // Your app will not have this permission. Turn off all functions
+                // that require this permission or it will force close like your
+                // original question
+            }
+        }
+    }
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 12345) {
             if (resultCode == RESULT_OK) {
-//                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
-                pic_preview.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
+                iv.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+                finish();
             }
         }
     }
