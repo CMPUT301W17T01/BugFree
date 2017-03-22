@@ -1,7 +1,16 @@
 package com.example.mac.bugfree.activity;
 
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,11 +25,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
@@ -28,12 +40,14 @@ import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static com.example.mac.bugfree.R.id.imageView;
 import static com.example.mac.bugfree.R.id.timePicker;
 
 /**
@@ -54,6 +68,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
+    private Uri imageFileUri;
 
 
     /**
@@ -255,6 +270,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 }
+            case R.id.action_camera:
+
+                takeAPhoto();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -359,6 +377,40 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         return time;
     }
+
+
+    public void takeAPhoto() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/Bugfree";
+        File folder = new File(path);
+        if (!folder.exists())
+            folder.mkdir();
+        String imagePathAndFileName = path + File.separator +
+                String.valueOf(System.currentTimeMillis()) + ".jpg";
+        File imageFile = new File(imagePathAndFileName);
+        imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
+                BuildConfig.APPLICATION_ID + ".provider",
+                imageFile);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+        startActivityForResult(intent, 12345);
+
+    }
+
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 12345) {
+            if (resultCode == RESULT_OK) {
+//                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
+                pic_preview.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+            }
+        }
+    }
+
+
+
     protected void onStart(){
         super.onStart();
     }
