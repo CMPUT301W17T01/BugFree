@@ -1,8 +1,10 @@
 package com.example.mac.bugfree.activity;
 
+import java.io.File;
 import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -18,7 +20,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
-
+import com.example.mac.bugfree.util.CurrentLocation;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.LoadFile;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -30,10 +38,15 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
-public class MapActivity extends AppCompatActivity {
-    private MapView mOpenMapView;
+import static android.widget.Toast.LENGTH_LONG;
 
-    ArrayList<OverlayItem> anotherOverlayItemArray;
+public class MapActivity extends AppCompatActivity {
+    private static final String FILENAME2 = "filter.sav";
+
+    private MapView mOpenMapView;
+    GeoPoint currentPoint;
+    GeoPoint startPoint;
+    //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
 
@@ -66,6 +79,10 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
+        // get the current user name
+//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        currentUserName = pref.getString("currentUser", "");
+
         mOpenMapView = (MapView) findViewById(R.id.map);
         mOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
 
@@ -74,29 +91,130 @@ public class MapActivity extends AppCompatActivity {
 
         IMapController mapController = mOpenMapView.getController();
         mapController.setZoom(14);
-        GeoPoint startPoint = new GeoPoint(53.56, -113.50);
+        startPoint = new GeoPoint(53.56, -113.50);
         mapController.setCenter(startPoint);
-
 
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
 
+        addMyLocationPin();
+        addMoodEventPin();
+
+    }
+
+
+    public void onResume() {
+        super.onResume();
+        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+
+    }
+
+    public void addMyLocationPin() {
         //Add MyLocationOverlay
-        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context) , mOpenMapView);
+        this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()) , mOpenMapView);
         this.myLocationOverlay.enableMyLocation();
         mOpenMapView.getOverlays().add(this.myLocationOverlay);
+    }
 
+    public void addMoodEventPin() {
+        if (fileExists(getApplicationContext(), FILENAME2)) {
+            loadFromFilterFile(getApplicationContext());
+        } else {
+            // TODO: add all participate's moodEvent in 5km
+            //loadAllParticipant();
+        }
+    }
 
-        //your items
+    private boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if (file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void loadFromFilterFile(Context context) {
+        LoadFile loadFile = new LoadFile();
+        ArrayList<MoodEvent> moodEventArrayList = new ArrayList<>();
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        items.add(new OverlayItem("Canada", "Country", new GeoPoint(45.4, -75.666667))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Calgary", "City", new GeoPoint(51.03, -114.05))); // Lat/Lon decimal degrees
-        items.add(new OverlayItem("Edmonton", "City", new GeoPoint(53.56, -113.50))); // Lat/Lon decimal degrees
 
-
+        moodEventArrayList = loadFile.loadFilteredMoodEventList(context);
+        MoodEventList moodEventList = new MoodEventList(moodEventArrayList);
 
         //the overlay
+        int len = moodEventList.getCount();
+        for (int i = 0; i<len; i++) {
+            MoodEvent moodEvent = moodEventList.getMoodEvent(i);
+            GeoPoint geoPoint = moodEvent.getLocation();
+
+            if (geoPoint != null) {
+                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+            }
+        }
+
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        //do something
+//                        double a = distanceBetweenPoints();
+
+                        Toast.makeText(MapActivity.this, item.getTitle() + "\n"
+                                        + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
+                                LENGTH_LONG).show();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+
+                        return false;
+                    }
+                });
+        mOverlay.setFocusItemsOnTap(true);
+
+        mOpenMapView.getOverlays().add(mOverlay);
+    }
+
+    private void loadAllParticipant() {
+        ArrayList<String> userList = new ArrayList<>();
+        MoodEventList moodEventList = new MoodEventList();
+        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+
+        ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+        getUserListTask.execute("1");
+        try{
+            userList = getUserListTask.get();
+            Log.i("Test in load", userList.get(0));
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the UserList out of the async object");
+        }
+
+        ElasticsearchUserController.GetUserTask getUserTask1;
+        for (String userName : userList) {
+            getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+            getUserTask1.execute(userName);
+            try {
+                User user = getUserTask1.get();
+                MoodEventList userMoodList = user.getMoodEventList();
+                userMoodList.sortByDate();
+                moodEventList.addMoodEvent(userMoodList.getMoodEvent(0));
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        }
+
+        int len = moodEventList.getCount();
+        for (int i = 0; i<len; i++) {
+            MoodEvent moodEvent = moodEventList.getMoodEvent(i);
+            GeoPoint geoPoint = moodEvent.getLocation();
+
+            if (geoPoint != null) {
+                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+            }
+        }
+
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
@@ -115,25 +233,32 @@ public class MapActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);
 
         mOpenMapView.getOverlays().add(mOverlay);
-
-
     }
 
+    public double distanceBetweenPoints(GeoPoint moodPoint) {
+        try {
+            CurrentLocation locationListener = new CurrentLocation();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                int latitude = (int) (location.getLatitude() * 1E6);
+                int longitude = (int) (location.getLongitude() * 1E6);
+                currentPoint = new GeoPoint(latitude, longitude);
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        Location currentLocation = new Location("Current Location");
+        currentLocation.setLatitude(currentPoint.getLatitudeE6() / 1E6);
+        currentLocation.setLongitude(currentPoint.getLongitudeE6() / 1E6);
 
-    public void onResume() {
-        super.onResume();
-        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        Location moodLocation = new Location("Mood's location");
 
+        moodLocation.setLatitude(moodPoint.getLatitudeE6() / 1E6);
+        moodLocation.setLongitude(moodPoint.getLongitudeE6() / 1E6);
+        double distance = currentLocation.distanceTo(moodLocation);
+        return distance;
     }
-
-    public boolean showPin(){
-        return true;
-    }
-
-    public boolean showDetail(){
-        return true;
-    }
-
-
 
 }
