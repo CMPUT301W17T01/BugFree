@@ -430,8 +430,30 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-        startActivityForResult(intent, 12345);
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    123456);
+        }
+        else {
+            startActivityForResult(intent, 12345);
+        }
+
+    }
+
+
+
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 123456) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Now user should be able to use camera
+            }
+            else {
+                // Your app will not have this permission. Turn off all functions
+                // that require this permission or it will force close like your
+                // original question
+            }
+        }
     }
 
 
@@ -439,8 +461,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 12345) {
             if (resultCode == RESULT_OK) {
-//                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
-                pic_preview.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
+                iv.setImageDrawable(Drawable.createFromPath(Environment.getExternalStorageDirectory().getAbsolutePath() +
+                        "/Bugfree"));
             }
         }
     }
