@@ -1,28 +1,25 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.activity.ViewMoodActivity;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * This class is list adapter which help to display every element in list

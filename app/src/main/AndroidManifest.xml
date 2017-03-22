@@ -3,6 +3,13 @@
     package="com.example.mac.bugfree">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -10,28 +17,41 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".CreateEditMoodActivity" />
-        <activity android:name=".MapActivity" />
+        <activity android:name=".activity.SignInActivity" />
+        <activity android:name=".activity.SignUpActivity" />
+        <activity android:name=".activity.CreateEditMoodActivity" />
+        <activity android:name=".activity.MapActivity" />
         <activity
-            android:name=".FilterActivity"
+            android:name=".activity.FilterActivity"
             android:label="@string/title_activity_filter">
 
             <!-- <intent-filter> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".FriendActivity" />
-        <activity android:name=".ViewMoodActivity" />
-        <activity android:name=".EditActivity"></activity>
+        <activity android:name=".activity.FriendActivity" />
+        <activity android:name=".activity.ViewMoodActivity" />
+        <activity android:name=".activity.EditActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,11 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.module;
 
+
+import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.exception.ImageTooBigException;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.util.GregorianCalendar;
 
@@ -142,7 +148,7 @@ public class MoodEvent {
     private String triggerText;
     private String socialSituation;
     private String urlPic;
-    //private Location location;
+    private GeoPoint location;
     private String belongsTo;
 
     /**
@@ -168,7 +174,7 @@ public class MoodEvent {
         }
 
         this.setBelongsTo(belongsTo);
-
+        this.location = null;
     }
 
     /**
@@ -354,6 +360,14 @@ public class MoodEvent {
      */
     public void setRealtime(GregorianCalendar realtime) {
         this.realtime = realtime;
+    }
+
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 
     @Override

@@ -1,8 +1,20 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,26 +27,35 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.example.mac.bugfree.BuildConfig;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.CurrentLocation;
 
+import org.osmdroid.util.GeoPoint;
+
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import static com.example.mac.bugfree.R.id.reason_textView;
+import static com.example.mac.bugfree.R.id.imageView;
+import static com.example.mac.bugfree.R.id.login_button;
 import static com.example.mac.bugfree.R.id.timePicker;
 
 /**
@@ -49,12 +70,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
     private EditText create_edit_reason;
-    private ImageView pic_preview, home_tab;
+    private ImageView pic_preview, home_tab, earth_tab;
     private Spinner mood_state_spinner, social_situation_spinner;
-    private CheckBox current_time_checkbox;
+    private CheckBox current_time_checkbox, currentLocationCheckbox;
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
+    private Uri imageFileUri;
+    private GeoPoint currentLocation;
+
 
 
     /**
@@ -72,6 +96,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_create_edit);
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
+        earth_tab = (ImageView) findViewById(R.id.earth_tab_add);
         social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
         mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
         pic_preview = (ImageView)findViewById(R.id.pic_preview);
@@ -81,11 +106,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
 
+        currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
+
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
         }
+
         home_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +121,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        earth_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
+
+
 
         //TODO allow user to add picture in part5
 //       add_pic.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +276,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                         dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
 
                     }
+
                     try {
                         setMoodEvent(current_user, mood_state, social_situation, reason);
                     } catch (MoodStateNotAvailableException e) {
@@ -245,14 +285,32 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 }
+            case R.id.action_camera:
+
+                takeAPhoto();
         }
         return super.onOptionsItemSelected(item);
     }
 
     //TODO add location in part 5
-    public boolean add_location(){
-        return true;
+    public void add_location(){
+        if (currentLocationCheckbox.isChecked()) {
+            try {
+                CurrentLocation locationListener = new CurrentLocation();
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if( location != null ) {
+                    int latitude = (int) (location.getLatitude() * 1E6);
+                    int longitude = (int) (location.getLongitude() * 1E6);
+                    currentLocation =  new GeoPoint(latitude, longitude);
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
     public boolean save_mood_list(String mood_state, String social_situation,String reason){
         return true;
     }
@@ -288,6 +346,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         moodEvent.setRealtime(real_time());
         moodEvent.setDateOfRecord(dateOfRecord);
+
+        // Test for the location
+        add_location();
+        if (currentLocation != null) {
+            moodEvent.setLocation(currentLocation);
+        }
 
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
@@ -349,6 +413,40 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         return time;
     }
+
+
+    public void takeAPhoto() {
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/Bugfree";
+        File folder = new File(path);
+        if (!folder.exists())
+            folder.mkdir();
+        String imagePathAndFileName = path + File.separator +
+                String.valueOf(System.currentTimeMillis()) + ".jpg";
+        File imageFile = new File(imagePathAndFileName);
+        imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
+                BuildConfig.APPLICATION_ID + ".provider",
+                imageFile);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+        startActivityForResult(intent, 12345);
+
+    }
+
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 12345) {
+            if (resultCode == RESULT_OK) {
+//                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
+                pic_preview.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+            }
+        }
+    }
+
+
+
     protected void onStart(){
         super.onStart();
     }

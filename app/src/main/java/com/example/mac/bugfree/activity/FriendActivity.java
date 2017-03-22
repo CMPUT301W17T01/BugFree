@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +17,10 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 import java.util.ArrayList;
 
@@ -284,12 +288,13 @@ public class FriendActivity extends AppCompatActivity {
                     anotherfollowList = anotherUser.getFolloweeIDs();
                     anotherfollowList.add(currentUserName);
 
+
                     ElasticsearchUserController.AddUserTask addUserTask2 =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask2.execute(anotherUser);
 
 
-                    Toast.makeText(getApplicationContext(), singleNotification+
+                    Toast.makeText(getApplicationContext(), singleNotification +
                             " has been accepted", Toast.LENGTH_SHORT).show();
                 }
             });

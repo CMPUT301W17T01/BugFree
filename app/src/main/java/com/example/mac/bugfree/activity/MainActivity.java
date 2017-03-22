@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +25,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.controller.MoodEventAdapter;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserName;
     private Context context;
     private TextView drawer_name;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +87,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CreateEditMoodActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+            }
+        });
+
+        ImageView earth_tab = (ImageView) findViewById(R.id.earth_tab_home);
+        earth_tab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
@@ -120,6 +140,27 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (fileExists(context, FILENAME2)) {
+                    loadFromFilterFile(context);
+                } else {
+                    loadList(currentUserName);
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
 
     }
 
@@ -200,7 +241,9 @@ public class MainActivity extends AppCompatActivity {
             getUserTask1.execute(followee);
             try {
                 User user_follow = getUserTask1.get();
-                moodEventList.addMoodEventList(user_follow.getMoodEventList());
+                MoodEventList userFollowMoodList = user_follow.getMoodEventList();
+                userFollowMoodList.sortByDate();
+                moodEventList.addMoodEvent(userFollowMoodList.getMoodEvent(0));
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
             }
@@ -268,29 +311,32 @@ public class MainActivity extends AppCompatActivity {
         if (followName.equals(currentUserName)) {
             Toast.makeText(this, "You enter wrong username", Toast.LENGTH_SHORT).show();
         }
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(followName);
 
-        try {
-            User user = getUserTask.get();
-            if(user != null){
-                ArrayList<String> pendingList = user.getPendingPermission();
-                ArrayList<String> followerList = user.getFollowerIDs();
+        else {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(followName);
 
-                if ( followerList.contains(currentUserName)) {
-                    Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+            try {
+                User user = getUserTask.get();
+                if(user != null){
+                    ArrayList<String> pendingList = user.getPendingPermission();
+                    ArrayList<String> followerList = user.getFollowerIDs();
+
+                    if ( followerList.contains(currentUserName)) {
+                        Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                    } else {
+                        pendingList.add(currentUserName);
+                        user.setPendingPermissions(pendingList);
+                        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                        addUserTask.execute(user);
+                    }
+
                 } else {
-                    pendingList.add(currentUserName);
-                    user.setPendingPermissions(pendingList);
-                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                    addUserTask.execute(user);
+                    Toast.makeText(this, "The user does not exist", Toast.LENGTH_SHORT).show();
                 }
-
-            } else {
-                Toast.makeText(this, "The user does not exist", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                //Log.i("Error", "Failed to get the User out of the async object");
             }
-        } catch (Exception e) {
-            //Log.i("Error", "Failed to get the User out of the async object");
         }
 
     }

@@ -1,14 +1,18 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.activity.EditActivity;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
 /**
@@ -93,25 +97,24 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
      * go to EditActivity
      */
     private void editMoodEvent() {
-        User user = new User();
-
-        SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
-        currentUserName = pref.getString("currentUser", "");
-
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(currentUserName);
-
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
-        }
+//        User user = new User();
+//
+//        SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
+//        currentUserName = pref.getString("currentUser", "");
+//
+//        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+//        getUserTask.execute(currentUserName);
+//
+//        try{
+//            user = getUserTask.get();
+//        } catch (Exception e) {
+//            Log.i("Error", "Failed to get the User out of the async object");
+//        }
 
         SharedPreferences.Editor editor = context.getSharedPreferences("editMoodEvent",Context.MODE_PRIVATE).edit();
         Gson gson = new Gson();
         String json = gson.toJson(moodEvent);
         editor.putString("moodevent",json);
-        //editor.putString("")
         editor.apply();
 
         Intent intent = new Intent(context, EditActivity.class);

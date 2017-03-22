@@ -1,4 +1,4 @@
-package com.example.mac.bugfree;
+package com.example.mac.bugfree.module;
 
 /**
  * This class stores all user related info, ID, follower ID followee ID ,and moodEventList.
@@ -7,6 +7,7 @@ package com.example.mac.bugfree;
  * Users are distinguished by uniqueID, corresponding to position stored in User List.
  * @author Zhi Li
  */
+
 import java.util.ArrayList;
 
 /**
