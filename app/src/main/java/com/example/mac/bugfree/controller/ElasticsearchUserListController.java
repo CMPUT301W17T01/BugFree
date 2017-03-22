@@ -15,6 +15,8 @@ import io.searchbox.client.JestResult;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
@@ -29,27 +31,26 @@ public class ElasticsearchUserListController {
 
 
     /**
-     * The function which add user to elastic search
+     * The function which add username to elastic search
      */
-    public static class AddUserListTask extends AsyncTask<ArrayList<String>, Void, Void> {
+    public static class AddUserListTask extends AsyncTask<String, Void, Void> {
 
         @Override
-        protected Void doInBackground(ArrayList<String>... arrayLists) {
+        protected Void doInBackground(String... userNames) {
             verifySettings();
 
-            for (ArrayList<String> user : arrayLists) {
-                Index index = new Index.Builder(user).index("cmput301w17t01").type("userlist").id("1").build();
-
-
+            for (String userName : userNames) {
+                Index index = new Index.Builder(userName).index("cmput301w17t01").type("username").build();
                 try {
                     // where is the client
                     DocumentResult result = client.execute(index);
+                    Log.d("In AsyncTask ID", result.getId());
                     if (result.isSucceeded()) {
                     } else {
-                        Log.i("Error", "Elasticsearch was not able to add the user.");
+                        Log.i("Error", "ElasticSearch was not able to add the userList.");
                     }
                 } catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the user");
+                    Log.i("Error", "The application failed to build and send the userName");
                 }
 
             }
@@ -58,21 +59,30 @@ public class ElasticsearchUserListController {
     }
 
     /**
-     * The function which get user from elastic search
+     * The function which get username from elastic search
      */
-    public static class GetUserTask extends AsyncTask<String, Void, ArrayList<String>> {
+    public static class GetUserListTask extends AsyncTask<String, Void, ArrayList<String>> {
         @Override
         protected ArrayList<String> doInBackground(String... params) {
             verifySettings();
 
-            ArrayList<String> userList = new ArrayList<String>();
-            Get get = new Get.Builder("cmput301w17t01", params[0]).type("userlist").build();
+            ArrayList<String> userList = new ArrayList<>();
+//            Get get = new Get.Builder("cmput301w17t01", params[0]).type("username").build();
+
+            Search search = new Search.Builder(params[0])
+                    .addIndex("cmput301w17t01")
+                    .addType("username")
+                    .build();
 
             try{
-                JestResult result = client.execute(get);
-                userList = result.getSourceAsObject(ArrayList.class);
+//                JestResult result = client.execute(get);
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()) {
+                    List<String> nameList = result.getSourceAsObjectList(String.class);
+                    userList.addAll(nameList);
+                }
             } catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticSearch server!");
             }
             return userList;
         }

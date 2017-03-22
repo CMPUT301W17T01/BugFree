@@ -20,8 +20,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.controller.ElasticsearchUserListController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.LoadFile;
 
 import org.osmdroid.api.IMapController;
@@ -117,6 +120,7 @@ public class MapActivity extends AppCompatActivity {
             loadFromFilterFile(getApplicationContext());
         } else {
             // TODO: add all participate's moodEvent in 5km
+            //loadAllParticipant();
         }
     }
 
@@ -135,6 +139,64 @@ public class MapActivity extends AppCompatActivity {
 
         moodEventArrayList = loadFile.loadFilteredMoodEventList(context);
         MoodEventList moodEventList = new MoodEventList(moodEventArrayList);
+
+        int len = moodEventList.getCount();
+        for (int i = 0; i<len; i++) {
+            MoodEvent moodEvent = moodEventList.getMoodEvent(i);
+            GeoPoint geoPoint = moodEvent.getLocation();
+
+            if (geoPoint != null) {
+                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+            }
+        }
+
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(this,items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        //do something
+                        Toast.makeText(MapActivity.this, item.getTitle() + "\n"
+                                        + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
+                                Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                });
+        mOverlay.setFocusItemsOnTap(true);
+
+        mOpenMapView.getOverlays().add(mOverlay);
+    }
+
+    private void loadAllParticipant(){
+        ArrayList<String> userList = new ArrayList<>();
+        MoodEventList moodEventList = new MoodEventList();
+        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+
+        ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+        getUserListTask.execute("1");
+        try{
+            userList = getUserListTask.get();
+            Log.i("Test in load", userList.get(0));
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the UserList out of the async object");
+        }
+
+        ElasticsearchUserController.GetUserTask getUserTask1;
+        for (String userName : userList) {
+            getUserTask1 = new  ElasticsearchUserController.GetUserTask();
+            getUserTask1.execute(userName);
+            try {
+                User user = getUserTask1.get();
+                MoodEventList userMoodList = user.getMoodEventList();
+                userMoodList.sortByDate();
+                moodEventList.addMoodEvent(userMoodList.getMoodEvent(0));
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        }
 
         int len = moodEventList.getCount();
         for (int i = 0; i<len; i++) {

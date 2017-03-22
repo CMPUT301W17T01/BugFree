@@ -31,7 +31,6 @@ import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.CurrentLocation;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -63,8 +62,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
     private GeoPoint currentLocation;
-
-    private GoogleApiClient mGoogleApiClient;
 
 
     /**
