@@ -5,8 +5,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -48,12 +51,15 @@ import com.example.mac.bugfree.util.CurrentLocation;
 import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.imageView;
 import static com.example.mac.bugfree.R.id.login_button;
 import static com.example.mac.bugfree.R.id.timePicker;
@@ -78,6 +84,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
+    public static final int TAKE_PHOTO = 1;
 
 
 
@@ -424,21 +431,26 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
     public void takeAPhoto() {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/Bugfree";
-        File folder = new File(path);
-        if (!folder.exists())
-            folder.mkdir();
-        String imagePathAndFileName = path + File.separator +
-                String.valueOf(System.currentTimeMillis()) + ".jpg";
-        File imageFile = new File(imagePathAndFileName);
-        imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
-                BuildConfig.APPLICATION_ID + ".provider",
-                imageFile);
+        File folder = new File(getExternalCacheDir(), "output_img.jpg");
+        try {
+            if (folder.exists()){
+                folder.delete();
+            }
+            folder.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
+                    "com.example.mac.bugfree.fileprovider", folder);
+        }
+        else {
+            imageFileUri = Uri.fromFile(folder);
+        }
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
-        startActivityForResult(intent, 12345);
+        startActivityForResult(intent, TAKE_PHOTO);
 
     }
 
@@ -460,12 +472,20 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 12345) {
-            if (resultCode == RESULT_OK) {
-                ImageView iv = (ImageView)findViewById(R.id.pic_preview);
-                iv.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
-                finish();
-            }
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK){
+                    try {
+                        Bitmap bitmap = BitmapFactory.
+                                decodeStream(getContentResolver().openInputStream(imageFileUri));
+                        pic_preview.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
