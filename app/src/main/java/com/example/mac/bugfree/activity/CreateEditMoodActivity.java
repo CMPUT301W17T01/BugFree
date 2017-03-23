@@ -2,17 +2,23 @@ package com.example.mac.bugfree.activity;
 
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -63,6 +69,7 @@ import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.imageView;
 import static com.example.mac.bugfree.R.id.login_button;
 import static com.example.mac.bugfree.R.id.timePicker;
+import static java.util.Date.parse;
 
 /**
  * This class allow users to create a new mood event
@@ -85,6 +92,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
 
 
 
@@ -137,20 +145,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        //TODO allow user to add picture in part5
-//       add_pic.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//               add_pic.setImageResource(R.drawable.picture_text);
-//               //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-//               //startActivity(intent);
-//               //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//               //startActivityForResult(i, RESULT_LOAD_IMAGE);
-//           }
-//       });
+        pic_preview.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+            }
+        });
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -455,23 +462,34 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 12345) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                takeAPhoto();
-                // Now user should be able to use camera
-            }
-            else {
-                // Your app will not have this permission. Turn off all functions
-                // that require this permission or it will force close like your
-                // original question
-            }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 12345:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takeAPhoto();
+                    // Now user should be able to use camera
+                } else {
+                    // Your app will not have this permission. Turn off all functions
+                    // that require this permission or it will force close like your
+                    // original question
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
         }
     }
 
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_PHOTO:
                 if (resultCode == RESULT_OK){
@@ -484,11 +502,77 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        handleImageOnKitKat(data);
+                    } else {
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
             default:
                 break;
         }
     }
 
+    @TargetApi(19)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this,uri)) {
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID + "=" +id;
+                imagePath = getImagePath(MediaStore.Images.
+                        Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.
+                        parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+    }
+
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            pic_preview.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void openAlbum(){
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO);
+    }
 
 
     protected void onStart(){
