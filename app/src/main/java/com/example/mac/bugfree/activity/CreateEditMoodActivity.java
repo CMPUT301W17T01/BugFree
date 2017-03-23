@@ -330,8 +330,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 }
+                return true;
             case R.id.action_camera:
-
                 if (Build.VERSION.SDK_INT >= 23) {
 
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
