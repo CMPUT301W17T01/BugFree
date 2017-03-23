@@ -56,7 +56,7 @@ public class MapActivity extends AppCompatActivity {
     //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=1337;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class MapActivity extends AppCompatActivity {
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
 
+        addMyLocationPin();
         addMoodEventPin();
 //        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 //        startActivity(intent);
@@ -132,7 +133,10 @@ public class MapActivity extends AppCompatActivity {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-        }
+        }else {
+                Toast.makeText(MapActivity.this, "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
+            }
+
 
 
     }
@@ -151,15 +155,13 @@ public class MapActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(MapActivity.this, "Permission Granted!", Toast.LENGTH_SHORT).show();
 
-                    addMyLocationPin();
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
 
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    Toast.makeText(MapActivity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
+
                 }
                 return;
             }
