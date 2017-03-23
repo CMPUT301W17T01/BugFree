@@ -1,8 +1,11 @@
 package com.example.mac.bugfree.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.controller.ElasticsearchUserListController;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.controller.MoodEventAdapter;
@@ -36,6 +40,7 @@ import com.example.mac.bugfree.module.User;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This Class is the main view class of the project.
@@ -50,6 +55,8 @@ import java.util.ArrayList;
  * @author  Xinlei Chen
  */
 public class MainActivity extends AppCompatActivity {
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     private static final String FILENAME2 = "filter.sav";
 
@@ -160,6 +167,15 @@ public class MainActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
+//        List<String> userNameList = new ArrayList<>();
+//        userNameList.add("Sam");
+//        userNameList.add("Tom");
+//        userNameList.add("Kevin");
+//        userNameList.add("Ray");
+//
+//        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
+//        addUserListTask.execute(userNameList);
 
 
     }
@@ -325,10 +341,14 @@ public class MainActivity extends AppCompatActivity {
                     if ( followerList.contains(currentUserName)) {
                         Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
                     } else {
-                        pendingList.add(currentUserName);
-                        user.setPendingPermissions(pendingList);
-                        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                        addUserTask.execute(user);
+                        if (pendingList.contains(currentUserName)) {
+                            Toast.makeText(this, "You already in pending list", Toast.LENGTH_SHORT).show();
+                        } else {
+                            pendingList.add(currentUserName);
+                            user.setPendingPermissions(pendingList);
+                            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                            addUserTask.execute(user);
+                        }
                     }
 
                 } else {
@@ -381,5 +401,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
         mRecyclerView.setAdapter(mAdapter);
     }
+
 
 }
