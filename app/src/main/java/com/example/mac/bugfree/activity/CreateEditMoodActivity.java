@@ -299,6 +299,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 }
+                return true;
             case R.id.action_camera:
 
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -308,6 +309,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 else{
                     takeAPhoto();
                 }
+                return true;
 
 
         }
