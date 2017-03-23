@@ -1,10 +1,17 @@
 package com.example.mac.bugfree.activity;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -49,6 +56,8 @@ import static com.example.mac.bugfree.R.id.timePicker;
  * @author Mengyang Chen
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
+
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     private String current_user, mood_state , social_situation, reason;
     private Date date = null;
@@ -113,8 +122,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-
-
+        
 
         //TODO allow user to add picture in part5
 //       add_pic.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +204,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             public void onClick(View v) {
                 simpleDatePicker.setEnabled(!current_time_checkbox.isChecked());
                 simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
+            }
+        });
+
+        currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                permissionLocationRequest();
+                add_location();
+
             }
         });
 
@@ -289,6 +306,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
     }
 
     public boolean save_mood_list(String mood_state, String social_situation,String reason){
@@ -328,7 +346,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setDateOfRecord(dateOfRecord);
 
         // Test for the location
-        add_location();
+        //add_location();
         if (currentLocation != null) {
             moodEvent.setLocation(currentLocation);
         }
@@ -393,8 +411,45 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         return time;
     }
-    protected void onStart(){
+
+    @Override
+    protected void onStart() {
         super.onStart();
+//        add_location();
+    }
+
+    public void onResume() {
+        super.onResume();
+        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+
+    }
+
+    private void permissionLocationRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                if(!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showMessageOKCancel("You need to allow access to Location",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                                            REQUEST_CODE_ASK_PERMISSIONS);
+                                }
+                            });
+                }
+            }
+
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(CreateEditMoodActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 }
 
