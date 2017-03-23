@@ -284,7 +284,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                     setResult(RESULT_OK);
                     finish();
+
                 }
+                return true;
             case R.id.action_camera:
 
                 if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -294,7 +296,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 else{
                     takeAPhoto();
                 }
-
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
@@ -429,12 +431,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         File folder = new File(path);
         if (!folder.exists())
             folder.mkdir();
-        String imagePathAndFileName = path + File.separator +
-                String.valueOf(System.currentTimeMillis()) + ".jpg";
+        String imagePathAndFileName = path + File.separator + String.valueOf(System.currentTimeMillis()) + ".jpg";
         File imageFile = new File(imagePathAndFileName);
         imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
-                BuildConfig.APPLICATION_ID + ".provider",
-                imageFile);
+                BuildConfig.APPLICATION_ID + ".provider", imageFile);
+        //imageFileUri = Uri.fromFile(imageFile);
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
@@ -461,11 +462,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 12345) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == 1) {
+                Toast.makeText(getApplicationContext(),resultCode, Toast.LENGTH_LONG).show();
                 ImageView iv = (ImageView)findViewById(R.id.pic_preview);
                 iv.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
-                finish();
+
             }
+            else
+                if (resultCode == 0) {
+//                    Toast.makeText(getApplicationContext(), resultCode, Toast.LENGTH_LONG).show();
+//                    ImageView iv = (ImageView) findViewById(R.id.pic_preview);
+//                    iv.setImageDrawable(Drawable.createFromPath(imageFileUri.getPath()));
+                    Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_LONG).show();
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "- - - @==8", Toast.LENGTH_LONG).show();
         }
     }
 
