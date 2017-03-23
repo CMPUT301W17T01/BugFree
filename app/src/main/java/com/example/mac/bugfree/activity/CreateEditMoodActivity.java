@@ -2,6 +2,25 @@ package com.example.mac.bugfree.activity;
 
 
 import android.Manifest;
+
+import android.annotation.TargetApi;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -26,11 +45,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
@@ -41,14 +63,20 @@ import com.example.mac.bugfree.util.CurrentLocation;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static com.example.mac.bugfree.R.id.image;
+import static com.example.mac.bugfree.R.id.imageView;
 import static com.example.mac.bugfree.R.id.login_button;
 import static com.example.mac.bugfree.R.id.timePicker;
+import static java.util.Date.parse;
 
 /**
  * This class allow users to create a new mood event
@@ -70,7 +98,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
+    private Uri imageFileUri;
     private GeoPoint currentLocation;
+    public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
+
 
 
     /**
@@ -135,6 +167,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 //               //startActivityForResult(i, RESULT_LOAD_IMAGE);
 //           }
 //       });
+        pic_preview.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+            }
+        });
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -285,6 +330,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 }
+            case R.id.action_camera:
+
+                if (Build.VERSION.SDK_INT >= 23) {
+
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 12345);
+
+                    } else {
+                        takeAPhoto();
+                    }
+                }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -412,10 +468,147 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return time;
     }
 
+
+    public void takeAPhoto() {
+        File folder = new File(getExternalCacheDir(), "output_img.jpg");
+        try {
+            if (folder.exists()){
+                folder.delete();
+            }
+            folder.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageFileUri = FileProvider.getUriForFile(CreateEditMoodActivity.this,
+                    "com.example.mac.bugfree.fileprovider", folder);
+        }
+        else {
+            imageFileUri = Uri.fromFile(folder);
+        }
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+
+    }
+
     @Override
-    protected void onStart() {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 12345:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takeAPhoto();
+                    // Now user should be able to use camera
+                } else {
+                    // Your app will not have this permission. Turn off all functions
+                    // that require this permission or it will force close like your
+                    // original question
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK){
+                    try {
+                        Bitmap bitmap = BitmapFactory.
+                                decodeStream(getContentResolver().openInputStream(imageFileUri));
+                        pic_preview.setImageBitmap(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        handleImageOnKitKat(data);
+                    } else {
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @TargetApi(19)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this,uri)) {
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID + "=" +id;
+                imagePath = getImagePath(MediaStore.Images.
+                        Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.
+                        parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+    }
+
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            pic_preview.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void openAlbum(){
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO);
+    }
+
+
+    protected void onStart(){
         super.onStart();
-//        add_location();
     }
 
     public void onResume() {
