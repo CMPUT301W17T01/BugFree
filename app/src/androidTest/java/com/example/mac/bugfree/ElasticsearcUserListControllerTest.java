@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,20 +27,20 @@ import static org.junit.Assert.assertEquals;
 @RunWith(AndroidJUnit4.class)
 public class ElasticsearcUserListControllerTest {
     @Rule
-    public ActivityTestRule<MapActivity> mActivityRule =
-            new ActivityTestRule<>(MapActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void elasticSearchAddUserListTest() {
         //ElasticsearchUserController.createIndex();
-//        ArrayList<String> userList = new ArrayList<>();
-//        userList.add("Sam");
-//        userList.add("Tom");
-//        userList.add("Kevin");
-//        userList.add("Ray");
+        List<String> userNameList = new ArrayList<>();
+        userNameList.add("Sam");
+        userNameList.add("Tom");
+        userNameList.add("Kevin");
+        userNameList.add("Ray");
 
         ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
-        addUserListTask.execute("Sam", "Tom", "Kevin", "Ray");
+        addUserListTask.execute(userNameList);
 
 //        String query = "{\n" +
 //                        "       \"query\" : {\n" +

@@ -33,18 +33,18 @@ public class ElasticsearchUserListController {
     /**
      * The function which add username to elastic search
      */
-    public static class AddUserListTask extends AsyncTask<String, Void, Void> {
+    public static class AddUserListTask extends AsyncTask<List<String>, Void, Void> {
 
         @Override
-        protected Void doInBackground(String... userNames) {
+        protected Void doInBackground(List<String>... userNameLists) {
             verifySettings();
 
-            for (String userName : userNames) {
-                Index index = new Index.Builder(userName).index("cmput301w17t01").type("username").build();
+            for (List<String> userNameList : userNameLists) {
+                Index index = new Index.Builder(userNameList).index("cmput301w17t01").type("username").id("name").build();
                 try {
                     // where is the client
                     DocumentResult result = client.execute(index);
-                    Log.d("In AsyncTask ID", result.getId());
+//                    Log.d("In AsyncTask ID", result.getId());
                     if (result.isSucceeded()) {
                     } else {
                         Log.i("Error", "ElasticSearch was not able to add the userList.");
