@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.module.UserNameList;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -29,22 +30,21 @@ import io.searchbox.indices.IndicesExists;
 public class ElasticsearchUserListController {
     private static JestDroidClient client;
 
-
     /**
      * The function which add username to elastic search
      */
-    public static class AddUserListTask extends AsyncTask<List<String>, Void, Void> {
+    public static class AddUserListTask extends AsyncTask<UserNameList, Void, Void> {
 
         @Override
-        protected Void doInBackground(List<String>... userNameLists) {
+        protected Void doInBackground(UserNameList... userNameLists) {
             verifySettings();
 
-            for (List<String> userNameList : userNameLists) {
+            for (UserNameList userNameList : userNameLists) {
                 Index index = new Index.Builder(userNameList).index("cmput301w17t01").type("username").id("name").build();
                 try {
                     // where is the client
                     DocumentResult result = client.execute(index);
-//                    Log.d("In AsyncTask ID", result.getId());
+                    Log.d("In AsyncTask userName", result.getId());
                     if (result.isSucceeded()) {
                     } else {
                         Log.i("Error", "ElasticSearch was not able to add the userList.");
@@ -58,29 +58,23 @@ public class ElasticsearchUserListController {
         }
     }
 
+
+
     /**
      * The function which get username from elastic search
      */
-    public static class GetUserListTask extends AsyncTask<String, Void, ArrayList<String>> {
+    public static class GetUserListTask extends AsyncTask<String, Void, UserNameList> {
         @Override
-        protected ArrayList<String> doInBackground(String... params) {
+        protected UserNameList doInBackground(String... params) {
             verifySettings();
 
-            ArrayList<String> userList = new ArrayList<>();
-//            Get get = new Get.Builder("cmput301w17t01", params[0]).type("username").build();
+            UserNameList userList = new UserNameList();
+            Get get = new Get.Builder("cmput301w17t01", params[0]).type("username").build();
 
-            Search search = new Search.Builder(params[0])
-                    .addIndex("cmput301w17t01")
-                    .addType("username")
-                    .build();
 
             try{
-//                JestResult result = client.execute(get);
-                SearchResult result = client.execute(search);
-                if(result.isSucceeded()) {
-                    List<String> nameList = result.getSourceAsObjectList(String.class);
-                    userList.addAll(nameList);
-                }
+                JestResult result = client.execute(get);
+                userList = result.getSourceAsObject(UserNameList.class);
             } catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticSearch server!");
             }

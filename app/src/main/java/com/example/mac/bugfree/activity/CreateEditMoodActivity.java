@@ -54,6 +54,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.handler.PermissionHandler;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
@@ -85,7 +86,6 @@ import static java.util.Date.parse;
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
 
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     private String current_user, mood_state , social_situation, reason;
     private Date date = null;
@@ -255,9 +255,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permissionLocationRequest();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
+                    permissionHandler.pRequest();
+                }
                 add_location();
-
             }
         });
 
@@ -617,32 +619,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     }
 
-    private void permissionLocationRequest() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-            if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
-                if(!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    showMessageOKCancel("You need to allow access to Location",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                                            REQUEST_CODE_ASK_PERMISSIONS);
-                                }
-                            });
-                }
-            }
 
-        }
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(CreateEditMoodActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 }
 
