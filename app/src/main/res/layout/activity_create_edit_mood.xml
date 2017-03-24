@@ -81,7 +81,6 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    app:srcCompat="@drawable/ic_add_pic"
                     android:id="@+id/pic_preview"
                     android:layout_height="120dp"
                     android:layout_weight="0.50"
