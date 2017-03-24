@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
@@ -122,7 +123,7 @@ public class MapActivity extends AppCompatActivity {
             loadFromFilterFile(getApplicationContext());
         } else {
             // TODO: add all participate's moodEvent in 5km
-            //loadAllParticipant();
+            loadAllParticipant();
         }
     }
 
@@ -178,21 +179,21 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void loadAllParticipant() {
-        ArrayList<String> userList = new ArrayList<>();
+        UserNameList userList = new UserNameList();
         MoodEventList moodEventList = new MoodEventList();
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
         ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
-        getUserListTask.execute("1");
+        getUserListTask.execute("name");
         try{
             userList = getUserListTask.get();
-            Log.i("Test in load", userList.get(0));
         } catch (Exception e) {
             Log.i("Error", "Failed to get the UserList out of the async object");
         }
+        ArrayList<String> arrayList = userList.getUserNameList();
 
         ElasticsearchUserController.GetUserTask getUserTask1;
-        for (String userName : userList) {
+        for (String userName : arrayList) {
             getUserTask1 = new  ElasticsearchUserController.GetUserTask();
             getUserTask1.execute(userName);
             try {
@@ -211,7 +212,10 @@ public class MapActivity extends AppCompatActivity {
             GeoPoint geoPoint = moodEvent.getLocation();
 
             if (geoPoint != null) {
-                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+                if (distanceBetweenPoints(geoPoint) <= 5){
+                    items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+                }
+//                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
             }
         }
 
@@ -258,7 +262,7 @@ public class MapActivity extends AppCompatActivity {
         moodLocation.setLatitude(moodPoint.getLatitudeE6() / 1E6);
         moodLocation.setLongitude(moodPoint.getLongitudeE6() / 1E6);
         double distance = currentLocation.distanceTo(moodLocation);
-        return distance;
+        return distance/1000;
     }
 
 }
