@@ -164,7 +164,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),mood_state+" is selected.",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //TODO set tick to be disable
                     mood_state = null;
                 }
             }
