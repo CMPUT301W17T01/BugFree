@@ -147,7 +147,7 @@ public class MoodEvent {
     private GregorianCalendar realtime;
     private String triggerText;
     private String socialSituation;
-    private String urlPic;
+    private String picId;
     private GeoPoint location;
     private String belongsTo;
 
@@ -269,22 +269,21 @@ public class MoodEvent {
     }
 
     /**
-     * Gets url pic.
+     * Gets Id pic.
      *
-     * @return the url pic
+     * @return the id pic
      */
-    public String getUrlPic() {
-        return urlPic;
+    public String getPicId() {
+        return picId;
     }
 
     /**
-     * Sets url pic.
+     * Sets pic Id.
      *
-     * @param urlPic the url pic
-     * @throws ImageTooBigException the image too big exception
+     * @param picId the pic Id
      */
-    public void setUrlPic(String urlPic) throws ImageTooBigException {
-        this.urlPic = urlPic;
+    public void setPicId(String picId){
+        this.picId = picId;
     }
 
     /**
