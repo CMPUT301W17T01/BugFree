@@ -66,7 +66,7 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 
         //Initialize a normal MoodEvent
         MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
-        mood.setUrlPic("fake.png");
+        mood.setPicId("fake.png");
         mood.setSocialSituation("Alone");
         mood.setTriggerText("School");
         mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
@@ -74,7 +74,7 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 
         //test the setters & getters
         try{
-            assertTrue(mood.getUrlPic().equals("fake.png"));
+            assertTrue(mood.getPicId().equals("fake.png"));
             assertTrue(mood.getSocialSituation().equals("Alone"));
             assertTrue(mood.getTriggerText().equals("School"));
             GregorianCalendar date1 = new GregorianCalendar(2017,2,2,15,16,17);
@@ -96,7 +96,7 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 //        //Initialize a normal MoodEvent
 //        User usr = new User("John");
 //        MoodEvent mood = new MoodEvent("Happy", usr.getUsr());
-//        mood.setUrlPic("fake.png");
+//        mood.setPicId("fake.png");
 //        mood.setSocialSituation("Alone");
 //        mood.setTriggerText("School");
 //        mood.setDateOfRecord(new GregorianCalendar(2017,2,2,15,16,17));
@@ -104,7 +104,7 @@ public class MoodEventTest extends ActivityInstrumentationTestCase2 {
 //        // Test Image size
 //        //fails
 //        try {
-//            mood.setUrlPic("A_big_image.png");
+//            mood.setPicId("A_big_image.png");
 //            fail();
 //        }catch (ImageTooBigException e){
 //            assertTrue(true);
