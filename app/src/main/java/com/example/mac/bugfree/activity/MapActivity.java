@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.audiofx.BassBoost;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.handler.PermissionHandler;
 import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
@@ -57,7 +59,7 @@ public class MapActivity extends AppCompatActivity {
     //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
+//    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,35 +113,11 @@ public class MapActivity extends AppCompatActivity {
         addMoodEventPin();
 //        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 //        startActivity(intent);
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MapActivity.this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(MapActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }else {
-                Toast.makeText(MapActivity.this, "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
-            }
-
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
+            permissionHandler.pRequest();
+        }
     }
 
 
@@ -148,29 +126,7 @@ public class MapActivity extends AppCompatActivity {
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
 
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(MapActivity.this, "Permission Granted!", Toast.LENGTH_SHORT).show();
 
-
-                } else {
-
-                    Toast.makeText(MapActivity.this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     public void addMyLocationPin() {
         //Add MyLocationOverlay
@@ -220,7 +176,6 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         //do something
-//                        double a = distanceBetweenPoints();
 
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
                                         + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
@@ -325,5 +280,6 @@ public class MapActivity extends AppCompatActivity {
         double distance = currentLocation.distanceTo(moodLocation);
         return distance/1000;
     }
+
 
 }
