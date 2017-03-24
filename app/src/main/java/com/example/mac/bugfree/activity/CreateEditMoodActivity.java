@@ -382,7 +382,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             throws MoodStateNotAvailableException{
         User user = new User();
 
-
+//TODO: command(add)
         String query = current_user;
         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
         getUserTask.execute(query);

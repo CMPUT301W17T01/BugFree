@@ -85,7 +85,7 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
 
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
-
+//TODO: command(delete)
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
 

@@ -221,11 +221,13 @@ public class EditActivity extends CreateEditMoodActivity {
                 } catch (Exception e) {
                     Log.i("Error", "Failed to get the User out of the async object");
                 }
+                ////TODO: command(edit)
                 MoodEventList moodEventList = user.getMoodEventList();
                 moodEventList.deleteMoodEvent(edit_mood_event);
                 user.setMoodEventList(moodEventList);
                 ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                 addUserTask.execute(user);
+                //
                     if(edit_mood_state == null){
                         Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                         break;

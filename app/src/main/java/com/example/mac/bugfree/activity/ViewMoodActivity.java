@@ -134,6 +134,7 @@ public class ViewMoodActivity extends AppCompatActivity {
 
 
     private void deleteMoodEvent() {
+        //TODO: command (delete)
         User user = new User();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);

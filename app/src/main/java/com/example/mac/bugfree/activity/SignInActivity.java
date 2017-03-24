@@ -1,5 +1,6 @@
 package com.example.mac.bugfree.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,13 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static com.google.common.collect.ComparisonChain.start;
 
 /**
  * This is the Sign Up view class of the project, <br> In this class, user interaction and Elastic Query action are performed
@@ -30,6 +38,20 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        //Check internet connectivity first
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+        if (isOnline) {
+            Toast.makeText(getApplicationContext(),
+                    "This device is online",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    "This device is offline",
+                    Toast.LENGTH_SHORT).show();
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_signin);
         setSupportActionBar(toolbar);
 
@@ -39,15 +61,20 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signInName = loginText.getText().toString();
-                if(validUser(signInName)){
+                if(validUser(signInName) && isOnline){
                     storePreference(signInName);
                     Toast.makeText(getApplicationContext(),
                             signInName + " has just logged in on this device.",
                             Toast.LENGTH_SHORT).show();
+
                     //setResult(RESULT_OK);
                     //finish();
                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                     startActivity(intent);
+                } else if (!isOnline){
+                    Toast.makeText(getApplicationContext(),
+                            "Please check internet connectivity.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -56,8 +83,14 @@ public class SignInActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
-                startActivity(intent);
+                if(isOnline) {
+                    Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please check internet connectivity.",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
