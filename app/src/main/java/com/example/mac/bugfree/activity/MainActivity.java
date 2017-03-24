@@ -56,8 +56,6 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
     private static final String FILENAME2 = "filter.sav";
 
     private DrawerLayout mDrawerLayout;
@@ -167,16 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-//        List<String> userNameList = new ArrayList<>();
-//        userNameList.add("Sam");
-//        userNameList.add("Tom");
-//        userNameList.add("Kevin");
-//        userNameList.add("Ray");
-//
-//        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
-//        addUserListTask.execute(userNameList);
-
 
     }
 
@@ -402,5 +390,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

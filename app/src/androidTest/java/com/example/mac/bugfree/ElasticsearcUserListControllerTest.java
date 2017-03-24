@@ -1,5 +1,6 @@
 package com.example.mac.bugfree;
 
+import android.os.SystemClock;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
@@ -33,14 +34,14 @@ public class ElasticsearcUserListControllerTest {
     @Test
     public void elasticSearchAddUserListTest() {
         //ElasticsearchUserController.createIndex();
-        List<String> userNameList = new ArrayList<>();
-        userNameList.add("Sam");
-        userNameList.add("Tom");
-        userNameList.add("Kevin");
-        userNameList.add("Ray");
-
-        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
-        addUserListTask.execute(userNameList);
+//        List<String> userNameList = new ArrayList<>();
+//        userNameList.add("Sam");
+//        userNameList.add("Tom");
+//        userNameList.add("Kevin");
+//        userNameList.add("Ray");
+//        SystemClock.sleep(3000);
+//        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
+//        addUserListTask.execute("Sam");
 
 //        String query = "{\n" +
 //                        "       \"query\" : {\n" +
