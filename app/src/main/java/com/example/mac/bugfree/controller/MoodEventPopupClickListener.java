@@ -13,6 +13,7 @@ import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -100,7 +101,10 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         addUserTask.execute(user);
 
         if (fileExists(context, FILENAME2)) {
-            saveInFile(moodEventList);
+            ArrayList<MoodEvent> moodEventArrayList = moodEventList.transferMoodEventListToArray();
+            SaveFile saveFile = new SaveFile();
+            saveFile.saveArrayList(context, moodEventArrayList, FILENAME2);
+
         }
 
     }
@@ -135,24 +139,4 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         return true;
     }
 
-    private void saveInFile(MoodEventList moodEventList) {
-        try {
-            FileOutputStream fos = context.openFileOutput(FILENAME2,
-                    Context.MODE_PRIVATE);
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
-            ArrayList<MoodEvent> moodEventArrayList = moodEventList.transferMoodEventListToArray();
-
-            // save the record list to Json
-            Gson gson = new Gson();
-            gson.toJson(moodEventArrayList, out);
-
-            out.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
 }

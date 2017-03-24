@@ -24,6 +24,7 @@ import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
@@ -285,7 +286,9 @@ public class FilterActivity extends AppCompatActivity {
                 }
                 // if there is only one option is selected, then save the mood event list in the file
                 if(flag == 1){
-                    saveInFile();
+                    //saveInFile();
+                    SaveFile saveFile = new SaveFile();
+                    saveFile.saveArrayList(getApplicationContext(), moodListAfterFilter, FILENAME);
                     saveOption();
                 }
                 // if no option is selected, then delete the file.
@@ -506,28 +509,6 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-    // Taken from LonelyTwiiter lab
-    /**
-     * Save the filtered mood event list into "filter.sav"
-     */
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME,
-                    Context.MODE_PRIVATE);
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
-            // save the record list to Json
-            Gson gson = new Gson();
-            gson.toJson(moodListAfterFilter, out);
-
-            out.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
 
     private void saveOption() {
         SharedPreferences filterSetting = getSharedPreferences("filterSetting",0);
