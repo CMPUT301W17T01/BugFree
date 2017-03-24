@@ -1,5 +1,12 @@
 package com.example.mac.bugfree.module;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 /**
  * Created by yipengzhou on 2017/3/23.
  */
@@ -11,14 +18,18 @@ public class Image {
      * AND maybe some function is public
      */
 
-    private String imageBase64;
+    private Bitmap src;
+    private byte[] imageByteArray = changeImageIntoByteArray(src);
+    private String imageBase64 = Base64.encodeToString(imageByteArray,
+            Base64.NO_WRAP);
 
     // Choose one from these two constructors
-    public Image(android.media.Image initialImage) {
-    }
+//    public Image(android.media.Image initialImage) {
+//    }
 
     public Image(String pathOfImage) {
-
+        src= BitmapFactory.decodeFile(pathOfImage);
+        changeImageIntoByteArray(src);
     }
 
     private void checkImageSize() {
@@ -27,8 +38,11 @@ public class Image {
         // TODO: you can transfer image into byteArray first then check size
     }
 
-    private void changeImageIntoByteArray() {
+    private byte[] changeImageIntoByteArray(Bitmap bitmap) {
         // TODO: maybe you need to change image into ByteArray
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        return stream.toByteArray();
     }
 
     private void imageToBase64(){
