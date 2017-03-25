@@ -22,4 +22,20 @@ public class UserNameList {
         return this.userNameList;
     }
 
+    public boolean hadUserName(String userName) {
+        return this.userNameList.contains(userName);
+    }
+
+    public void addUserName(String userName) {
+        this.userNameList.add(userName);
+    }
+
+    public void deleteUserName(String userName) {
+        this.userNameList.remove(userName);
+    }
+
+    public int getCount() {
+        return this.userNameList.size();
+    }
+
 }
