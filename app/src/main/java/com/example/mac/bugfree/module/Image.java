@@ -18,43 +18,51 @@ public class Image {
      * AND maybe some function is public
      */
 
-    private Bitmap src;
-    private byte[] imageByteArray = changeImageIntoByteArray(src);
-    private String imageBase64 = Base64.encodeToString(imageByteArray,
-            Base64.NO_WRAP);
+    private Bitmap bm;
+    private byte[] imageByteArray = changeImageIntoByteArray(bm);
+    private String imageBase64;
+    private int imageByteCount;
 
     // Choose one from these two constructors
 //    public Image(android.media.Image initialImage) {
 //    }
 
     public Image(String pathOfImage) {
-        src= BitmapFactory.decodeFile(pathOfImage);
-        changeImageIntoByteArray(src);
+        bm= BitmapFactory.decodeFile(pathOfImage);
     }
 
     private void checkImageSize() {
         // TODO: check the image size if too large, resize it then transfer into base64
         // TODO: if not too large, transfer into base64
         // TODO: you can transfer image into byteArray first then check size
+        changeImageIntoByteArray(bm);
+        imageByteCount = imageByteArray.length;
+        if (imageByteCount >= 65536) {
+            resizeImage(bm);
+        }
     }
 
     private byte[] changeImageIntoByteArray(Bitmap bitmap) {
         // TODO: maybe you need to change image into ByteArray
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
 
-    private void imageToBase64(){
+    private String imageToBase64(){
         // TODO: change image or any other type of image into Base64
+        imageBase64 = Base64.encodeToString(imageByteArray, Base64.NO_WRAP);
+        return imageBase64;
     }
 
     private void base64ToImage() {
         // TODO: change base64 String into image and store it
     }
 
-    private void resizeImage() {
+    private void resizeImage(Bitmap bitmap) {
         // TODO: resize the image
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
     }
 
     private void storeImage() {
