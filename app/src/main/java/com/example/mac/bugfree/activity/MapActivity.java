@@ -59,7 +59,7 @@ public class MapActivity extends AppCompatActivity {
     //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
-//    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +111,34 @@ public class MapActivity extends AppCompatActivity {
 
         addMyLocationPin();
         addMoodEventPin();
-//        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//        startActivity(intent);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
-            permissionHandler.pRequest();
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MapActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    // Show an expanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(MapActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }else {
+                Toast.makeText(getApplicationContext(), "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -125,6 +147,27 @@ public class MapActivity extends AppCompatActivity {
         super.onResume();
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Permission Denied!", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 
