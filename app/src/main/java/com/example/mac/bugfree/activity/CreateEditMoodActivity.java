@@ -73,9 +73,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static com.example.mac.bugfree.R.id.image;
-import static com.example.mac.bugfree.R.id.imageView;
-import static com.example.mac.bugfree.R.id.login_button;
+import static com.example.mac.bugfree.R.id.expanded_menu;
 import static com.example.mac.bugfree.R.id.timePicker;
 import static java.util.Date.parse;
 
@@ -86,6 +84,9 @@ import static java.util.Date.parse;
  */
 public class CreateEditMoodActivity extends AppCompatActivity {
 
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
 
     private String current_user, mood_state , social_situation, reason;
     private Date date = null;
@@ -100,8 +101,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
-    public static final int TAKE_PHOTO = 1;
-    public static final int CHOOSE_PHOTO = 2;
+
 
 
 
@@ -129,8 +129,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker = (TimePicker)findViewById(timePicker);
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
-
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
+        //registerForContextMenu(R.id.action_camera);
 
 
         if(current_time_checkbox.isChecked()){
@@ -154,32 +154,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-        
-
-        //TODO allow user to add picture in part5
-//       add_pic.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//               add_pic.setImageResource(R.drawable.picture_text);
-//               //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-//               //startActivity(intent);
-//               //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//               //startActivityForResult(i, RESULT_LOAD_IMAGE);
-//           }
-//       });
-        pic_preview.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    openAlbum();
-                }
-            }
-        });
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -256,8 +230,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
-                    permissionHandler.pRequest();
+                    permissionLocationRequest();
                 }
                 add_location();
             }
@@ -310,17 +283,16 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 current_user = pref.getString("currentUser", "");
-                
-                if(mood_state == null){
+
+                if (mood_state == null) {
                     Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else {
-                    if(current_time_checkbox.isChecked()) {
+                } else {
+                    if (current_time_checkbox.isChecked()) {
                         dateOfRecord = real_time();
 
                     } else {
-                        dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
+                        dateOfRecord = new GregorianCalendar(set_year, set_month + 1, set_day, set_hour, set_minute);
 
                     }
 
@@ -331,23 +303,34 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                     setResult(RESULT_OK);
                     finish();
+
                 }
                 return true;
-            case R.id.action_camera:
-                if (Build.VERSION.SDK_INT >= 23) {
+            
+            case R.id.expanded_menu_camera:
 
+                if (Build.VERSION.SDK_INT >= 23) {
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, 12345);
-
                     } else {
                         takeAPhoto();
                     }
                 }
+                return true;
+
+            case R.id.expanded_menu_gallery:
+                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO add location in part 5
     public void add_location(){
         if (currentLocationCheckbox.isChecked()) {
             try {
@@ -472,6 +455,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
     public void takeAPhoto() {
+
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
             if (folder.exists()){
@@ -490,6 +474,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
         startActivityForResult(intent, TAKE_PHOTO);
 
@@ -580,6 +565,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         displayImage(imagePath);
     }
 
+
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
@@ -609,16 +595,37 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    protected void onStart(){
+    @Override
+    protected void onStart() {
         super.onStart();
     }
 
-    public void onResume() {
-        super.onResume();
-        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+    private void permissionLocationRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                if(!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showMessageOKCancel("You need to allow access to Location",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                                            REQUEST_CODE_ASK_PERMISSIONS);
+                                }
+                            });
+                }
+            }
 
+        }
     }
 
-
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(CreateEditMoodActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
 }
 

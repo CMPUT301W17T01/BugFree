@@ -529,7 +529,6 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
         getUserListTask.execute("name");
         try{
             UserNameList userListGet = getUserListTask.get();
-//            assertEquals(userList, userListGet);
         } catch (Exception e) {
             Log.i("Error", "Failed to get the User out of the async object");
         }
