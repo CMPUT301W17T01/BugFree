@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
-import com.example.mac.bugfree.handler.PermissionHandler;
 import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
