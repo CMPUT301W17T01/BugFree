@@ -31,7 +31,7 @@ public class Image {
         bm= BitmapFactory.decodeFile(pathOfImage);
     }
 
-    private void checkImageSize() {
+    private void checkImageSize(Bitmap bm) {
         // TODO: check the image size if too large, resize it then transfer into base64
         // TODO: if not too large, transfer into base64
         // TODO: you can transfer image into byteArray first then check size
@@ -39,6 +39,10 @@ public class Image {
         imageByteCount = imageByteArray.length;
         if (imageByteCount >= 65536) {
             resizeImage(bm);
+            checkImageSize(bm);
+        }
+        else {
+            imageToBase64(bm);
         }
     }
 
@@ -49,14 +53,18 @@ public class Image {
         return stream.toByteArray();
     }
 
-    private String imageToBase64(){
+    private String imageToBase64(Bitmap bm){
         // TODO: change image or any other type of image into Base64
-        imageBase64 = Base64.encodeToString(imageByteArray, Base64.NO_WRAP);
+        imageBase64 = Base64.encodeToString(changeImageIntoByteArray(bm), Base64.NO_WRAP);
         return imageBase64;
     }
 
-    private void base64ToImage() {
+    private Bitmap base64ToImage() {
         // TODO: change base64 String into image and store it
+        byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
+                decodedString.length);
+        return decodedByte;
     }
 
     private void resizeImage(Bitmap bitmap) {
