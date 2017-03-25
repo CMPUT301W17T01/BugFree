@@ -19,9 +19,8 @@ public class Image {
      */
 
     private Bitmap src;
-    private byte[] imageByteArray = changeImageIntoByteArray(src);
-    private String imageBase64 = Base64.encodeToString(imageByteArray,
-            Base64.NO_WRAP);
+    private byte[] imageByteArray = changeImageIntoByteArray();
+    private String imageBase64;
 
     // Choose one from these two constructors
 //    public Image(android.media.Image initialImage) {
@@ -29,7 +28,7 @@ public class Image {
 
     public Image(String pathOfImage) {
         src= BitmapFactory.decodeFile(pathOfImage);
-        changeImageIntoByteArray(src);
+        changeImageIntoByteArray();
     }
 
     private void checkImageSize() {
@@ -38,23 +37,26 @@ public class Image {
         // TODO: you can transfer image into byteArray first then check size
     }
 
-    private byte[] changeImageIntoByteArray(Bitmap bitmap) {
+    private byte[] changeImageIntoByteArray() {
         // TODO: maybe you need to change image into ByteArray
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();
     }
 
-    private void imageToBase64(){
+    private String imageToBase64(){
         // TODO: change image or any other type of image into Base64
+        imageBase64 = Base64.encodeToString(imageByteArray, Base64.NO_WRAP);
+        return imageBase64;
     }
 
     private void base64ToImage() {
         // TODO: change base64 String into image and store it
     }
 
-    private void resizeImage() {
+    private void resizeImage(Bitmap bitmap) {
         // TODO: resize the image
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
     }
 
     private void storeImage() {
