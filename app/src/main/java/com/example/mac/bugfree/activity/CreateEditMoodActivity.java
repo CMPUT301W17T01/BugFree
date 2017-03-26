@@ -228,7 +228,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
+                    PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext(), CreateEditMoodActivity.this);
+                    //permissionHandler.onRequestPermissionsResult(666,new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, new int[] {PackageManager.PERMISSION_DENIED});
                     permissionHandler.pRequest();
                 }
                 add_location();

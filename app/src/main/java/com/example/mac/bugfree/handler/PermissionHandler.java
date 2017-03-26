@@ -23,11 +23,13 @@ import static android.support.v4.app.ActivityCompat.requestPermissions;
 public class PermissionHandler extends Activity{
 
     private Context context;
+    private Activity activity;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
 
-    public PermissionHandler(Context applicationContext) {
+    public PermissionHandler(Context applicationContext, Activity activity) {
         this.context = applicationContext;
+        this.activity = activity;
     }
 
 
@@ -35,7 +37,7 @@ public class PermissionHandler extends Activity{
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an expanation to the user *asynchronously* -- don't block

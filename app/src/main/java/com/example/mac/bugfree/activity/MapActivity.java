@@ -115,7 +115,7 @@ public class MapActivity extends AppCompatActivity {
 //        startActivity(intent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext());
+            PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext(), MapActivity.this);
             permissionHandler.pRequest();
         }
     }
