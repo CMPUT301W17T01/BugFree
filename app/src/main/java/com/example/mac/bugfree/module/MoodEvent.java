@@ -56,6 +56,7 @@ public class MoodEvent implements StateConstants {
 
         this.setBelongsTo(belongsTo);
         this.location = null;
+        this.picId = null;
     }
 
     /**
