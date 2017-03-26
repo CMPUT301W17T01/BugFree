@@ -4,6 +4,7 @@ package com.example.mac.bugfree.module;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.exception.ImageTooBigException;
+import com.example.mac.bugfree.util.StateConstants;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -18,128 +19,8 @@ import java.util.GregorianCalendar;
  *
  * @author Zhi Li
  */
-public class MoodEvent {
-    /**
-     * The constant angerRed.
-     */
-//Fixed colors
-    public static final int angerRed = -65536;
-    /**
-     * The constant confusionCyan.
-     */
-    public static final int confusionCyan = -16711681;
-    /**
-     * The constant disgustGray.
-     */
-    public static final int disgustGray =  -7829368;
-    /**
-     * The constant fearBlack.
-     */
-    public static final int fearBlack = -16777216;
-    /**
-     * The constant happyYellow.
-     */
-    public static final int happyYellow = -256;
-    /**
-     * The constant sadBlue.
-     */
-    public static final int sadBlue = -16776961;
-    /**
-     * The constant shameGreen.
-     */
-    public static final int shameGreen = -16711936;
-    /**
-     * The constant surpriseMagenta.
-     */
-    public static final int surpriseMagenta = -65281;
+public class MoodEvent implements StateConstants {
 
-    /**
-     * The constant angerIcon.
-     */
-//Fixed icons
-    public static final int angerIcon = R.drawable.anger;
-    /**
-     * The constant confusionIcon.
-     */
-    public static final int confusionIcon = R.drawable.confusion;
-    /**
-     * The constant disgustIcon.
-     */
-    public static final int disgustIcon =  R.drawable.disgust;
-    /**
-     * The constant fearIcon.
-     */
-    public static final int fearIcon = R.drawable.fear;
-    /**
-     * The constant happyIcon.
-     */
-    public static final int happyIcon = R.drawable.happy;
-    /**
-     * The constant sadIcon.
-     */
-    public static final int sadIcon = R.drawable.sad;
-    /**
-     * The constant shameIcon.
-     */
-    public static final int shameIcon = R.drawable.shame;
-    /**
-     * The constant surpriseIcon.
-     */
-    public static final int surpriseIcon = R.drawable.surprise;
-
-    /**
-     * The constant angerStr.
-     */
-//Fixed strings for emotion states
-    public static final String angerStr = "Anger";
-    /**
-     * The constant confusionStr.
-     */
-    public static final String confusionStr = "Confusion";
-    /**
-     * The constant disgustStr.
-     */
-    public static final String disgustStr =  "Disgust";
-    /**
-     * The constant fearStr.
-     */
-    public static final String fearStr = "Fear";
-    /**
-     * The constant happyStr.
-     */
-    public static final String happyStr = "Happy";
-    /**
-     * The constant sadStr.
-     */
-    public static final String sadStr = "Sad";
-    /**
-     * The constant shameStr.
-     */
-    public static final String shameStr = "Shame";
-    /**
-     * The constant surpriseStr.
-     */
-    public static final String surpriseStr = "Surprise";
-
-    /**
-     * The constant alone.
-     */
-//Fixed type of social situations
-    public static final String alone ="Alone";
-    /**
-     * The constant withOne.
-     */
-    public static final String withOne = "With one other person";
-    /**
-     * The constant moreThanTwo.
-     */
-    public static final String moreThanTwo = "Two to several people";
-    /**
-     * The constant crowd.
-     */
-    public static final String crowd = "With a crowd";
-
-    //Other details
     private String moodState;
     private Integer moodColor;
     private Integer moodIcon;
@@ -147,7 +28,7 @@ public class MoodEvent {
     private GregorianCalendar realtime;
     private String triggerText;
     private String socialSituation;
-    private String urlPic;
+    private String picId;
     private GeoPoint location;
     private String belongsTo;
 
@@ -164,7 +45,7 @@ public class MoodEvent {
      * @param belongsTo String, User name
      * @throws MoodStateNotAvailableException the mood state not available exception
      */
-    public MoodEvent(String MoodState,String belongsTo) throws MoodStateNotAvailableException {
+    public MoodEvent(String MoodState,String belongsTo) throws MoodStateNotAvailableException  {
         //Initialize moodState, color, icon.
         this.setMoodState(MoodState);
         try{
@@ -186,29 +67,29 @@ public class MoodEvent {
     public void setColorIcon() throws MoodStateNotAvailableException{
         String MoodState = this.moodState;
         if (MoodState.equals("Anger")){
-            this.moodColor = angerRed;
-            this.moodIcon = angerIcon;
+            this.moodColor = StateConstants.angerRed;
+            this.moodIcon = StateConstants.angerIcon;
         }else if (MoodState.equals("Confusion")){
-            this.moodColor = confusionCyan;
-            this.moodIcon = confusionIcon;
+            this.moodColor = StateConstants.confusionCyan;
+            this.moodIcon = StateConstants.confusionIcon;
         }else if (MoodState.equals("Disgust")){
-            this.moodColor = disgustGray;
-            this.moodIcon = disgustIcon;
+            this.moodColor = StateConstants.disgustGray;
+            this.moodIcon = StateConstants.disgustIcon;
         }else if (MoodState.equals("Fear")){
-            this.moodColor = fearBlack;
-            this.moodIcon = fearIcon;
+            this.moodColor = StateConstants.fearBlack;
+            this.moodIcon = StateConstants.fearIcon;
         }else if (MoodState.equals("Happy")){
-            this.moodColor = happyYellow;
-            this.moodIcon = happyIcon;
+            this.moodColor = StateConstants.happyYellow;
+            this.moodIcon = StateConstants.happyIcon;
         }else if (MoodState.equals("Sad")){
-            this.moodColor = sadBlue;
-            this.moodIcon = sadIcon;
+            this.moodColor = StateConstants.sadBlue;
+            this.moodIcon = StateConstants.sadIcon;
         }else if (MoodState.equals("Shame")){
-            this.moodColor = shameGreen;
-            this.moodIcon = shameIcon;
+            this.moodColor = StateConstants.shameGreen;
+            this.moodIcon = StateConstants.shameIcon;
         }else if (MoodState.equals("Surprise")){
-            this.moodColor = surpriseMagenta;
-            this.moodIcon = surpriseIcon;
+            this.moodColor = StateConstants.surpriseMagenta;
+            this.moodIcon = StateConstants.surpriseIcon;
         }else{
             throw new MoodStateNotAvailableException();
         }
@@ -269,22 +150,21 @@ public class MoodEvent {
     }
 
     /**
-     * Gets url pic.
+     * Gets Id pic.
      *
-     * @return the url pic
+     * @return the id pic
      */
-    public String getUrlPic() {
-        return urlPic;
+    public String getPicId() {
+        return picId;
     }
 
     /**
-     * Sets url pic.
+     * Sets pic Id.
      *
-     * @param urlPic the url pic
-     * @throws ImageTooBigException the image too big exception
+     * @param picId the pic Id
      */
-    public void setUrlPic(String urlPic) throws ImageTooBigException {
-        this.urlPic = urlPic;
+    public void setPicId(String picId){
+        this.picId = picId;
     }
 
     /**
