@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
-import com.example.mac.bugfree.handler.PermissionHandler;
 import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
@@ -59,7 +58,7 @@ public class MapActivity extends AppCompatActivity {
     //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
-//    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,20 +110,33 @@ public class MapActivity extends AppCompatActivity {
 
         addMyLocationPin();
         addMoodEventPin();
-//        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//        startActivity(intent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            PermissionHandler permissionHandler = new PermissionHandler(getApplicationContext(), MapActivity.this);
-            permissionHandler.pRequest();
-        }
     }
-
-
     public void onResume() {
         super.onResume();
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Permission Denied!", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 
