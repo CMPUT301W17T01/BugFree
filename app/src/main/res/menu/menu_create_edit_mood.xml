@@ -13,10 +13,10 @@
         <menu>
             <item
                 android:id="@+id/expanded_menu_camera"
-                android:title="camera" />
+                android:title="Camera" />
             <item
                 android:id="@+id/expanded_menu_gallery"
-                android:title="Choose From Gallery" />
+                android:title="Choose From Album" />
 
 
         </menu>

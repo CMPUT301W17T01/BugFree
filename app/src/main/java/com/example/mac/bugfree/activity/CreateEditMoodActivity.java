@@ -53,7 +53,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.Image;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
@@ -73,6 +76,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static com.example.mac.bugfree.R.id.expanded_menu;
+import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.timePicker;
 import static java.util.Date.parse;
 
@@ -87,7 +91,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
 
-    private String current_user, mood_state , social_situation, reason;
+    private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -100,6 +104,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
+    private ImageForElasticSearch imageForElasticSearch = null;
 
 
 
@@ -165,7 +170,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),mood_state+" is selected.",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //TODO set tick to be disable
                     mood_state = null;
                 }
             }
@@ -229,7 +233,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
                     permissionLocationRequest();
+
                 }
                 add_location();
             }
@@ -298,8 +304,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         setMoodEvent(current_user, mood_state, social_situation, reason);
                     } catch (MoodStateNotAvailableException e) {
-
+                        Log.i("Error", "(MoodState is Not Available");
                     }
+
+
                     setResult(RESULT_OK);
                     finish();
 
@@ -391,8 +399,16 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currentLocation);
         }
 
+
+        if (imageForElasticSearch != null) {
+            String uniqueId = uploadImage(imageForElasticSearch);
+            moodEvent.setPicId(uniqueId);
+        }
+        
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
+
+
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
@@ -514,7 +530,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
-                        pic_preview.setImageBitmap(bitmap);
+                        //pic_preview.setImageBitmap(bitmap);
+                        Image image = new Image(bitmap);
+
+                        Bitmap test = image.base64ToImage();
+                        pic_preview.setImageBitmap(test);
+
+                        imageForElasticSearch = new
+                                ImageForElasticSearch(image.getImageBase64());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -543,8 +566,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=" +id;
-                imagePath = getImagePath(MediaStore.Images.
-                        Media.EXTERNAL_CONTENT_URI, selection);
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 Uri contentUri = ContentUris.withAppendedId(Uri.
                         parse("content://downloads/public_downloads"), Long.valueOf(docId));
@@ -564,7 +586,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         displayImage(imagePath);
     }
 
-
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
@@ -580,7 +601,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Image image = new Image(bitmap);
+            imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
             pic_preview.setImageBitmap(bitmap);
+            Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
@@ -626,5 +650,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
+    private String uploadImage (ImageForElasticSearch ifes){
+        String uniqueID = null;
+
+        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+        addImageTask.execute(ifes);
+        try {
+            uniqueID = addImageTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return uniqueID;
+
+    }
+
 }
 
