@@ -121,6 +121,8 @@ public class ViewMoodActivity extends AppCompatActivity  {
                     editMoodEvent();
                     Intent intent = new Intent(ViewMoodActivity.this, EditActivity.class);
                     startActivity(intent);
+                    setResult(RESULT_OK);
+                    finish();
                     return true;
                 }
                 else{

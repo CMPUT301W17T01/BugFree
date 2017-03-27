@@ -91,7 +91,8 @@
                     android:id="@+id/socialSituation_textView"
                     android:layout_weight="1.65"
                     android:textSize="18sp"
-                    android:fontFamily="serif" />
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
 
             </LinearLayout>
             <LinearLayout
@@ -143,6 +144,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/date_textView"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:text="Location:"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text3_location"
+                    android:layout_weight="1.65"
+                    android:textSize="18sp"
+                    android:fontFamily="serif"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Location_textView"
                     android:layout_weight="1.65"
                     android:textSize="18sp"
                     android:fontFamily="serif"

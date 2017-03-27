@@ -207,6 +207,7 @@ public class EditActivity extends CreateEditMoodActivity {
 
     public void load_moodEvent(MoodEvent edit_mood_event ){
 
+        edit_mood_state = edit_mood_event.getMoodState();
         mood_state_spinner.setSelection(getIndex(mood_state_spinner, edit_mood_event.getMoodState()));
         if(edit_mood_event.getSocialSituation() != null){
             social_situation_spinner.setSelection(getIndex(social_situation_spinner, edit_mood_event.getSocialSituation()));
@@ -247,7 +248,7 @@ public class EditActivity extends CreateEditMoodActivity {
         //handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_add_tick:
-                if(edit_mood_event.getMoodState() == null){
+                if(edit_mood_state == null){
                     Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                     break;
                 }
