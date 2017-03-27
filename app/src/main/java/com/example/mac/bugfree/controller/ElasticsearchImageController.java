@@ -11,6 +11,7 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -50,6 +51,29 @@ public class ElasticsearchImageController {
 
             }
             return uniqueID;
+        }
+    }
+
+    /**
+     * The function which delete image from elastic search
+     */
+    public static class DeleteImageTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            verifySettings();
+
+            Delete delete = new Delete.Builder(params[0]).index("cmput301w17t01").type("image").build();
+            try {
+                // where is the client
+                DocumentResult result = client.execute(delete);
+                if (result.isSucceeded()) {
+                } else {
+                    Log.i("Error", "Elasticsearch was not able to add the image.");
+                }
+            } catch (Exception e) {
+                Log.i("Error", "The application failed to build and send the image");
+            }
+            return null;
         }
     }
 
