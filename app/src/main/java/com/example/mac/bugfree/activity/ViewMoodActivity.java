@@ -60,6 +60,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
         TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date_text = (TextView) findViewById(R.id.date_textView);
+        TextView location_text =(TextView) findViewById(R.id.text4_location);
         ImageView picImage = (ImageView) findViewById(R.id.imageView);
         //image.setImageResource(R.drawable.picture_text);
 
@@ -96,6 +97,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
         } else {
             picImage.setImageResource(R.drawable.picture_text);
         }
+        if (moodEvent.getLocation()!=null){
+            location_text.setText(moodEvent.getLocation().toString());
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,6 +125,8 @@ public class ViewMoodActivity extends AppCompatActivity  {
                     editMoodEvent();
                     Intent intent = new Intent(ViewMoodActivity.this, EditActivity.class);
                     startActivity(intent);
+                    setResult(RESULT_OK);
+                    finish();
                     return true;
                 }
                 else{
