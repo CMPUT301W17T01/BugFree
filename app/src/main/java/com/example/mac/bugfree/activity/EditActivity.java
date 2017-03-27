@@ -271,6 +271,9 @@ public class EditActivity extends CreateEditMoodActivity {
                 } else{
                     LoadFile load = new LoadFile();
                     user = load.loadUser(context);
+                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                    editor.putBoolean("hasBeenOffline", true);
+                    editor.apply();
                 }
 
                 MoodEventList moodEventList = user.getMoodEventList();
@@ -283,8 +286,11 @@ public class EditActivity extends CreateEditMoodActivity {
                     SaveFile s = new SaveFile(context, user);
                 } else{
                     SaveFile s = new SaveFile(context, user);
+                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                    editor.putBoolean("hasBeenOffline", true);
+                    editor.apply();
                 }
-
+//TODO: why this is below elastic search?
                     if(edit_mood_state == null){
                         Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                         break;

@@ -63,7 +63,18 @@ public class ViewMoodActivity extends AppCompatActivity  {
         ImageView picImage = (ImageView) findViewById(R.id.imageView);
         //image.setImageResource(R.drawable.picture_text);
 
+        Context context = getApplicationContext();
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
 
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (!isOnline && !currentUserName.equals("")){
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
 
         moodState.setText(moodEvent.getMoodState());
         if(moodEvent.getSocialSituation()!=null){
@@ -172,6 +183,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
         } else{
             LoadFile load = new LoadFile();
             user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -184,6 +198,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
             SaveFile s = new SaveFile(context, user);
         } else{
             SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
     }

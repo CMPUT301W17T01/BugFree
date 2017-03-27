@@ -1,3 +1,4 @@
+
 package com.example.mac.bugfree.activity;
 
 import android.Manifest;
@@ -6,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -74,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        userOfflineUpdate();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString("currentUser","");
                         editor.apply();
 
+                        // Set has been offline to false
+                        editor.putBoolean("hasBeenOffline", false);
+                        editor.apply();
+
                         // filterFile will be removed
                         if (fileExists(context, FILENAME2)) {
                             File file = context.getFileStreamPath(FILENAME2);
@@ -168,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
+                userOfflineUpdate();
+                SystemClock.sleep(1000);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -190,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
+
         if (currentUserName.equals("")) {
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
@@ -197,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
             drawer_name.setText(currentUserName);
             context = getApplicationContext();
             userOfflineUpdate();
+            SystemClock.sleep(1000);
             if (fileExists(context, FILENAME2)) {
                 loadFromFilterFile(context);
             } else {
@@ -432,7 +440,17 @@ public class MainActivity extends AppCompatActivity {
         hasBeenOffline = pref.getBoolean("hasBeenOffline",false);
         currentUserName = pref.getString("currentUser", "");
 
-        if (isOnline && hasBeenOffline ) {
+        if (!isOnline && !currentUserName.equals("")){
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+            // filterFile will be removed
+            if (fileExists(context, FILENAME2)) {
+                File file = context.getFileStreamPath(FILENAME2);
+                file.delete();
+            }
+        }
+        if (isOnline) {
             //If has been offline and now is online, when signed in, load the local user and upload the local user
             if (!currentUserName.equals("")) {
                 LoadFile load = new LoadFile();
@@ -446,10 +464,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("hasBeenOffline", false);
             editor.apply();
 
-        } else if (!isOnline && !currentUserName.equals("")){
-            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-            editor.putBoolean("hasBeenOffline", true);
-            editor.apply();
         }
     }
     @Override

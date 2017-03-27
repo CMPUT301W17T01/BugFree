@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * To use this class,use the following steps:
  * (userList is the updated/created userList available to be stored)
  * 1. Context context = getApplicationContext();
- * 1. SaveFile s = new saveFile(context, user);
+ * 1. SaveFile s = new SaveFile(context, user);
  * The file name is file.save.
  *
  * @author Zhi Li

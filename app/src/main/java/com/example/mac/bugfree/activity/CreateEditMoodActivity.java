@@ -398,6 +398,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         } else{
             LoadFile load = new LoadFile();
             user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
         MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
@@ -430,6 +433,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             SaveFile s = new SaveFile(context, user);
         } else{
             SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
     }

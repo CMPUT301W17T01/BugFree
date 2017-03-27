@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.SaveFile;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -60,12 +62,28 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                Context context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
                 signInName = loginText.getText().toString();
                 if(validUser(signInName) && isOnline){
                     storePreference(signInName);
                     Toast.makeText(getApplicationContext(),
                             signInName + " has just logged in on this device.",
                             Toast.LENGTH_SHORT).show();
+
+                    // Save the user just logged in in Json file
+                    ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                    getUserTask.execute(signInName);
+                    try {
+                        User user = getUserTask.get();
+                        SaveFile s = new SaveFile(context, user);
+                        Toast.makeText(getApplicationContext(),
+                                "Json file saved.",
+                                Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get the User out of the async object");
+                    }
 
                     //setResult(RESULT_OK);
                     //finish();
