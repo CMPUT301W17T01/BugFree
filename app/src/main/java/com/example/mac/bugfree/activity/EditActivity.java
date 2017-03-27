@@ -196,12 +196,7 @@ public class EditActivity extends CreateEditMoodActivity {
                 set_minute = simpleTimePicker.getMinute();
             }
         });
-        if (edit_mood_event.getPicId() != null){
-            Bitmap image = getImage(edit_mood_event);
-            pic_preview.setImageBitmap(image);
-        } else {
-            pic_preview.setImageResource(R.drawable.picture_text);
-        }
+
 
         load_moodEvent(edit_mood_event);
 
@@ -218,6 +213,12 @@ public class EditActivity extends CreateEditMoodActivity {
         }
         if(edit_mood_event.getTriggerText()!=null){
             edit_reason.setText(edit_mood_event.getTriggerText());
+        }
+        if (edit_mood_event.getPicId() != null){
+            Bitmap image = getImage(edit_mood_event);
+            pic_preview.setImageBitmap(image);
+        } else {
+            pic_preview.setImageResource(R.drawable.picture_text);
         }
 
     }
@@ -246,81 +247,75 @@ public class EditActivity extends CreateEditMoodActivity {
         //handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_add_tick:
+                if(edit_mood_event.getMoodState() == null){
+                    Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                else {
+                    User user = new User();
+                    SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                    current_user = pref.getString("currentUser", "");
 
-                User user = new User();
-                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-                current_user = pref.getString("currentUser", "");
+                    // When the moodEvent has been edited, check for internet connection.
+                    // If online, sync to Elastic search and save locally.
+                    // If offline, save locally
+                    InternetConnectionChecker checker = new InternetConnectionChecker();
+                    Context context = getApplicationContext();
+                    final boolean isOnline = checker.isOnline(context);
 
-                // When the moodEvent has been edited, check for internet connection.
-                // If online, sync to Elastic search and save locally.
-                // If offline, save locally
-
-                InternetConnectionChecker checker = new InternetConnectionChecker();
-                Context context = getApplicationContext();
-                final boolean isOnline = checker.isOnline(context);
-
-                if(isOnline) {
-                    String query = current_user;
-                    ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-                    getUserTask.execute(current_user);
-                    try {
-                        user = getUserTask.get();
-                    } catch (Exception e) {
-                        Log.i("Error", "Failed to get the User out of the async object");
-                    }
-                } else{
+                    if(isOnline) {
+                        String query = current_user;
+                        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                        getUserTask.execute(current_user);
+                        try {
+                            user = getUserTask.get();
+                        } catch (Exception e) {
+                            Log.i("Error", "Failed to get the User out of the async object");
+                        }
+                    } else {
                     LoadFile load = new LoadFile();
                     user = load.loadUser(context);
                     SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                     editor.putBoolean("hasBeenOffline", true);
                     editor.apply();
-                }
+                    }
 
-                MoodEventList moodEventList = user.getMoodEventList();
-                moodEventList.deleteMoodEvent(edit_mood_event);
+                    MoodEventList moodEventList = user.getMoodEventList();
+                    moodEventList.deleteMoodEvent(edit_mood_event);
 
-                if (edit_mood_event.getPicId() != null){
-                    ElasticsearchImageController.DeleteImageTask deleteImageTask =
-                            new ElasticsearchImageController.DeleteImageTask();
-                    deleteImageTask.execute(edit_mood_event.getPicId());
-                }
+                    if (edit_mood_event.getPicId() != null){
+                        ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                             new ElasticsearchImageController.DeleteImageTask();
+                        deleteImageTask.execute(edit_mood_event.getPicId());
+                    }
+                    user.setMoodEventList(moodEventList);
 
-                user.setMoodEventList(moodEventList);
+                    if(isOnline) {
+                        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                        addUserTask.execute(user);
+                        SaveFile s = new SaveFile(context, user);
+                    } else{
+                        SaveFile s = new SaveFile(context, user);
+                        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                        editor.putBoolean("hasBeenOffline", true);
+                        editor.apply();
+                    }
 
-                if(isOnline) {
-                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                    addUserTask.execute(user);
-                    SaveFile s = new SaveFile(context, user);
-                } else{
-                    SaveFile s = new SaveFile(context, user);
-                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                    editor.putBoolean("hasBeenOffline", true);
-                    editor.apply();
-                }
-//TODO: why this is below elastic search?
-                    if(edit_mood_state == null){
-                        Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
-                        break;
+                    if(current_time_checkbox.isChecked()) {
+                        dateOfRecord = real_time();
                     }
                     else {
-                        if(current_time_checkbox.isChecked()) {
-                            dateOfRecord = real_time();
-                        }
-                        else {
-                            dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
-
-                        }
-                        try {
-                           setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch);
-                        } catch (MoodStateNotAvailableException e) {
-
-                        }
+                        dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
+                     }
+                    try {
+                        setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch);
+                    } catch (MoodStateNotAvailableException e) {
+                        Log.i("Error", "Failed to get the Mood state");
+                    }
                     setResult(RESULT_OK);
                     finish();
                 }
                 return true;
-
-
 
             case R.id.expanded_menu_camera:
 

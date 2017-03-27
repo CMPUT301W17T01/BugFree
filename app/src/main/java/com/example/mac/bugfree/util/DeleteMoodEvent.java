@@ -4,14 +4,12 @@ package com.example.mac.bugfree.util;
  * Created by Zhi Li on 2017/3/23.
  */
 
-public class DeleteMoodEvent implements Command {
+public class DeleteMoodEvent{
 
-    @Override
     public void execute() {
 
     }
 
-    @Override
     public void undo() {
 
     }
