@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import com.example.mac.bugfree.util.SaveFile;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
@@ -20,23 +22,25 @@ public class Image {
      */
 
     private Bitmap bm;
-    private byte[] imageByteArray = changeImageIntoByteArray(bm);
+    private byte[] imageByteArray;
     private String imageBase64;
     private int imageByteCount;
 
-    // Choose one from these two constructors
-//    public Image(android.media.Image initialImage) {
-//    }
+    public Image(Bitmap bitmap) {
+        bm = bitmap;
+        checkImageSize(bm);
+    }
 
     public Image(String pathOfImage) {
         bm= BitmapFactory.decodeFile(pathOfImage);
+        checkImageSize(bm);
     }
 
     private void checkImageSize(Bitmap bm) {
         // TODO: check the image size if too large, resize it then transfer into base64
         // TODO: if not too large, transfer into base64
         // TODO: you can transfer image into byteArray first then check size
-        changeImageIntoByteArray(bm);
+        imageByteArray = changeImageIntoByteArray(bm);
         imageByteCount = imageByteArray.length;
         if (imageByteCount >= 65536) {
             resizeImage(bm);
@@ -54,17 +58,17 @@ public class Image {
         return stream.toByteArray();
     }
 
-    private String imageToBase64(Bitmap bm){
+    private void imageToBase64(Bitmap bm){
         // TODO: change image or any other type of image into Base64
         imageBase64 = Base64.encodeToString(changeImageIntoByteArray(bm), Base64.NO_WRAP);
-        return imageBase64;
     }
 
-    private Bitmap base64ToImage() {
+    public Bitmap base64ToImage() {
         // TODO: change base64 String into image and store it
         byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
                 decodedString.length);
+
         return decodedByte;
     }
 
@@ -76,6 +80,10 @@ public class Image {
 
     private void storeImage() {
         // TODO: store the image which you have transferred from base64
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
     }
 
 }
