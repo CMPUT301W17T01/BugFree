@@ -453,11 +453,16 @@ public class MainActivity extends AppCompatActivity {
         if (isOnline) {
             //If has been offline and now is online, when signed in, load the local user and upload the local user
             if (!currentUserName.equals("")) {
-                LoadFile load = new LoadFile();
-                User user = load.loadUser(context);
-
-                ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                addUserTask.execute(user);
+                try {
+                    LoadFile load = new LoadFile();
+                    User user = load.loadUser(context);
+                    if (user != null) {
+                        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                        addUserTask.execute(user);
+                    }
+                } catch (Exception e){
+                    Log.i("Warning", "Failed to read local file.");
+                }
             }
             // Set has been offline to false
             SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
