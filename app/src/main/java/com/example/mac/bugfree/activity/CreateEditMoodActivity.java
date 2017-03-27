@@ -302,7 +302,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
@@ -370,7 +370,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
             throws MoodStateNotAvailableException{
         User user = new User();
 
@@ -469,7 +469,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    public void takeAPhoto() {
+    private void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
@@ -530,11 +530,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
-                        //pic_preview.setImageBitmap(bitmap);
+                        pic_preview.setImageBitmap(bitmap);
                         Image image = new Image(bitmap);
-
-                        Bitmap test = image.base64ToImage();
-                        pic_preview.setImageBitmap(test);
 
                         imageForElasticSearch = new
                                 ImageForElasticSearch(image.getImageBase64());
@@ -604,7 +601,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             Image image = new Image(bitmap);
             imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
             pic_preview.setImageBitmap(bitmap);
-            Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
