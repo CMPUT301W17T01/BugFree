@@ -1,3 +1,4 @@
+
 package com.example.mac.bugfree.activity;
 
 import android.Manifest;
@@ -6,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.controller.MoodEventAdapter;
@@ -58,6 +61,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String FILENAME2 = "filter.sav";
+    private static final String FILENAME = "file.sav";
 
     private DrawerLayout mDrawerLayout;
     //private MoodEventList moodEventArrayList = new MoodEventList();
@@ -65,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private TextView drawer_name;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private InternetConnectionChecker checker = new InternetConnectionChecker();
+    private boolean hasBeenOffline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,15 +122,22 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                Intent intent;
                 switch (item.getItemId()) {
                     case R.id.drawer_filter:
-                        Intent intent = new Intent(MainActivity.this, FilterActivity.class);
-                        startActivity(intent);
+                        if (isOnline) {
+                            intent = new Intent(MainActivity.this, FilterActivity.class);
+                            startActivity(intent);
+                        }
                         break;
 
                     case R.id.drawer_friend:
-                        intent = new Intent(MainActivity.this, FriendActivity.class);
-                        startActivity(intent);
+                        if (isOnline) {
+                            intent = new Intent(MainActivity.this, FriendActivity.class);
+                            startActivity(intent);
+                        }
                         break;
 
                     case R.id.drawer_sign_out:
@@ -133,11 +146,17 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString("currentUser","");
                         editor.apply();
 
+                        // Set has been offline to false
+                        editor.putBoolean("hasBeenOffline", false);
+                        editor.apply();
+
                         // filterFile will be removed
                         if (fileExists(context, FILENAME2)) {
                             File file = context.getFileStreamPath(FILENAME2);
                             file.delete();
                         }
+                        File file = context.getFileStreamPath(FILENAME);
+                        file.delete();
 
                         // change to SignInActivity
                         intent = new Intent(MainActivity.this, SignInActivity.class);
@@ -153,6 +172,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
+                userOfflineUpdate();
+                SystemClock.sleep(1000);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -175,12 +196,15 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
+
         if (currentUserName.equals("")) {
             Intent intent = new Intent(MainActivity.this, SignInActivity.class);
             startActivity(intent);
         } else {
             drawer_name.setText(currentUserName);
             context = getApplicationContext();
+            userOfflineUpdate();
+            SystemClock.sleep(1000);
             if (fileExists(context, FILENAME2)) {
                 loadFromFilterFile(context);
             } else {
@@ -209,8 +233,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.add_follow:
-                Toast.makeText(this, "You clicked add_follow", Toast.LENGTH_SHORT).show();
-                followDialogue();
+                context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                if (isOnline) {
+                    Toast.makeText(this, "You clicked add_follow", Toast.LENGTH_SHORT).show();
+                    followDialogue();
+                } else{
+                    Toast.makeText(this, "This Device is offline", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             default:
@@ -230,28 +260,38 @@ public class MainActivity extends AppCompatActivity {
         User user = new User();
 
         String query = currentUserName;
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(query);
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
-        }
 
-        MoodEventList moodEventList = user.getMoodEventList();
-        ElasticsearchUserController.GetUserTask getUserTask1;
+        context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
 
-        ArrayList<String> followeeList = user.getFolloweeIDs();
-        for  (String followee : followeeList) {
-            getUserTask1 = new  ElasticsearchUserController.GetUserTask();
-            getUserTask1.execute(followee);
+        if (isOnline) {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(query);
             try {
-                User user_follow = getUserTask1.get();
-                MoodEventList userFollowMoodList = user_follow.getMoodEventList();
-                userFollowMoodList.sortByDate();
-                moodEventList.addMoodEvent(userFollowMoodList.getMoodEvent(0));
+                user = getUserTask.get();
             } catch (Exception e) {
-                //Log.i("Error", "Failed to get the User out of the async object");
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else {
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
+        }
+        MoodEventList moodEventList = user.getMoodEventList();
+
+        if(isOnline){
+            ElasticsearchUserController.GetUserTask getUserTask1;
+            ArrayList<String> followeeList = user.getFolloweeIDs();
+            for (String followee : followeeList) {
+                getUserTask1 = new ElasticsearchUserController.GetUserTask();
+                getUserTask1.execute(followee);
+                try {
+                    User user_follow = getUserTask1.get();
+                    MoodEventList userFollowMoodList = user_follow.getMoodEventList();
+                    userFollowMoodList.sortByDate();
+                    moodEventList.addMoodEvent(userFollowMoodList.getMoodEvent(0));
+                } catch (Exception e) {
+                    //Log.i("Error", "Failed to get the User out of the async object");
+                }
             }
         }
 
@@ -392,6 +432,40 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    private void userOfflineUpdate(){
+        context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        hasBeenOffline = pref.getBoolean("hasBeenOffline",false);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (!isOnline && !currentUserName.equals("")){
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+            // filterFile will be removed
+            if (fileExists(context, FILENAME2)) {
+                File file = context.getFileStreamPath(FILENAME2);
+                file.delete();
+            }
+        }
+        if (isOnline) {
+            //If has been offline and now is online, when signed in, load the local user and upload the local user
+            if (!currentUserName.equals("")) {
+                LoadFile load = new LoadFile();
+                User user = load.loadUser(context);
+
+                ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                addUserTask.execute(user);
+            }
+            // Set has been offline to false
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", false);
+            editor.apply();
+
+        }
+    }
     @Override
     protected void onStop() {
         super.onStop();

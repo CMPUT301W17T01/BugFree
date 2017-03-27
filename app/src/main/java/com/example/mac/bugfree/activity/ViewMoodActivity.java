@@ -3,6 +3,7 @@ package com.example.mac.bugfree.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,11 +14,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.controller.MoodEventAdapter;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +35,7 @@ import java.text.SimpleDateFormat;
  * @author Mengyang Chen
  */
 
-public class ViewMoodActivity extends AppCompatActivity {
+public class ViewMoodActivity extends AppCompatActivity  {
 
     private MoodEvent moodEvent;
     private String currentUserName;
@@ -53,10 +60,21 @@ public class ViewMoodActivity extends AppCompatActivity {
         TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date_text = (TextView) findViewById(R.id.date_textView);
-        ImageView image = (ImageView) findViewById(R.id.imageView);
-        image.setImageResource(R.drawable.picture_text);
+        ImageView picImage = (ImageView) findViewById(R.id.imageView);
+        //image.setImageResource(R.drawable.picture_text);
 
+        Context context = getApplicationContext();
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
 
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (!isOnline && !currentUserName.equals("")){
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
 
         moodState.setText(moodEvent.getMoodState());
         if(moodEvent.getSocialSituation()!=null){
@@ -71,6 +89,13 @@ public class ViewMoodActivity extends AppCompatActivity {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time = fmt.format(moodEvent.getDateOfRecord().getTime());
         date_text.setText(time);
+
+        if (moodEvent.getPicId() != null){
+            Bitmap image = getImage(moodEvent);
+            picImage.setImageBitmap(image);
+        } else {
+            picImage.setImageResource(R.drawable.picture_text);
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,31 +159,55 @@ public class ViewMoodActivity extends AppCompatActivity {
 
 
     private void deleteMoodEvent() {
+
         User user = new User();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "").replace("\"", "");
 
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(currentUserName);
+        // When the moodEvent has been created, check for internet connection.
+        // If online, sync to Elastic search and save locally.
+        // If offline, save locally
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
 
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+        if(isOnline) {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(currentUserName);
+            try {
+                user = getUserTask.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else{
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
-        MoodEventList moodEventList = user.getMoodEventList();
 
+        MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
 
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user);
+        if(isOnline) {
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+            SaveFile s = new SaveFile(context, user);
+        } else{
+            SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
+
     }
 
     private void editMoodEvent() {
         User user = new User();
-
+        //TODO: use of user?
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "").replace("\"", "");
 
@@ -176,6 +225,21 @@ public class ViewMoodActivity extends AppCompatActivity {
         String json = gson.toJson(moodEvent);
         editor.putString("moodevent",json);
         editor.apply();
+    }
+    private Bitmap getImage(MoodEvent moodEvent){
+        String uniqueId = moodEvent.getPicId();
+        ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
+        getImageTask.execute(uniqueId);
+
+        ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+
+        try {
+            imageForElasticSearch = getImageTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imageForElasticSearch.base64ToImage();
     }
 
     protected void onStart(){

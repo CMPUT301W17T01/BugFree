@@ -63,6 +63,9 @@ import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.CurrentLocation;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -302,7 +305,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
@@ -370,19 +373,34 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
             throws MoodStateNotAvailableException{
         User user = new User();
 
 
-        String query = current_user;
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(query);
 
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+        // When the moodEvent has been created, check for internet connection.
+        // If online, sync to Elastic search and save locally.
+        // If offline, save locally
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+
+        if(isOnline) {
+            String query = current_user;
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(query);
+            try {
+                user = getUserTask.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else{
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
         MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
@@ -404,14 +422,22 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             String uniqueId = uploadImage(imageForElasticSearch);
             moodEvent.setPicId(uniqueId);
         }
-        
+
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
 
 
+        if(isOnline) {
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+            SaveFile s = new SaveFile(context, user);
+        } else{
+            SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
 
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user);
     }
 
     /**
@@ -469,7 +495,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    public void takeAPhoto() {
+    private void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
@@ -530,11 +556,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
-                        //pic_preview.setImageBitmap(bitmap);
+                        pic_preview.setImageBitmap(bitmap);
                         Image image = new Image(bitmap);
-
-                        Bitmap test = image.base64ToImage();
-                        pic_preview.setImageBitmap(test);
 
                         imageForElasticSearch = new
                                 ImageForElasticSearch(image.getImageBase64());
@@ -604,7 +627,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             Image image = new Image(bitmap);
             imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
             pic_preview.setImageBitmap(bitmap);
-            Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
