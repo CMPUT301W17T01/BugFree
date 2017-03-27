@@ -78,9 +78,7 @@ public class SignInActivity extends AppCompatActivity {
                     try {
                         User user = getUserTask.get();
                         SaveFile s = new SaveFile(context, user);
-                        Toast.makeText(getApplicationContext(),
-                                "Json file saved.",
-                                Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
                         Log.i("Error", "Failed to get the User out of the async object");
                     }
