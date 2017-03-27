@@ -3,6 +3,7 @@ package com.example.mac.bugfree.controller;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.activity.ViewMoodActivity;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.google.gson.Gson;
@@ -159,9 +161,15 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         final MoodEvent moodEvent = mmoodEventArrayList.getMoodEvent(position);
         SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy hh:mm");
         holder.iconImage.setImageResource(moodEvent.getMoodIcon());
-        //holder.usernameText.setText("Username");
         holder.usernameText.setText(moodEvent.getBelongsTo());
-        holder.picImage.setImageResource(R.drawable.picture_text);
+
+        if (moodEvent.getPicId() != null){
+            Bitmap image = getImage(moodEvent);
+            holder.picImage.setImageBitmap(image);
+        } else {
+            holder.picImage.setImageResource(R.drawable.picture_text);
+        }
+
         holder.reasonText.setText(moodEvent.getTriggerText());
         holder.dateText.setText("Date");
         holder.eventHandleImage.setImageResource(R.drawable.point);
@@ -197,5 +205,21 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         inflater.inflate(R.menu.mood_event_popup_menu_user, popup.getMenu());
         popup.setOnMenuItemClickListener(new MoodEventPopupClickListener(position, mmoodEventArrayList.getMoodEvent(position), view.getContext()));
         popup.show();
+    }
+
+    private Bitmap getImage(MoodEvent moodEvent){
+            String uniqueId = moodEvent.getPicId();
+            ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
+            getImageTask.execute(uniqueId);
+
+            ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+
+            try {
+                imageForElasticSearch = getImageTask.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return imageForElasticSearch.base64ToImage();
     }
 }
