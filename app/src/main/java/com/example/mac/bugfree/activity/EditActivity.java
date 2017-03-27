@@ -1,7 +1,23 @@
 package com.example.mac.bugfree.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.ContentUris;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,11 +30,15 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.Image;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
@@ -26,6 +46,9 @@ import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -43,7 +66,9 @@ public class EditActivity extends CreateEditMoodActivity {
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
     private CheckBox current_time_checkbox;
-
+    private ImageView pic_preview;
+    private Uri imageFileUri;
+    private ImageForElasticSearch imageForElasticSearch = null;
     /**
      * onCreate begins from here
      * set the spinners, pickers and EditText, store them whenever changed
@@ -61,6 +86,7 @@ public class EditActivity extends CreateEditMoodActivity {
         mood_state_spinner= (Spinner)findViewById(R.id.edit_mood_state_spinner);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
         simpleTimePicker = (TimePicker)findViewById(R.id.timePicker);
+        pic_preview = (ImageView)findViewById(R.id.pic_preview);
         current_time_checkbox = (CheckBox) findViewById(R.id.current_time);
         current_time_checkbox.setChecked(true);
         simpleTimePicker.setIs24HourView(true);
@@ -166,8 +192,14 @@ public class EditActivity extends CreateEditMoodActivity {
                 set_minute = simpleTimePicker.getMinute();
             }
         });
-        load_moodEvent(edit_mood_event);
+        if (edit_mood_event.getPicId() != null){
+            Bitmap image = getImage(edit_mood_event);
+            pic_preview.setImageBitmap(image);
+        } else {
+            pic_preview.setImageResource(R.drawable.picture_text);
+        }
 
+        load_moodEvent(edit_mood_event);
 
     }
     /**
@@ -229,26 +261,209 @@ public class EditActivity extends CreateEditMoodActivity {
                     if(edit_mood_state == null){
                         Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                         break;
-                   }
+                    }
                     else {
                         if(current_time_checkbox.isChecked()) {
                             dateOfRecord = real_time();
-
-                        } else {
+                        }
+                        else {
                             dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
 
                         }
-
                         try {
-                           setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger);
+                           setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch);
                         } catch (MoodStateNotAvailableException e) {
 
-                    }
+                        }
                     setResult(RESULT_OK);
                     finish();
                 }
+                return true;
+
+
+
+            case R.id.expanded_menu_camera:
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 12345);
+                    } else {
+                        takeAPhoto();
+                    }
+                }
+                return true;
+
+            case R.id.expanded_menu_gallery:
+                if (ContextCompat.checkSelfPermission(EditActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(EditActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    public void takeAPhoto() {
+
+        File folder = new File(getExternalCacheDir(), "output_img.jpg");
+        try {
+            if (folder.exists()){
+                folder.delete();
+            }
+            folder.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= 24) {
+            imageFileUri = FileProvider.getUriForFile(EditActivity.this,
+                    "com.example.mac.bugfree.fileprovider", folder);
+        }
+        else {
+            imageFileUri = Uri.fromFile(folder);
+        }
+
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case 12345:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takeAPhoto();
+                    // Now user should be able to use camera
+                } else {
+                    // Your app will not have this permission. Turn off all functions
+                    // that require this permission or it will force close like your
+                    // original question
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK){
+                    try {
+                        Bitmap bitmap = BitmapFactory.
+                                decodeStream(getContentResolver().openInputStream(imageFileUri));
+                        pic_preview.setImageBitmap(bitmap);
+                        Image image = new Image(bitmap);
+
+                        imageForElasticSearch = new
+                                ImageForElasticSearch(image.getImageBase64());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        handleImageOnKitKat(data);
+                    } else {
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @TargetApi(19)
+    private void handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this,uri)) {
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID + "=" +id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.
+                        parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+    }
+
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Image image = new Image(bitmap);
+            imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
+            pic_preview.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private Bitmap getImage(MoodEvent moodEvent){
+        String uniqueId = moodEvent.getPicId();
+        ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
+        getImageTask.execute(uniqueId);
+
+        ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+
+        try {
+            imageForElasticSearch = getImageTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return imageForElasticSearch.base64ToImage();
+    }
+
+
+    public void openAlbum(){
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO);
     }
 
 }

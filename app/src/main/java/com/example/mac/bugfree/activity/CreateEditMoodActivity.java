@@ -76,6 +76,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static com.example.mac.bugfree.R.id.expanded_menu;
+import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.timePicker;
 import static java.util.Date.parse;
 
@@ -90,7 +91,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
 
-    private String current_user, mood_state , social_situation, reason;
+    private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -169,7 +170,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),mood_state+" is selected.",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //TODO set tick to be disable
                     mood_state = null;
                 }
             }
@@ -233,7 +233,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
                     permissionLocationRequest();
+
                 }
                 add_location();
             }
@@ -300,10 +302,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
                     } catch (MoodStateNotAvailableException e) {
-
+                        Log.i("Error", "(MoodState is Not Available");
                     }
+
+
                     setResult(RESULT_OK);
                     finish();
 
@@ -366,7 +370,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
             throws MoodStateNotAvailableException{
         User user = new User();
 
@@ -394,6 +398,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         if (currentLocation != null) {
             moodEvent.setLocation(currentLocation);
         }
+
 
         if (imageForElasticSearch != null) {
             String uniqueId = uploadImage(imageForElasticSearch);
@@ -464,7 +469,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    public void takeAPhoto() {
+    private void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
@@ -525,11 +530,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
-                        //pic_preview.setImageBitmap(bitmap);
+                        pic_preview.setImageBitmap(bitmap);
                         Image image = new Image(bitmap);
-
-                        Bitmap test = image.base64ToImage();
-                        pic_preview.setImageBitmap(test);
 
                         imageForElasticSearch = new
                                 ImageForElasticSearch(image.getImageBase64());
@@ -561,8 +563,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=" +id;
-                imagePath = getImagePath(MediaStore.Images.
-                        Media.EXTERNAL_CONTENT_URI, selection);
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 Uri contentUri = ContentUris.withAppendedId(Uri.
                         parse("content://downloads/public_downloads"), Long.valueOf(docId));
@@ -581,7 +582,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         String imagePath = getImagePath(uri, null);
         displayImage(imagePath);
     }
-
 
     private String getImagePath(Uri uri, String selection) {
         String path = null;
