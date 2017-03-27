@@ -62,11 +62,12 @@ public class Image {
         imageBase64 = Base64.encodeToString(changeImageIntoByteArray(bm), Base64.NO_WRAP);
     }
 
-    private Bitmap base64ToImage() {
+    public Bitmap base64ToImage() {
         // TODO: change base64 String into image and store it
         byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
                 decodedString.length);
+
         return decodedByte;
     }
 

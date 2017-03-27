@@ -53,6 +53,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
@@ -102,6 +103,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
+    private ImageForElasticSearch imageForElasticSearch = null;
 
 
 
@@ -393,8 +395,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currentLocation);
         }
 
+//        if (imageForElasticSearch != null) {
+//            String uniqueId = uploadImage(imageForElasticSearch);
+//            moodEvent.setPicId(uniqueId);
+//        }
+        
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
+
+
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
@@ -516,9 +525,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
-                        pic_preview.setImageBitmap(bitmap);
+                        //pic_preview.setImageBitmap(bitmap);
                         Image image = new Image(bitmap);
-                        ImageForElasticSearch ifes = new
+
+                        Bitmap test = image.base64ToImage();
+                        pic_preview.setImageBitmap(test);
+
+                        imageForElasticSearch = new
                                 ImageForElasticSearch(image.getImageBase64());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -585,6 +598,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Image image = new Image(bitmap);
+            imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
             pic_preview.setImageBitmap(bitmap);
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
@@ -632,7 +647,18 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void uploadImage (ImageForElasticSearch ifes){
+    private String uploadImage (ImageForElasticSearch ifes){
+        String uniqueID = null;
+
+        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+        addImageTask.execute(ifes);
+        try {
+            uniqueID = addImageTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return uniqueID;
 
     }
 
