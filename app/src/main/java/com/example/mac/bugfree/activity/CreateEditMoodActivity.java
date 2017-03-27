@@ -73,6 +73,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static com.example.mac.bugfree.R.id.expanded_menu;
+import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.timePicker;
 import static java.util.Date.parse;
 
@@ -87,7 +88,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
 
-    private String current_user, mood_state , social_situation, reason;
+    private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -515,8 +516,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             case TAKE_PHOTO:
                 if (resultCode == RESULT_OK){
                     try {
-                        Bitmap bitmap = BitmapFactory.
-                                decodeStream(getContentResolver().openInputStream(imageFileUri));
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageFileUri));
                         pic_preview.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -582,6 +582,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             pic_preview.setImageBitmap(bitmap);
+            Toast.makeText(this, imagePath, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
