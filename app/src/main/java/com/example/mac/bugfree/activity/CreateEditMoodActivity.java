@@ -395,11 +395,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currentLocation);
         }
 
-//        if (imageForElasticSearch != null) {
-//            String uniqueId = uploadImage(imageForElasticSearch);
-//            moodEvent.setPicId(uniqueId);
-//        }
 
+        if (imageForElasticSearch != null) {
+            String uniqueId = uploadImage(imageForElasticSearch);
+            moodEvent.setPicId(uniqueId);
+        }
+        
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
 
