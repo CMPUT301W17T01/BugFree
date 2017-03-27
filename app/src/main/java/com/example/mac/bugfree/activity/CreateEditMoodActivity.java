@@ -54,6 +54,8 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.Image;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
@@ -515,6 +517,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
                         pic_preview.setImageBitmap(bitmap);
+                        Image image = new Image(bitmap);
+                        ImageForElasticSearch ifes = new
+                                ImageForElasticSearch(image.getImageBase64());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -626,5 +631,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
+    private void uploadImage (ImageForElasticSearch ifes){
+
+    }
+
 }
 
