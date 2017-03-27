@@ -54,7 +54,6 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
-import com.example.mac.bugfree.handler.PermissionHandler;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
