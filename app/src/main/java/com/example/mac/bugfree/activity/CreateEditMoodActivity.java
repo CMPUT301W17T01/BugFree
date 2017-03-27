@@ -300,8 +300,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     try {
                         setMoodEvent(current_user, mood_state, social_situation, reason);
                     } catch (MoodStateNotAvailableException e) {
-
+                        Log.i("Error", "(MoodState is Not Available");
                     }
+
+
                     setResult(RESULT_OK);
                     finish();
 
@@ -545,8 +547,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=" +id;
-                imagePath = getImagePath(MediaStore.Images.
-                        Media.EXTERNAL_CONTENT_URI, selection);
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 Uri contentUri = ContentUris.withAppendedId(Uri.
                         parse("content://downloads/public_downloads"), Long.valueOf(docId));
@@ -565,7 +566,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         String imagePath = getImagePath(uri, null);
         displayImage(imagePath);
     }
-
 
     private String getImagePath(Uri uri, String selection) {
         String path = null;
