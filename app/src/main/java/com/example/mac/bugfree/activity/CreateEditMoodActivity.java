@@ -370,7 +370,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason,ImageForElasticSearch imageForElasticSearch)
             throws MoodStateNotAvailableException{
         User user = new User();
 
