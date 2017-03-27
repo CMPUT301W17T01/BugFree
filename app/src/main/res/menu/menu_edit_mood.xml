@@ -4,6 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.mac.bugfree.activity.EditActivity">
 
+
+    <item
+        android:id="@+id/action_camera"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:orderInCategory="2"
+        android:title="camera"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/expanded_menu_camera"
+                android:title="Camera" />
+            <item
+                android:id="@+id/expanded_menu_gallery"
+                android:title="Choose From Album" />
+
+
+        </menu>
+
+    </item>
     <item
         android:id="@+id/action_add_tick"
         android:icon="@drawable/ic_tick"

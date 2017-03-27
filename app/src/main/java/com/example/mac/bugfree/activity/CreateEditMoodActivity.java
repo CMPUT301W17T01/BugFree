@@ -53,7 +53,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.Image;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
@@ -72,9 +75,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static com.example.mac.bugfree.R.id.expanded_menu;
 import static com.example.mac.bugfree.R.id.image;
-import static com.example.mac.bugfree.R.id.imageView;
-import static com.example.mac.bugfree.R.id.login_button;
 import static com.example.mac.bugfree.R.id.timePicker;
 import static java.util.Date.parse;
 
@@ -86,8 +88,10 @@ import static java.util.Date.parse;
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
 
-    private String current_user, mood_state , social_situation, reason;
+    private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -100,8 +104,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
-    public static final int TAKE_PHOTO = 1;
-    public static final int CHOOSE_PHOTO = 2;
+    private ImageForElasticSearch imageForElasticSearch = null;
+
 
 
 
@@ -129,8 +133,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker = (TimePicker)findViewById(timePicker);
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
-
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
+        //registerForContextMenu(R.id.action_camera);
 
 
         if(current_time_checkbox.isChecked()){
@@ -154,32 +158,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-        
-
-        //TODO allow user to add picture in part5
-//       add_pic.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//               add_pic.setImageResource(R.drawable.picture_text);
-//               //Intent intent = new Intent(CreateEditMoodActivity.this, MainActivity.class);
-//               //startActivity(intent);
-//               //Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//               //startActivityForResult(i, RESULT_LOAD_IMAGE);
-//           }
-//       });
-        pic_preview.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    openAlbum();
-                }
-            }
-        });
 
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -192,7 +170,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),mood_state+" is selected.",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //TODO set tick to be disable
                     mood_state = null;
                 }
             }
@@ -255,9 +232,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                permissionLocationRequest();
-                add_location();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
+                    permissionLocationRequest();
+
+                }
+                add_location();
             }
         });
 
@@ -308,44 +288,56 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 current_user = pref.getString("currentUser", "");
-                
-                if(mood_state == null){
+
+                if (mood_state == null) {
                     Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else {
-                    if(current_time_checkbox.isChecked()) {
+                } else {
+                    if (current_time_checkbox.isChecked()) {
                         dateOfRecord = real_time();
 
                     } else {
-                        dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
+                        dateOfRecord = new GregorianCalendar(set_year, set_month + 1, set_day, set_hour, set_minute);
 
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
                     } catch (MoodStateNotAvailableException e) {
-
+                        Log.i("Error", "(MoodState is Not Available");
                     }
+
+
                     setResult(RESULT_OK);
                     finish();
+
                 }
-            case R.id.action_camera:
+                return true;
+            
+            case R.id.expanded_menu_camera:
 
                 if (Build.VERSION.SDK_INT >= 23) {
-
                     if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, 12345);
-
                     } else {
                         takeAPhoto();
                     }
                 }
+                return true;
+
+            case R.id.expanded_menu_gallery:
+                if (ContextCompat.checkSelfPermission(CreateEditMoodActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateEditMoodActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    openAlbum();
+                }
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO add location in part 5
     public void add_location(){
         if (currentLocationCheckbox.isChecked()) {
             try {
@@ -378,7 +370,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
             throws MoodStateNotAvailableException{
         User user = new User();
 
@@ -407,8 +399,16 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currentLocation);
         }
 
+
+        if (imageForElasticSearch != null) {
+            String uniqueId = uploadImage(imageForElasticSearch);
+            moodEvent.setPicId(uniqueId);
+        }
+        
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
+
+
 
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
@@ -469,7 +469,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    public void takeAPhoto() {
+    private void takeAPhoto() {
+
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
             if (folder.exists()){
@@ -488,6 +489,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileUri);
         startActivityForResult(intent, TAKE_PHOTO);
 
@@ -529,6 +531,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
                         pic_preview.setImageBitmap(bitmap);
+                        Image image = new Image(bitmap);
+
+                        imageForElasticSearch = new
+                                ImageForElasticSearch(image.getImageBase64());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -557,8 +563,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
                 String selection = MediaStore.Images.Media._ID + "=" +id;
-                imagePath = getImagePath(MediaStore.Images.
-                        Media.EXTERNAL_CONTENT_URI, selection);
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 Uri contentUri = ContentUris.withAppendedId(Uri.
                         parse("content://downloads/public_downloads"), Long.valueOf(docId));
@@ -593,6 +598,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Image image = new Image(bitmap);
+            imageForElasticSearch = new ImageForElasticSearch(image.getImageBase64());
             pic_preview.setImageBitmap(bitmap);
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
@@ -607,14 +614,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
-    protected void onStart(){
+    @Override
+    protected void onStart() {
         super.onStart();
-    }
-
-    public void onResume() {
-        super.onResume();
-        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-
     }
 
     private void permissionLocationRequest() {
@@ -644,5 +646,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
+    private String uploadImage (ImageForElasticSearch ifes){
+        String uniqueID = null;
+
+        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+        addImageTask.execute(ifes);
+        try {
+            uniqueID = addImageTask.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return uniqueID;
+
+    }
+
 }
 

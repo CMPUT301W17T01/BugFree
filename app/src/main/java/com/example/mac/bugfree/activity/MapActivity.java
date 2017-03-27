@@ -2,15 +2,23 @@ package com.example.mac.bugfree.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.audiofx.BassBoost;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
@@ -49,6 +58,7 @@ public class MapActivity extends AppCompatActivity {
     //private String currentUserName;
 
     MyLocationNewOverlay myLocationOverlay = null;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +112,33 @@ public class MapActivity extends AppCompatActivity {
         addMoodEventPin();
 
     }
-
-
     public void onResume() {
         super.onResume();
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getApplicationContext(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Permission Denied!", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
     public void addMyLocationPin() {
         //Add MyLocationOverlay
@@ -122,7 +152,7 @@ public class MapActivity extends AppCompatActivity {
             loadFromFilterFile(getApplicationContext());
         } else {
             // TODO: add all participate's moodEvent in 5km
-            //loadAllParticipant();
+            loadAllParticipant();
         }
     }
 
@@ -158,7 +188,6 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
                         //do something
-//                        double a = distanceBetweenPoints();
 
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
                                         + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
@@ -178,21 +207,21 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void loadAllParticipant() {
-        ArrayList<String> userList = new ArrayList<>();
+        UserNameList userList = new UserNameList();
         MoodEventList moodEventList = new MoodEventList();
         ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
         ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
-        getUserListTask.execute("1");
+        getUserListTask.execute("name");
         try{
             userList = getUserListTask.get();
-            Log.i("Test in load", userList.get(0));
         } catch (Exception e) {
             Log.i("Error", "Failed to get the UserList out of the async object");
         }
+        ArrayList<String> arrayList = userList.getUserNameList();
 
         ElasticsearchUserController.GetUserTask getUserTask1;
-        for (String userName : userList) {
+        for (String userName : arrayList) {
             getUserTask1 = new  ElasticsearchUserController.GetUserTask();
             getUserTask1.execute(userName);
             try {
@@ -211,7 +240,10 @@ public class MapActivity extends AppCompatActivity {
             GeoPoint geoPoint = moodEvent.getLocation();
 
             if (geoPoint != null) {
-                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+                if (distanceBetweenPoints(geoPoint) <= 5){
+                    items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
+                }
+//                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
             }
         }
 
@@ -258,7 +290,8 @@ public class MapActivity extends AppCompatActivity {
         moodLocation.setLatitude(moodPoint.getLatitudeE6() / 1E6);
         moodLocation.setLongitude(moodPoint.getLongitudeE6() / 1E6);
         double distance = currentLocation.distanceTo(moodLocation);
-        return distance;
+        return distance/1000;
     }
+
 
 }

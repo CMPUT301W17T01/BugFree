@@ -10,6 +10,7 @@ import com.example.mac.bugfree.controller.ElasticsearchUserListController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.module.UserNameList;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -506,31 +507,31 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
         }
     }
 
-//    public void testUserListCreation() {
-//        ArrayList<String> userList = new ArrayList<>();
-//        userList.add(name0);
-//        userList.add(name1);
-//        userList.add(name2);
-//        userList.add(name3);
-//        userList.add(name4);
-//        userList.add(name5);
-//        userList.add(name6);
-//        userList.add(name7);
-//        userList.add(name8);
-//        userList.add(name9);
-//
-//        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
-//        addUserListTask.execute(userList);
-//
-//        ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
-//        getUserListTask.execute("1");
-//        try{
-//            ArrayList<String> userListGet = getUserListTask.get();
-//            Log.d("Test in ElasticUserList", userListGet.get(0));
-//            assertEquals(userList, userListGet);
-//        } catch (Exception e) {
-//            Log.i("Error", "Failed to get the User out of the async object");
-//        }
-//    }
+    public void testUserListCreation() {
+        ArrayList<String> userList = new ArrayList<>();
+        userList.add(name0);
+        userList.add(name1);
+        userList.add(name2);
+        userList.add(name3);
+        userList.add(name4);
+        userList.add(name5);
+        userList.add(name6);
+        userList.add(name7);
+        userList.add(name8);
+        userList.add(name9);
+
+        UserNameList userNameList = new UserNameList(userList);
+
+        ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
+        addUserListTask.execute(userNameList);
+
+        ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+        getUserListTask.execute("name");
+        try{
+            UserNameList userListGet = getUserListTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package com.example.mac.bugfree.util;
 
 import android.content.Context;
 
+import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
@@ -10,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 /**
  * This is a method class, the main purpose is to store the UserList passed in into a Json file.
@@ -36,6 +38,10 @@ public class SaveFile{
         saveJson(context, user);
     }
 
+    public SaveFile() {
+
+    }
+
     /**
      * Save json.
      *
@@ -57,6 +63,25 @@ public class SaveFile{
             throw new RuntimeException();
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            throw new RuntimeException();
+        }
+    }
+
+    public void saveArrayList(Context context, ArrayList<MoodEvent> moodEventArrayList, String saveFILENAME) {
+        try {
+            FileOutputStream fos = context.openFileOutput(saveFILENAME,
+                    Context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+
+            // save the record list to Json
+            Gson gson = new Gson();
+            gson.toJson(moodEventArrayList, out);
+
+            out.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException();
+        } catch (IOException e) {
             throw new RuntimeException();
         }
     }

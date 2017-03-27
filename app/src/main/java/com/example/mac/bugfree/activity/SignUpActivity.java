@@ -12,7 +12,11 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.R;
+import com.example.mac.bugfree.controller.ElasticsearchUserListController;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.module.UserNameList;
+
+import java.util.ArrayList;
 
 /**
  * This is the Sign In view class of the project, <br> In this class, user interaction and Elastic Query action are performed
@@ -45,7 +49,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 signUpName = signUpText.getText().toString();
                 if (notExist(signUpName) &&!signUpName.equals("")){
-                    if (createUser(signUpName)) {
+                    if (createUser(signUpName) && updateUserNameList(signUpName)) {
                         Toast.makeText(getApplicationContext(),
                                 "User " + signUpName + " created.",
                                 Toast.LENGTH_SHORT).show();
@@ -102,6 +106,33 @@ public class SignUpActivity extends AppCompatActivity {
                     "Can not create user. Internet connection Error",
                     Toast.LENGTH_SHORT).show();
             return false;
+        }
+    }
+
+    private boolean updateUserNameList(String usrName) {
+        UserNameList userNameList = new UserNameList();
+
+        ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+        getUserListTask.execute("name");
+        try{
+            userNameList = getUserListTask.get();
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the User out of the async object");
+            return false;
+        }
+
+        if (userNameList != null) {
+            userNameList.addUserName(usrName);
+            ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
+            addUserListTask.execute(userNameList);
+            return true;
+        } else {
+            ArrayList<String> usrNameList = new ArrayList<String>();
+            usrNameList.add(usrName);
+            userNameList = new UserNameList(usrNameList);
+            ElasticsearchUserListController.AddUserListTask addUserListTask = new ElasticsearchUserListController.AddUserListTask();
+            addUserListTask.execute(userNameList);
+            return true;
         }
     }
 }

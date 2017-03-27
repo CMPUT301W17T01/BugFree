@@ -7,13 +7,25 @@
     <item
         android:id="@+id/action_camera"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="tick"
-        app:showAsAction="always" />
+        android:orderInCategory="2"
+        android:title="camera"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/expanded_menu_camera"
+                android:title="Camera" />
+            <item
+                android:id="@+id/expanded_menu_gallery"
+                android:title="Choose From Album" />
+
+
+        </menu>
+
+    </item>
     <item
         android:id="@+id/action_add_tick"
         android:icon="@drawable/ic_tick"
         android:title="tick"
         app:showAsAction="always" />
-
 
 </menu>

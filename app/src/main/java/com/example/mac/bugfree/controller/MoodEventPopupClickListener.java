@@ -13,7 +13,16 @@ import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 /**
  * This is the listener for popup menu which in card view
@@ -23,6 +32,8 @@ import com.google.gson.Gson;
  */
 
 public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickListener {
+
+    private static final String FILENAME2 = "filter.sav";
 
     private int position;
     private MoodEvent moodEvent;
@@ -89,6 +100,13 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
         addUserTask.execute(user);
 
+        if (fileExists(context, FILENAME2)) {
+            ArrayList<MoodEvent> moodEventArrayList = moodEventList.transferMoodEventListToArray();
+            SaveFile saveFile = new SaveFile();
+            saveFile.saveArrayList(context, moodEventArrayList, FILENAME2);
+
+        }
+
     }
 
     /**
@@ -97,20 +115,6 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
      * go to EditActivity
      */
     private void editMoodEvent() {
-//        User user = new User();
-//
-//        SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
-//        currentUserName = pref.getString("currentUser", "");
-//
-//        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-//        getUserTask.execute(currentUserName);
-//
-//        try{
-//            user = getUserTask.get();
-//        } catch (Exception e) {
-//            Log.i("Error", "Failed to get the User out of the async object");
-//        }
-
         SharedPreferences.Editor editor = context.getSharedPreferences("editMoodEvent",Context.MODE_PRIVATE).edit();
         Gson gson = new Gson();
         String json = gson.toJson(moodEvent);
@@ -120,4 +124,19 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         Intent intent = new Intent(context, EditActivity.class);
         context.startActivity(intent);
     }
+
+    /**
+     * To check if the file "filter.sav" is exist
+     * @param context
+     * @param filename
+     * @return if it exists, return true. Vice Versa
+     */
+    private boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if (file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
+
 }
