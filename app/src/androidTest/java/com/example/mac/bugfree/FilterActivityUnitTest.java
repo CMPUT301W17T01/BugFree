@@ -18,6 +18,7 @@ import com.example.mac.bugfree.module.MoodEvent;
 import com.robotium.solo.Solo;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.test.InstrumentationRegistry.getContext;
 
 /**
  * Created by heyuehuang on 2017-02-22.
@@ -34,8 +35,17 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
     }
 
     public void setUp() throws Exception{
+        super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
-        SharedPreferences filterSetting = this.getInstrumentation().getTargetContext().getSharedPreferences("filterSetting",0);
+        SharedPreferences filterSetting = getInstrumentation().getTargetContext().getSharedPreferences("filterSetting",0);
+        SharedPreferences.Editor editor = filterSetting.edit();
+        editor.clear();
+        editor.commit();
+    }
+    protected void tearDown() throws Exception {
+        // Clear everything in the SharedPreferences
+        super.tearDown();
+        SharedPreferences filterSetting = getInstrumentation().getTargetContext().getSharedPreferences("filterSetting",0);
         SharedPreferences.Editor editor = filterSetting.edit();
         editor.clear();
         editor.commit();
@@ -156,7 +166,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         View menu = solo.getView(R.id.activity_filter);
         solo.clickOnView(menu);
     }
-    
+
     // Taken from http://stackoverflow.com/questions/9189011/how-to-test-checkboxes-in-custom-listviews-using-robotium-in-android
     /**
      * Test display all checkbox in following can be clicked and
