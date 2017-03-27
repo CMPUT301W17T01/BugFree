@@ -17,6 +17,8 @@ import android.net.NetworkInfo;
 public class InternetConnectionChecker {
     public InternetConnectionChecker(){}
 
+    //Taken form http://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out
+    // 2017-03-23 23:20
     public boolean isOnline(Context context) {
             ConnectivityManager cm =
                     (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
