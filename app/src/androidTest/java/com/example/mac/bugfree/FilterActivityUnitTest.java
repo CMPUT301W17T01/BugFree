@@ -1,5 +1,7 @@
 package com.example.mac.bugfree;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.CheckBox;
@@ -7,10 +9,15 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+import android.content.SharedPreferences;
+import android.widget.Spinner;
+
 import com.example.mac.bugfree.activity.FilterActivity;
 import com.example.mac.bugfree.activity.MainActivity;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.robotium.solo.Solo;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by heyuehuang on 2017-02-22.
@@ -28,7 +35,12 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
 
     public void setUp() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
+        SharedPreferences filterSetting = this.getInstrumentation().getTargetContext().getSharedPreferences("filterSetting",0);
+        SharedPreferences.Editor editor = filterSetting.edit();
+        editor.clear();
+        editor.commit();
     }
+
 
     // Taken from http://bitbar.com/automated-ui-testing-android-applications-robotium/
     /**
@@ -38,7 +50,9 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
      * Should pass.
      */
     public void testMyselfMoodState(){
+
         solo.assertCurrentActivity("Wrong Activity", FilterActivity.class);
+
         solo.clickOnView(solo.getCurrentActivity().findViewById(R.id.spinner_myself));
         solo.clickInList(4);
 
