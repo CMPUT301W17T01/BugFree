@@ -422,7 +422,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             String uniqueId = uploadImage(imageForElasticSearch);
             moodEvent.setPicId(uniqueId);
         }
-        
+
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.addMoodEvent(moodEvent);
 
