@@ -3,6 +3,7 @@ package com.example.mac.bugfree.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,6 +45,9 @@ import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -246,20 +250,41 @@ public class EditActivity extends CreateEditMoodActivity {
                 User user = new User();
                 SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                 current_user = pref.getString("currentUser", "");
-                ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-                getUserTask.execute(current_user);
-                try{
-                    user = getUserTask.get();
-                } catch (Exception e) {
-                    Log.i("Error", "Failed to get the User out of the async object");
+
+                // When the moodEvent has been edited, check for internet connection.
+                // If online, sync to Elastic search and save locally.
+                // If offline, save locally
+
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                Context context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+
+                if(isOnline) {
+                    String query = current_user;
+                    ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                    getUserTask.execute(current_user);
+                    try {
+                        user = getUserTask.get();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get the User out of the async object");
+                    }
+                } else{
+                    LoadFile load = new LoadFile();
+                    user = load.loadUser(context);
                 }
-                ////TODO: command(edit)
+
                 MoodEventList moodEventList = user.getMoodEventList();
                 moodEventList.deleteMoodEvent(edit_mood_event);
                 user.setMoodEventList(moodEventList);
-                ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                addUserTask.execute(user);
-                //
+
+                if(isOnline) {
+                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+                    SaveFile s = new SaveFile(context, user);
+                } else{
+                    SaveFile s = new SaveFile(context, user);
+                }
+
                     if(edit_mood_state == null){
                         Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                         break;
