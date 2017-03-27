@@ -255,6 +255,13 @@ public class EditActivity extends CreateEditMoodActivity {
                 }
                 MoodEventList moodEventList = user.getMoodEventList();
                 moodEventList.deleteMoodEvent(edit_mood_event);
+
+                if (edit_mood_event.getPicId() != null){
+                    ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                            new ElasticsearchImageController.DeleteImageTask();
+                    deleteImageTask.execute(edit_mood_event.getPicId());
+                }
+
                 user.setMoodEventList(moodEventList);
                 ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                 addUserTask.execute(user);
@@ -448,7 +455,7 @@ public class EditActivity extends CreateEditMoodActivity {
         ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
         getImageTask.execute(uniqueId);
 
-        ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+        //imageForElasticSearch = new ImageForElasticSearch();
 
         try {
             imageForElasticSearch = getImageTask.get();
