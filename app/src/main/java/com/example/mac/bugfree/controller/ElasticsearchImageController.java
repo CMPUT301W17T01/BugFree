@@ -5,10 +5,14 @@ import android.util.Log;
 
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+
+import java.util.ArrayList;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -78,7 +82,6 @@ public class ElasticsearchImageController {
                 } catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the image");
                 }
-
             }
             return null;
         }
@@ -145,4 +148,5 @@ public class ElasticsearchImageController {
             client = (JestDroidClient) factory.getObject();
         }
     }
+
 }
