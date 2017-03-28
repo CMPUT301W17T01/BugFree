@@ -327,22 +327,17 @@ public class EditActivity extends CreateEditMoodActivity {
                     if (current_time_checkbox.isChecked()) {
                         dateOfRecord = real_time();
                     } else {
-                        if (current_time_checkbox.isChecked()) {
-                            dateOfRecord = real_time();
-                        } else {
                             dateOfRecord = new GregorianCalendar(set_year, set_month + 1, set_day, set_hour, set_minute);
-                        }
-                        try {
-                            setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch, currentLocation);
-                        } catch (MoodStateNotAvailableException e) {
-
-                            Log.i("Error", "Failed to get the Mood state");
-                        }
-                        setResult(RESULT_OK);
-                        finish();
                     }
-                    return true;
+                    try {
+                        setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch, currentLocation);
+                    } catch (MoodStateNotAvailableException e) {
+                        Log.i("Error", "Failed to get the Mood state");
+                    }
+                    setResult(RESULT_OK);
+                    finish();
                 }
+                    return true;
 
             case R.id.expanded_menu_camera:
 
