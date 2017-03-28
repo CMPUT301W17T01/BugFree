@@ -34,7 +34,7 @@ public class FilterActivityUnitTest extends ActivityInstrumentationTestCase2<Fil
         super(FilterActivity.class);
     }
 
-    public void setUp() throws Exception{
+    protected void setUp() throws Exception{
         super.setUp();
         solo = new Solo(getInstrumentation(), getActivity());
         SharedPreferences filterSetting = getInstrumentation().getTargetContext().getSharedPreferences("filterSetting",0);
