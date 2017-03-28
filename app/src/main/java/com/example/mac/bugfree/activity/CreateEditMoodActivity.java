@@ -238,7 +238,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                     permissionLocationRequest();
-
                 }
                 add_location();
             }
@@ -305,7 +304,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch,currentLocation);
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
@@ -356,6 +355,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+        } else {
+            currentLocation = null;
         }
 
     }
@@ -373,7 +374,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason,ImageForElasticSearch imageForElasticSearch)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch, GeoPoint currLocation)
             throws MoodStateNotAvailableException{
         User user = new User();
 
@@ -413,8 +414,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         // Test for the location
         //add_location();
-        if (currentLocation != null) {
-            moodEvent.setLocation(currentLocation);
+        if (currLocation != null) {
+            moodEvent.setLocation(currLocation);
         }
 
 

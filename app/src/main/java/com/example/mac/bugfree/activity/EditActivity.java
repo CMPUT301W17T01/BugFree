@@ -4,12 +4,15 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,10 +49,13 @@ import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
+
+import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,16 +70,19 @@ import java.util.GregorianCalendar;
  */
 public class EditActivity extends CreateEditMoodActivity {
 
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private MoodEvent edit_mood_event;
     private String current_user, edit_mood_state, edit_social_situation, edit_trigger;
     private EditText edit_reason;
     private Spinner mood_state_spinner, social_situation_spinner;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
-    private CheckBox current_time_checkbox;
+    private CheckBox current_time_checkbox, currentLocationCheckbox;
     private ImageView pic_preview;
     private Uri imageFileUri;
     private ImageForElasticSearch imageForElasticSearch = null;
+    private GeoPoint currentLocation;
+
     /**
      * onCreate begins from here
      * set the spinners, pickers and EditText, store them whenever changed
@@ -85,40 +95,38 @@ public class EditActivity extends CreateEditMoodActivity {
         setSupportActionBar(toolbar);
         ArrayAdapter<CharSequence> adapter1;
         ArrayAdapter<CharSequence> adapter2;
-        edit_reason = (EditText)findViewById(R.id.edit_reason);
-        social_situation_spinner= (Spinner)findViewById(R.id.edit_social_situation_spinner);
-        mood_state_spinner= (Spinner)findViewById(R.id.edit_mood_state_spinner);
-        simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
-        simpleTimePicker = (TimePicker)findViewById(R.id.timePicker);
-        pic_preview = (ImageView)findViewById(R.id.pic_preview);
+        edit_reason = (EditText) findViewById(R.id.edit_reason);
+        social_situation_spinner = (Spinner) findViewById(R.id.edit_social_situation_spinner);
+        mood_state_spinner = (Spinner) findViewById(R.id.edit_mood_state_spinner);
+        simpleDatePicker = (DatePicker) findViewById(R.id.datePicker);
+        simpleTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        pic_preview = (ImageView) findViewById(R.id.pic_preview);
         current_time_checkbox = (CheckBox) findViewById(R.id.current_time);
         current_time_checkbox.setChecked(true);
         simpleTimePicker.setIs24HourView(true);
+        currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
 
 
-        SharedPreferences sharedPreferences =getSharedPreferences("editMoodEvent", MODE_PRIVATE);
-        Gson gson =new Gson();
-        String json = sharedPreferences.getString("moodevent","");
-        edit_mood_event = gson.fromJson(json,MoodEvent.class);
+        SharedPreferences sharedPreferences = getSharedPreferences("editMoodEvent", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("moodevent", "");
+        edit_mood_event = gson.fromJson(json, MoodEvent.class);
 
-
-
-        if(current_time_checkbox.isChecked()){
+        if (current_time_checkbox.isChecked()) {
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
         }
 
-        adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
+        adapter1 = ArrayAdapter.createFromResource(this, R.array.mood_states_array, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mood_state_spinner.setAdapter(adapter1);
-        mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        mood_state_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0){
+                if (i > 0) {
                     edit_mood_state = adapterView.getItemAtPosition(i).toString();
-                    Toast.makeText(getApplicationContext(),edit_mood_state+" is selected.",Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    Toast.makeText(getApplicationContext(), edit_mood_state + " is selected.", Toast.LENGTH_SHORT).show();
+                } else {
                     edit_mood_state = null;
                 }
             }
@@ -129,20 +137,20 @@ public class EditActivity extends CreateEditMoodActivity {
             }
         });
 
-        adapter2 = ArrayAdapter.createFromResource(this,R.array.social_situation_array,android.R.layout.simple_spinner_item);
+        adapter2 = ArrayAdapter.createFromResource(this, R.array.social_situation_array, android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         social_situation_spinner.setAdapter(adapter2);
         social_situation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i>0) {
+                if (i > 0) {
                     edit_social_situation = adapterView.getItemAtPosition(i).toString();
                     Toast.makeText(getApplicationContext(), edit_social_situation + " is selected.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    edit_social_situation=null;
+                } else {
+                    edit_social_situation = null;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -154,15 +162,16 @@ public class EditActivity extends CreateEditMoodActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (edit_reason.getText().toString().split("\\s+").length>3){
+                if (edit_reason.getText().toString().split("\\s+").length > 3) {
                     edit_reason.setError("Only the first 3 words will be sent");
-                }
-                else {
+                } else {
                     edit_trigger = edit_reason.getText().toString();
                 }
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
             }
@@ -176,6 +185,16 @@ public class EditActivity extends CreateEditMoodActivity {
             }
         });
 
+        currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    permissionLocationRequest();
+                }
+                add_location();
+            }
+        });
+
         Calendar calendar = edit_mood_event.getDateOfRecord();
 
         simpleDatePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -185,7 +204,7 @@ public class EditActivity extends CreateEditMoodActivity {
 
                         set_year = simpleDatePicker.getYear();
                         set_month = simpleDatePicker.getMonth();
-                        set_day =  simpleDatePicker.getDayOfMonth();
+                        set_day = simpleDatePicker.getDayOfMonth();
 
                     }
                 });
@@ -201,21 +220,25 @@ public class EditActivity extends CreateEditMoodActivity {
         load_moodEvent(edit_mood_event);
 
     }
+
     /**
      * local functions that allow users to load the mood events
      */
 
-    public void load_moodEvent(MoodEvent edit_mood_event ){
+    public void load_moodEvent(MoodEvent edit_mood_event) {
 
         edit_mood_state = edit_mood_event.getMoodState();
         mood_state_spinner.setSelection(getIndex(mood_state_spinner, edit_mood_event.getMoodState()));
-        if(edit_mood_event.getSocialSituation() != null){
+        if (edit_mood_event.getSocialSituation() != null) {
             social_situation_spinner.setSelection(getIndex(social_situation_spinner, edit_mood_event.getSocialSituation()));
         }
-        if(edit_mood_event.getTriggerText()!=null){
+        if (edit_mood_event.getTriggerText() != null) {
             edit_reason.setText(edit_mood_event.getTriggerText());
         }
-        if (edit_mood_event.getPicId() != null){
+        if (edit_mood_event.getLocation() != null) {
+            currentLocationCheckbox.setChecked(true);
+        }
+        if (edit_mood_event.getPicId() != null) {
             Bitmap image = getImage(edit_mood_event);
             pic_preview.setImageBitmap(image);
         } else {
@@ -223,19 +246,21 @@ public class EditActivity extends CreateEditMoodActivity {
         }
 
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_mood, menu);
 
         return true;
 
     }
+
     //http://stackoverflow.com/questions/8769368/how-to-set-position-in-spinner
-    private int getIndex(Spinner spinner, String myString){
+    private int getIndex(Spinner spinner, String myString) {
 
         int index = 0;
 
-        for (int i=0;i<spinner.getCount();i++){
-            if (spinner.getItemAtPosition(i).equals(myString)){
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(myString)) {
                 index = i;
             }
         }
@@ -248,11 +273,10 @@ public class EditActivity extends CreateEditMoodActivity {
         //handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_add_tick:
-                if(edit_mood_state == null){
+                if (edit_mood_state == null) {
                     Toast.makeText(getApplicationContext(), "Choose a mood state", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else {
+                } else {
                     User user = new User();
                     SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
                     current_user = pref.getString("currentUser", "");
@@ -264,7 +288,7 @@ public class EditActivity extends CreateEditMoodActivity {
                     Context context = getApplicationContext();
                     final boolean isOnline = checker.isOnline(context);
 
-                    if(isOnline) {
+                    if (isOnline) {
                         String query = current_user;
                         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
                         getUserTask.execute(current_user);
@@ -274,42 +298,41 @@ public class EditActivity extends CreateEditMoodActivity {
                             Log.i("Error", "Failed to get the User out of the async object");
                         }
                     } else {
-                    LoadFile load = new LoadFile();
-                    user = load.loadUser(context);
-                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                    editor.putBoolean("hasBeenOffline", true);
-                    editor.apply();
+                        LoadFile load = new LoadFile();
+                        user = load.loadUser(context);
+                        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                        editor.putBoolean("hasBeenOffline", true);
+                        editor.apply();
                     }
 
                     MoodEventList moodEventList = user.getMoodEventList();
                     moodEventList.deleteMoodEvent(edit_mood_event);
 
-                    if (edit_mood_event.getPicId() != null){
+                    if (edit_mood_event.getPicId() != null) {
                         ElasticsearchImageController.DeleteImageTask deleteImageTask =
-                             new ElasticsearchImageController.DeleteImageTask();
+                                new ElasticsearchImageController.DeleteImageTask();
                         deleteImageTask.execute(edit_mood_event.getPicId());
                     }
                     user.setMoodEventList(moodEventList);
 
-                    if(isOnline) {
+                    if (isOnline) {
                         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                         addUserTask.execute(user);
                         SaveFile s = new SaveFile(context, user);
-                    } else{
+                    } else {
                         SaveFile s = new SaveFile(context, user);
                         SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                         editor.putBoolean("hasBeenOffline", true);
                         editor.apply();
                     }
 
-                    if(current_time_checkbox.isChecked()) {
+                    if (current_time_checkbox.isChecked()) {
                         dateOfRecord = real_time();
+                    } else {
+                        dateOfRecord = new GregorianCalendar(set_year, set_month + 1, set_day, set_hour, set_minute);
                     }
-                    else {
-                        dateOfRecord = new GregorianCalendar(set_year, set_month+1, set_day, set_hour, set_minute);
-                     }
                     try {
-                        setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch);
+                        setMoodEvent(current_user, edit_mood_state, edit_social_situation, edit_trigger, imageForElasticSearch, currentLocation);
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "Failed to get the Mood state");
                     }
@@ -342,12 +365,11 @@ public class EditActivity extends CreateEditMoodActivity {
     }
 
 
-
     public void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
         try {
-            if (folder.exists()){
+            if (folder.exists()) {
                 folder.delete();
             }
             folder.createNewFile();
@@ -357,8 +379,7 @@ public class EditActivity extends CreateEditMoodActivity {
         if (Build.VERSION.SDK_INT >= 24) {
             imageFileUri = FileProvider.getUriForFile(EditActivity.this,
                     "com.example.mac.bugfree.fileprovider", folder);
-        }
-        else {
+        } else {
             imageFileUri = Uri.fromFile(folder);
         }
 
@@ -400,7 +421,7 @@ public class EditActivity extends CreateEditMoodActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_PHOTO:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     try {
                         Bitmap bitmap = BitmapFactory.
                                 decodeStream(getContentResolver().openInputStream(imageFileUri));
@@ -432,11 +453,11 @@ public class EditActivity extends CreateEditMoodActivity {
     private void handleImageOnKitKat(Intent data) {
         String imagePath = null;
         Uri uri = data.getData();
-        if (DocumentsContract.isDocumentUri(this,uri)) {
+        if (DocumentsContract.isDocumentUri(this, uri)) {
             String docId = DocumentsContract.getDocumentId(uri);
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
-                String selection = MediaStore.Images.Media._ID + "=" +id;
+                String selection = MediaStore.Images.Media._ID + "=" + id;
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
                 Uri contentUri = ContentUris.withAppendedId(Uri.
@@ -479,7 +500,8 @@ public class EditActivity extends CreateEditMoodActivity {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }
     }
-    private Bitmap getImage(MoodEvent moodEvent){
+
+    private Bitmap getImage(MoodEvent moodEvent) {
         String uniqueId = moodEvent.getPicId();
         ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
         getImageTask.execute(uniqueId);
@@ -496,10 +518,59 @@ public class EditActivity extends CreateEditMoodActivity {
     }
 
 
-    public void openAlbum(){
+    public void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
         startActivityForResult(intent, CHOOSE_PHOTO);
+    }
+
+    private void permissionLocationRequest() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (hasLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                if (!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    showMessageOKCancel("You need to allow access to Location",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                            REQUEST_CODE_ASK_PERMISSIONS);
+                                }
+                            });
+                }
+            }
+
+        }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(EditActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    public void add_location() {
+        if (currentLocationCheckbox.isChecked()) {
+            try {
+                CurrentLocation locationListener = new CurrentLocation();
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null) {
+                    int latitude = (int) (location.getLatitude() * 1E6);
+                    int longitude = (int) (location.getLongitude() * 1E6);
+                    currentLocation = new GeoPoint(latitude, longitude);
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        } else {
+            currentLocation = null;
+        }
+
     }
 
 }

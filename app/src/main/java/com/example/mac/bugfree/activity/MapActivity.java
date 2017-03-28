@@ -2,6 +2,7 @@ package com.example.mac.bugfree.activity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.Manifest;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,16 +39,23 @@ import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.LoadFile;
+
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+
+
+
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -56,6 +66,8 @@ public class MapActivity extends AppCompatActivity {
     GeoPoint currentPoint;
     GeoPoint startPoint;
     //private String currentUserName;
+    GeoPoint p;
+    GeoPoint loc;
 
     MyLocationNewOverlay myLocationOverlay = null;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
@@ -292,6 +304,23 @@ public class MapActivity extends AppCompatActivity {
         double distance = currentLocation.distanceTo(moodLocation);
         return distance/1000;
     }
+
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        int actionType = ev.getAction();
+//        switch (actionType) {
+//            case MotionEvent.ACTION_UP:
+//                Projection proj = mOpenMapView.getProjection();
+//                IGeoPoint loc = proj.fromPixels((int)ev.getX(), (int)ev.getY());
+//                String longitude = Double.toString(((double)loc.getLongitudeE6())/1E6);
+//                String latitude = Double.toString(((double)loc.getLatitudeE6())/1E6);
+//
+//                Toast toast = Toast.makeText(getApplicationContext(), "Longitude: "+ longitude +" Latitude: "+ latitude , Toast.LENGTH_LONG);
+//                toast.show();
+//
+//        }
+//        return super.dispatchTouchEvent(ev);
+//    }
 
 
 }

@@ -54,6 +54,40 @@ public class ElasticsearchImageController {
         }
     }
 
+
+    /**
+     * The function which add image to elastic search when create image offline
+     */
+    public static class AddImageOfflineTask extends AsyncTask<ImageForElasticSearch, Void, Void> {
+
+        @Override
+        protected Void doInBackground(ImageForElasticSearch... images) {
+            verifySettings();
+
+
+            for (ImageForElasticSearch image : images) {
+                Index index = new Index.Builder(image).index("cmput301w17t01").type("image").id(image.getUniqueId()).build();
+
+                try {
+                    // where is the client
+                    DocumentResult result = client.execute(index);
+                    if (result.isSucceeded()) {
+                    } else {
+                        Log.i("Error", "Elasticsearch was not able to add the image.");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "The application failed to build and send the image");
+                }
+
+            }
+            return null;
+        }
+    }
+
+
+
+
+
     /**
      * The function which delete image from elastic search
      */
