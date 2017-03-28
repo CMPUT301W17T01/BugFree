@@ -164,6 +164,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.usernameText.setText(moodEvent.getBelongsTo());
 
         if (moodEvent.getPicId() != null){
+            //TODO: set image
             Bitmap image = getImage(moodEvent);
             holder.picImage.setImageBitmap(image);
         } else {
@@ -208,6 +209,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     }
 
     private Bitmap getImage(MoodEvent moodEvent){
+        //TODO getimage
             String uniqueId = moodEvent.getPicId();
             ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
             getImageTask.execute(uniqueId);

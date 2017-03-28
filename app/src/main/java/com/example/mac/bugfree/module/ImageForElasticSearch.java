@@ -28,7 +28,7 @@ public class ImageForElasticSearch {
 
         return decodedByte;
     }
-
+//TODO
     public String getImageBase64() {
         return imageBase64;
     }

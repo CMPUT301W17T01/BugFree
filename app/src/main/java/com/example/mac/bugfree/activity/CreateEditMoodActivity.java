@@ -417,7 +417,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currentLocation);
         }
 
-
+//TODO: save to image file
         if (imageForElasticSearch != null) {
             String uniqueId = uploadImage(imageForElasticSearch);
             moodEvent.setPicId(uniqueId);
