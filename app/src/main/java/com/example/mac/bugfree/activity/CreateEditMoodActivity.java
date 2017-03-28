@@ -355,6 +355,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+        } else {
+            currentLocation = null;
         }
 
     }
