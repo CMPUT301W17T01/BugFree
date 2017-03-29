@@ -198,6 +198,23 @@
                     android:layout_weight="1.65" />
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/choose_location_on_map"
+                    android:text="Choose A Location On Map"
+                    android:layout_width="wrap_content"
+                    android:clickable="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="120dp"
+                    android:onClick="chooseLocation"
+                    android:layout_weight="1.65" />
+
+            </LinearLayout>
 
         <LinearLayout
             android:layout_marginTop="30dp"

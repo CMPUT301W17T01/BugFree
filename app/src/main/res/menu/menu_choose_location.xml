@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.mac.bugfree.activity.FilterActivity">
+
+    <item
+        android:id="@+id/activity_choose_location_on_map"
+        android:title="@string/activity_choose_location"
+        android:icon="@drawable/ic_tick"
+        app:showAsAction="always" />
+</menu>

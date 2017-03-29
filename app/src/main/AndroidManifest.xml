@@ -40,6 +40,8 @@
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.CreateEditMoodActivity" />
         <activity android:name=".activity.MapActivity" />
+        <activity android:name=".activity.ChooseLocationOnMapActivity" />
+
         <activity
             android:name=".activity.FilterActivity"
             android:label="@string/title_activity_filter">
