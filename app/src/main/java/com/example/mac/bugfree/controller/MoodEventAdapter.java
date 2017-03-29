@@ -209,6 +209,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     private Bitmap getImage(MoodEvent moodEvent){
             String uniqueId = moodEvent.getPicId();
+
             ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
             getImageTask.execute(uniqueId);
 
