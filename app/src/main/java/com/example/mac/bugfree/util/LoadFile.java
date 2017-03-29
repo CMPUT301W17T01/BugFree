@@ -20,8 +20,9 @@ import com.google.gson.reflect.TypeToken;
  * (Version 1.0 contains load file locally only, load from online function will be added later.)
  * To use this class,use the following steps:
  * (need to declare: [private UserList userList;] on top)
+ * 0. Context context = getApplicationContext();
  * 1. LoadFile load = new LoadFile();
- * 2. user = load.loadFile();
+ * 2. user = load.loadUser(context);
  *
  * @author Zhi Li
  * @version2.0

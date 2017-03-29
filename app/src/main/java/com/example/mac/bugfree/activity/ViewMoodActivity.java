@@ -22,6 +22,9 @@ import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -57,10 +60,22 @@ public class ViewMoodActivity extends AppCompatActivity  {
         TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date_text = (TextView) findViewById(R.id.date_textView);
+        TextView location_text =(TextView) findViewById(R.id.text4_location);
         ImageView picImage = (ImageView) findViewById(R.id.imageView);
         //image.setImageResource(R.drawable.picture_text);
 
+        Context context = getApplicationContext();
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
 
+        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (!isOnline && !currentUserName.equals("")){
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
 
         moodState.setText(moodEvent.getMoodState());
         if(moodEvent.getSocialSituation()!=null){
@@ -81,6 +96,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
             picImage.setImageBitmap(image);
         } else {
             picImage.setImageResource(R.drawable.picture_text);
+        }
+        if (moodEvent.getLocation()!=null){
+            location_text.setText(moodEvent.getLocation().toString());
         }
     }
 
@@ -107,6 +125,8 @@ public class ViewMoodActivity extends AppCompatActivity  {
                     editMoodEvent();
                     Intent intent = new Intent(ViewMoodActivity.this, EditActivity.class);
                     startActivity(intent);
+                    setResult(RESULT_OK);
+                    finish();
                     return true;
                 }
                 else{
@@ -145,31 +165,55 @@ public class ViewMoodActivity extends AppCompatActivity  {
 
 
     private void deleteMoodEvent() {
+
         User user = new User();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "").replace("\"", "");
 
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(currentUserName);
+        // When the moodEvent has been created, check for internet connection.
+        // If online, sync to Elastic search and save locally.
+        // If offline, save locally
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
 
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+        if(isOnline) {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(currentUserName);
+            try {
+                user = getUserTask.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else{
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
-        MoodEventList moodEventList = user.getMoodEventList();
 
+        MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
 
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user);
+        if(isOnline) {
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+            SaveFile s = new SaveFile(context, user);
+        } else{
+            SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
+
     }
 
     private void editMoodEvent() {
         User user = new User();
-
+        //TODO: use of user?
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "").replace("\"", "");
 

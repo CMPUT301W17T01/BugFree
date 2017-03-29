@@ -13,6 +13,8 @@ import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
@@ -77,17 +79,27 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
      */
     private void deleteMoodEvent() {
         User user = new User();
-
         SharedPreferences pref = context.getSharedPreferences("data", context.MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
 
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(currentUserName);
+        // When the moodEvent has been created, check for internet connection.
+        // If online, sync to Elastic search and save locally.
+        // If offline, save locally
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
 
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+        if(isOnline) {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(currentUserName);
+
+            try {
+                user = getUserTask.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else {
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -97,8 +109,13 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
 
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user);
+        if(isOnline) {
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+        }
+
+        SaveFile s = new SaveFile(context, user);
+
 
         if (fileExists(context, FILENAME2)) {
             ArrayList<MoodEvent> moodEventArrayList = moodEventList.transferMoodEventListToArray();

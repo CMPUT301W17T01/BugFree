@@ -63,6 +63,9 @@ import com.example.mac.bugfree.exception.MoodStateNotAvailableException;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.CurrentLocation;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
+import com.example.mac.bugfree.util.LoadFile;
+import com.example.mac.bugfree.util.SaveFile;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -235,7 +238,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                     permissionLocationRequest();
-
                 }
                 add_location();
             }
@@ -302,7 +304,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
 
                     try {
-                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch);
+                        setMoodEvent(current_user, mood_state, social_situation, reason, imageForElasticSearch,currentLocation);
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
@@ -372,19 +374,34 @@ public class CreateEditMoodActivity extends AppCompatActivity {
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
      */
-    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch)
+    public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch, GeoPoint currLocation)
             throws MoodStateNotAvailableException{
         User user = new User();
 
 
-        String query = current_user;
-        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-        getUserTask.execute(query);
 
-        try{
-            user = getUserTask.get();
-        } catch (Exception e) {
-            Log.i("Error", "Failed to get the User out of the async object");
+        // When the moodEvent has been created, check for internet connection.
+        // If online, sync to Elastic search and save locally.
+        // If offline, save locally
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+
+        if(isOnline) {
+            String query = current_user;
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(query);
+            try {
+                user = getUserTask.get();
+            } catch (Exception e) {
+                Log.i("Error", "Failed to get the User out of the async object");
+            }
+        } else{
+            LoadFile load = new LoadFile();
+            user = load.loadUser(context);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
         }
 
         MoodEvent moodEvent = new MoodEvent(mood_state, current_user);
@@ -397,8 +414,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
         // Test for the location
         //add_location();
-        if (currentLocation != null) {
-            moodEvent.setLocation(currentLocation);
+        if (currLocation != null) {
+            moodEvent.setLocation(currLocation);
         }
 
 
@@ -411,9 +428,17 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEventList.addMoodEvent(moodEvent);
 
 
+        if(isOnline) {
+            ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+            addUserTask.execute(user);
+            SaveFile s = new SaveFile(context, user);
+        } else{
+            SaveFile s = new SaveFile(context, user);
+            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+            editor.putBoolean("hasBeenOffline", true);
+            editor.apply();
+        }
 
-        ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-        addUserTask.execute(user);
     }
 
     /**

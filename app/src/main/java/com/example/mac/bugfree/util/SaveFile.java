@@ -18,7 +18,8 @@ import java.util.ArrayList;
  * (Version 1.0 contains store file locally only, upload function will be added later.)
  * To use this class,use the following steps:
  * (userList is the updated/created userList available to be stored)
- * 1. SaveFile s = new saveJsonFile(User user);
+ * 1. Context context = getApplicationContext();
+ * 1. SaveFile s = new SaveFile(context, user);
  * The file name is file.save.
  *
  * @author Zhi Li
