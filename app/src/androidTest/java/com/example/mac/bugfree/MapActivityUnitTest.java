@@ -28,11 +28,11 @@ public class MapActivityUnitTest extends ActivityInstrumentationTestCase2<MapAct
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testDistanceBetweenTwoPoint(){
-        solo.assertCurrentActivity("Wrong Activity", MapActivity.class);
-        GeoPoint gp = new GeoPoint();
-
-    }
+//    public void testDistanceBetweenTwoPoint(){
+//        solo.assertCurrentActivity("Wrong Activity", MapActivity.class);
+//        GeoPoint gp = new GeoPoint();
+//
+//    }
 
 
 

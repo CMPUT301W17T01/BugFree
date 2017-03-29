@@ -5,10 +5,14 @@ import android.util.Log;
 
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
+import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
+
+import java.util.ArrayList;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
@@ -23,42 +27,42 @@ import io.searchbox.core.Index;
 public class ElasticsearchImageController {
     private static JestDroidClient client;
 
-    /**
-     * The function which add image to elastic search
-     */
-    public static class AddImageTask extends AsyncTask<ImageForElasticSearch, Void, String> {
-
-        @Override
-        protected String doInBackground(ImageForElasticSearch... images) {
-            verifySettings();
-
-            String uniqueID = "";
-
-            for (ImageForElasticSearch image : images) {
-                Index index = new Index.Builder(image).index("cmput301w17t01").type("image").build();
-
-                try {
-                    // where is the client
-                    DocumentResult result = client.execute(index);
-                    if (result.isSucceeded()) {
-                        uniqueID = result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the image.");
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the image");
-                }
-
-            }
-            return uniqueID;
-        }
-    }
+//    /**
+//     * The function which add image to elastic search
+//     */
+//    public static class AddImageTask extends AsyncTask<ImageForElasticSearch, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(ImageForElasticSearch... images) {
+//            verifySettings();
+//
+//            String uniqueID = "";
+//
+//            for (ImageForElasticSearch image : images) {
+//                Index index = new Index.Builder(image).index("cmput301w17t01").type("image").build();
+//
+//                try {
+//                    // where is the client
+//                    DocumentResult result = client.execute(index);
+//                    if (result.isSucceeded()) {
+//                        uniqueID = result.getId();
+//                    } else {
+//                        Log.i("Error", "Elasticsearch was not able to add the image.");
+//                    }
+//                } catch (Exception e) {
+//                    Log.i("Error", "The application failed to build and send the image");
+//                }
+//
+//            }
+//            return uniqueID;
+//        }
+//    }
 
 
     /**
      * The function which add image to elastic search when create image offline
      */
-    public static class AddImageOfflineTask extends AsyncTask<ImageForElasticSearch, Void, Void> {
+    public static class AddImageTask extends AsyncTask<ImageForElasticSearch, Void, Void> {
 
         @Override
         protected Void doInBackground(ImageForElasticSearch... images) {
@@ -78,7 +82,6 @@ public class ElasticsearchImageController {
                 } catch (Exception e) {
                     Log.i("Error", "The application failed to build and send the image");
                 }
-
             }
             return null;
         }
@@ -145,4 +148,5 @@ public class ElasticsearchImageController {
             client = (JestDroidClient) factory.getObject();
         }
     }
+
 }
