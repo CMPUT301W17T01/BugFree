@@ -11,6 +11,7 @@ import android.util.Base64;
 public class ImageForElasticSearch {
 
     private String imageBase64;
+    private String uniqueId;
 
     public ImageForElasticSearch(String base64) {
         this.imageBase64 = base64;
@@ -37,4 +38,11 @@ public class ImageForElasticSearch {
         this.imageBase64 = imageBase64;
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 }

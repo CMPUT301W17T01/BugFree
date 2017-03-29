@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">BugFree</string>
+    <string name="app_name">uMood</string>
 
 
     <string name="title_activity_filter">Filter Mood</string>
 
     <string name="activity_filter">Filter</string>
+    <string name="activity_choose_location">Choose Your Location</string>
+
     <string name="activity_map">Map</string>
     <string name="emotional_state_my">My Emotional State</string>
     <string name="emotional_state_fo">Others Emotional State</string>

@@ -7,7 +7,6 @@ import com.example.mac.bugfree.activity.MainActivity;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
-import com.example.mac.bugfree.util.DeleteFile;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.util.SaveFile;
 
@@ -25,7 +24,6 @@ public class SaveLoadFileTest extends ActivityInstrumentationTestCase2 {
     private User usr = new User("haha");
     private LoadFile load;
     private SaveFile save;
-    private DeleteFile delete;
 
     public SaveLoadFileTest() {
         super(MainActivity.class);

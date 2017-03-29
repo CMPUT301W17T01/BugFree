@@ -51,8 +51,8 @@ public class FriendActivity extends AppCompatActivity {
     private ListView followerListView;
     private ListView notificationListView;
 
-    private String currentUserName;
-    private User user = new User();
+    public String currentUserName;
+    public User user = new User();
 
     public ListView getNotificationList(){
         return notificationListView;
