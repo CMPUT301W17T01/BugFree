@@ -421,9 +421,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
         if (imageForElasticSearch != null) {
-
-            String uniqueId = uploadImage(imageForElasticSearch);
-            moodEvent.setPicId(uniqueId);
+            String uniqueID = realT.getTime().toString().replaceAll("\\s", "") + current_user;
+            moodEvent.setPicId(uniqueID);
+            uploadImage(imageForElasticSearch, uniqueID);
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -676,20 +676,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .show();
     }
 
-//    private String uploadImage (ImageForElasticSearch ifes){
-//        String uniqueID = null;
-//
-//        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
-//        addImageTask.execute(ifes);
-//        try {
-//            uniqueID = addImageTask.get();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return uniqueID;
-//
-//    }
+    private void uploadImage (ImageForElasticSearch ifes, String uniqueId){
+        ifes.setUniqueId(uniqueId);
+
+        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+        addImageTask.execute(ifes);
+    }
 
 }
 
