@@ -110,8 +110,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private ImageForElasticSearch imageForElasticSearch = null;
 
 
-
-
     /**
      * onCreate begins from here
      * set the spinners, pickers and EditText, store them whenever changed
@@ -682,6 +680,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
         addImageTask.execute(ifes);
     }
+
+    public void chooseLocation(View v) {
+        Intent aa = new Intent(CreateEditMoodActivity.this,ChooseLocationOnMapActivity.class);
+        startActivity(aa);
+    }
+
+
 
 }
 
