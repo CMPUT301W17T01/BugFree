@@ -46,18 +46,22 @@ public class ElasticsearchImageControllerTest {
 
         MoodEventList moodEventList = user.getMoodEventList();
         GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
-        String uniqueID = null;
+        String dateString = dateOfRecord.getTime().toString().replaceAll("\\s", "");
+        Log.i("Test", dateString+user.getUsr());
+        String uniqueID = dateString+user.getUsr();
+
         try {
             MoodEvent moodEvent = new MoodEvent("Happy", user.getUsr());
             moodEvent.setRealtime(dateOfRecord);
             moodEvent.setDateOfRecord(dateOfRecord);
+            moodEvent.setPicId(uniqueID);
+
 
             ImageForElasticSearch image = new ImageForElasticSearch("DSIjsdjgfrsiIHNUI798JNJKBIYGIUJNKLNIOU98789JKNKJBKJBNJNN");
+            image.setUniqueId(uniqueID);
             ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
             addImageTask.execute(image);
-            uniqueID = addImageTask.get();
 
-            moodEvent.setPicId(uniqueID);
             moodEventList.addMoodEvent(moodEvent);
 
             user.setMoodEventList(moodEventList);

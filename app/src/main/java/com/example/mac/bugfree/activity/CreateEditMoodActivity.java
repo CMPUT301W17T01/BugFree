@@ -409,7 +409,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setSocialSituation(social_situation);
         moodEvent.setTriggerText(reason);
 
-        moodEvent.setRealtime(real_time());
+        GregorianCalendar realT = real_time();
+        moodEvent.setRealtime(realT);
         moodEvent.setDateOfRecord(dateOfRecord);
 
         // Test for the location
@@ -420,6 +421,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
 
         if (imageForElasticSearch != null) {
+
             String uniqueId = uploadImage(imageForElasticSearch);
             moodEvent.setPicId(uniqueId);
         }
@@ -674,20 +676,20 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .show();
     }
 
-    private String uploadImage (ImageForElasticSearch ifes){
-        String uniqueID = null;
-
-        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
-        addImageTask.execute(ifes);
-        try {
-            uniqueID = addImageTask.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return uniqueID;
-
-    }
+//    private String uploadImage (ImageForElasticSearch ifes){
+//        String uniqueID = null;
+//
+//        ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+//        addImageTask.execute(ifes);
+//        try {
+//            uniqueID = addImageTask.get();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return uniqueID;
+//
+//    }
 
 }
 
