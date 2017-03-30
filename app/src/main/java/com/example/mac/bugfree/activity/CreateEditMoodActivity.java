@@ -225,7 +225,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 simpleDatePicker.setEnabled(!current_time_checkbox.isChecked());
-                simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
+                if(Build.VERSION.SDK_INT>=23)
+                    simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
             }
         });
 
@@ -259,6 +260,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 set_hour = simpleTimePicker.getHour();
                 set_minute = simpleTimePicker.getMinute();
+
             }
         });
         
@@ -305,7 +307,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
-
 
                     setResult(RESULT_OK);
                     finish();

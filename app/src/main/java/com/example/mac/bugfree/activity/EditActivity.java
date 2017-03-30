@@ -181,7 +181,8 @@ public class EditActivity extends CreateEditMoodActivity {
             @Override
             public void onClick(View v) {
                 simpleDatePicker.setEnabled(!current_time_checkbox.isChecked());
-                simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
+                if(Build.VERSION.SDK_INT>=23)
+                    simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
             }
         });
 
