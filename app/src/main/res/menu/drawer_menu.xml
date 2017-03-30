@@ -11,6 +11,11 @@
             android:icon="@drawable/drawer_friends"
             android:title="Friends" />
 
+        <item
+            android:id="@+id/drawer_block"
+            android:icon="@drawable/drawer_friends"
+            android:title="Block List" />
+
     </group>
 
     <item android:title="System">
