@@ -28,6 +28,7 @@ import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 
 /**
@@ -206,6 +207,22 @@ public class ViewMoodActivity extends AppCompatActivity  {
         MoodEventList moodEventList = user.getMoodEventList();
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
+
+        if (moodEvent.getPicId() != null) {
+            if (isOnline) {
+                ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                        new ElasticsearchImageController.DeleteImageTask();
+                deleteImageTask.execute(moodEvent.getPicId());
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            } else {
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            }
+            File file = context.getFileStreamPath(moodEvent.getPicId());
+            file.delete();
+
+        }
 
         if(isOnline) {
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();

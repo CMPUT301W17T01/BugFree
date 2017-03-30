@@ -315,8 +315,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        userOfflineUpdate();
-        SystemClock.sleep(1000);
+//        userOfflineUpdate();
+//        SystemClock.sleep(1000);
         // specify an adapter
         RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
@@ -438,8 +438,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        userOfflineUpdate();
-        SystemClock.sleep(1000);
+//        userOfflineUpdate();
+//        SystemClock.sleep(1000);
         // specify an adapter
         RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
