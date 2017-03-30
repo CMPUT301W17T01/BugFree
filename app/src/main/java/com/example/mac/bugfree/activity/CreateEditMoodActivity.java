@@ -54,6 +54,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
@@ -415,8 +416,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 //TODO: save to image file
         if (imageForElasticSearch != null) {
             String uniqueID = realT.getTime().toString().replaceAll("\\s", "") + current_user;
+            uniqueID = uniqueID.replaceAll(":","");
+            String OriginID = moodEvent.getPicId();
             moodEvent.setPicId(uniqueID);
-            uploadImage(imageForElasticSearch, uniqueID);
+            if (isOnline){
+                uploadImage(imageForElasticSearch, uniqueID);
+            }else {
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,OriginID);
+            }
         }
 
         MoodEventList moodEventList = user.getMoodEventList();

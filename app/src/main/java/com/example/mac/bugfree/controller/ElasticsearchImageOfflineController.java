@@ -34,9 +34,11 @@ public class ElasticsearchImageOfflineController {
     private String base64str;
     private ArrayList<String> imageList;
 
+
     public void AddImageTask (Context context,String imageBase64, String base64Id,String OriginId){
 //        if (OriginId!=null) {
 //            boolean contains =
+//        LoadFile load = new LoadFile();
         updateOfflineArrayList(context, "update", base64Id, OriginId);
 //        }else{
 //            updateOfflineArrayList(context, "update",base64Id,OriginId);
@@ -52,6 +54,8 @@ public class ElasticsearchImageOfflineController {
      */
     public void DeleteImageTask(Context context,String imageId){
         updateOfflineArrayList(context, "delete", null, imageId);
+//        LoadFile load = new LoadFile();
+//        User user = load.loadUser(context);
 
 //        saveBase64(context,imageBase64, base64Id);
     }
@@ -63,7 +67,7 @@ public class ElasticsearchImageOfflineController {
      *
      *  This method is for newly signed in user, it creates all the empty file for offline function for image
      *  This image offline function is for the current user's image only.
-     *  Only being called once after valid signin.
+     *  Being called once after valid signin and at online.
      *  There are three files to be created:
      *  1. image.sav (file stores a dictionary contains image unique id and the image base64 String,
      *                  both already exist in elastic search and image need to be upload to/delete from ElasticSearch.)

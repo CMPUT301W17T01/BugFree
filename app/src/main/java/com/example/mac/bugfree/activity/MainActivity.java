@@ -483,6 +483,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Clear the local upload,delete,online lists
                     elasticsearchImageOfflineController.prepImageOffline(context,user);
+
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read local file.");
                 }

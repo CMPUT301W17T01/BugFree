@@ -41,6 +41,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
@@ -312,9 +313,14 @@ public class EditActivity extends CreateEditMoodActivity {
                     //TODO: delete offline
                     //if online/offline
                     if (edit_mood_event.getPicId() != null) {
-                        ElasticsearchImageController.DeleteImageTask deleteImageTask =
-                                new ElasticsearchImageController.DeleteImageTask();
-                        deleteImageTask.execute(edit_mood_event.getPicId());
+                        if (isOnline) {
+                            ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                                    new ElasticsearchImageController.DeleteImageTask();
+                            deleteImageTask.execute(edit_mood_event.getPicId());
+                        } else {
+                            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                            elasticsearchImageOfflineController.DeleteImageTask(context,edit_mood_event.getPicId());
+                        }
                     }
                     user.setMoodEventList(moodEventList);
 
@@ -506,15 +512,27 @@ public class EditActivity extends CreateEditMoodActivity {
 
     private Bitmap getImage(MoodEvent moodEvent) {
         String uniqueId = moodEvent.getPicId();
-        ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
-        getImageTask.execute(uniqueId);
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        current_user = pref.getString("currentUser", "");
 
-        //imageForElasticSearch = new ImageForElasticSearch();
 
-        try {
-            imageForElasticSearch = getImageTask.get();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (isOnline) {
+            ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
+            getImageTask.execute(uniqueId);
+
+            //imageForElasticSearch = new ImageForElasticSearch();
+
+            try {
+                imageForElasticSearch = getImageTask.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (uniqueId!=null){
+            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+            imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
         }
 
         return imageForElasticSearch.base64ToImage();
