@@ -305,22 +305,6 @@ public class MapActivity extends AppCompatActivity {
         return distance/1000;
     }
 
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        int actionType = ev.getAction();
-//        switch (actionType) {
-//            case MotionEvent.ACTION_UP:
-//                Projection proj = mOpenMapView.getProjection();
-//                IGeoPoint loc = proj.fromPixels((int)ev.getX(), (int)ev.getY());
-//                String longitude = Double.toString(((double)loc.getLongitudeE6())/1E6);
-//                String latitude = Double.toString(((double)loc.getLatitudeE6())/1E6);
-//
-//                Toast toast = Toast.makeText(getApplicationContext(), "Longitude: "+ longitude +" Latitude: "+ latitude , Toast.LENGTH_LONG);
-//                toast.show();
-//
-//        }
-//        return super.dispatchTouchEvent(ev);
-//    }
 
 
 }
