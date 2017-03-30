@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
@@ -56,6 +57,9 @@ public class SignInActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_signin);
         setSupportActionBar(toolbar);
+
+        ImageView imageView = (ImageView) findViewById(R.id.title_image);
+        imageView.setImageResource(R.drawable.umood);
 
         Button signInButton = (Button) findViewById(R.id.login_button);
         loginText = (EditText) findViewById(R.id.login_edit);
