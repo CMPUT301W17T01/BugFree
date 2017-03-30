@@ -85,14 +85,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp" />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/ic_like_button"
-            android:id="@+id/likeButton"
-            android:layout_marginLeft="120dp"
-            android:background="@mipmap/ic_like_button" />
-
     </LinearLayout>
     </LinearLayout>
 

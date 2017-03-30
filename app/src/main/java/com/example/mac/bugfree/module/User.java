@@ -19,6 +19,7 @@ public class User {
     private ArrayList<String> followeeIDs = new ArrayList<>();
     private ArrayList<String> followerIDs = new ArrayList<>();
     private ArrayList<String> pendingPermissions = new ArrayList<>();
+    private ArrayList<String> blockIDs = new ArrayList<>();
     private MoodEventList moodEventList= new MoodEventList();
 
 
@@ -107,6 +108,10 @@ public class User {
      */
     public void setPendingPermissions(ArrayList<String> pendingPermissions) {
         this.pendingPermissions = pendingPermissions;
+    }
+
+    public ArrayList<String> getBlockList() {
+        return blockIDs;
     }
 
 
