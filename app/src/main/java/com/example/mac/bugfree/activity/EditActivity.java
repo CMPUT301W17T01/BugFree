@@ -317,10 +317,15 @@ public class EditActivity extends CreateEditMoodActivity {
                             ElasticsearchImageController.DeleteImageTask deleteImageTask =
                                     new ElasticsearchImageController.DeleteImageTask();
                             deleteImageTask.execute(edit_mood_event.getPicId());
+                            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                            elasticsearchImageOfflineController.DeleteImageTask(context,edit_mood_event.getPicId());
                         } else {
                             ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
                             elasticsearchImageOfflineController.DeleteImageTask(context,edit_mood_event.getPicId());
                         }
+                        File file = context.getFileStreamPath(edit_mood_event.getPicId());
+                        file.delete();
+
                     }
                     user.setMoodEventList(moodEventList);
 

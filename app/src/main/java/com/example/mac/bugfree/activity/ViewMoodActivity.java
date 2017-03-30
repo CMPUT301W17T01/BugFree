@@ -93,11 +93,14 @@ public class ViewMoodActivity extends AppCompatActivity  {
         date_text.setText(time);
 
         if (moodEvent.getPicId() != null){
+            try{
             if(isOnline ||currentUserName.equals(moodEvent.getBelongsTo())) {
                 Bitmap image = getImage(moodEvent);
                 picImage.setImageBitmap(image);
             }else if(!isOnline){
                 picImage.setImageResource(R.drawable.picture_text);
+            }}catch(Exception e){
+                Log.i("bitmap_error","null");
             }
         } else {
             picImage.setImageResource(R.drawable.picture_text);

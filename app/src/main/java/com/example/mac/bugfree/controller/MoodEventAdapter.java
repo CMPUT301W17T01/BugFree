@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     private String currentUser = "";
     private Context context;
     private boolean isOnline;
+
     /**
      * The type View holder.
      * Provide a reference to the views for each data item
@@ -101,9 +103,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
      * @param moodEventArrayList the mood event array list
      * @param currentUser        the current user
      */
-    public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser) {
+    public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser,Context context) {
         this.mmoodEventArrayList = moodEventArrayList;
         this.currentUser = currentUser;
+        this.context = context;
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        isOnline = checker.isOnline(context);
     }
 
 
@@ -135,12 +140,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 editor.putString("moodevent",json);
                 editor.putString("currentUser",json1);
                 editor.apply();
-
-                Intent intent = new Intent(v.getContext(), ViewMoodActivity.class);
-                v.getContext().startActivity(intent);
-                context = v.getContext();
                 InternetConnectionChecker checker = new InternetConnectionChecker();
                 isOnline = checker.isOnline(context);
+                Intent intent = new Intent(v.getContext(), ViewMoodActivity.class);
+                v.getContext().startActivity(intent);
+//                context = v.getContext();
+
             }
         });
 
@@ -170,9 +175,15 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
         if (moodEvent.getPicId() != null){
             //TODO: set image
+
+            Log.i("pic id is not null",moodEvent.getPicId());
             if(isOnline ||currentUser.equals(moodEvent.getBelongsTo())) {
-                Bitmap image = getImage(moodEvent);
-                holder.picImage.setImageBitmap(image);
+                try {
+                    Bitmap image = getImage(moodEvent);
+                    holder.picImage.setImageBitmap(image);
+                } catch(Exception e){
+                    Log.i("bitmap_error","null");
+                }
             } else if(!isOnline){
                 holder.picImage.setImageResource(R.drawable.picture_text);
             }

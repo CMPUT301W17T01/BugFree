@@ -421,6 +421,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setPicId(uniqueID);
             if (isOnline){
                 uploadImage(imageForElasticSearch, uniqueID);
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,OriginID);
             }else {
                 ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
                 elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,OriginID);

@@ -161,6 +161,12 @@ public class MainActivity extends AppCompatActivity {
                         File file = context.getFileStreamPath(FILENAME);
                         file.delete();
 
+                        ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                        ArrayList<String> onlineList = elasticsearchImageOfflineController.loadImageList(context,"online");
+                        for(String id:onlineList){
+                            file = context.getFileStreamPath(id);
+                            file.delete();
+                        }
                         // change to SignInActivity
                         intent = new Intent(MainActivity.this, SignInActivity.class);
                         startActivity(intent);
@@ -309,8 +315,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        userOfflineUpdate();
+        SystemClock.sleep(1000);
         // specify an adapter
-        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
+        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -430,8 +438,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        userOfflineUpdate();
+        SystemClock.sleep(1000);
         // specify an adapter
-        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
+        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -475,10 +485,12 @@ public class MainActivity extends AppCompatActivity {
                         String base64 = elasticsearchImageOfflineController.loadBase64(context, Id);
                         ImageForElasticSearch ifes = new ImageForElasticSearch(base64,Id);
                         addImageTask.execute(ifes);
+                        SystemClock.sleep(500);
                     }
                     ArrayList<String> deleteList = elasticsearchImageOfflineController.loadImageList(context,"delete");
                     for (String Id :deleteList){
                         deleteImageTask.execute(Id);
+                        SystemClock.sleep(1000);
                     }
 
                     //Clear the local upload,delete,online lists
