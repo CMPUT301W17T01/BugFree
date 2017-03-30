@@ -18,6 +18,7 @@ import com.example.mac.bugfree.activity.ViewMoodActivity;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -33,7 +34,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     private MoodEventList mmoodEventArrayList = new MoodEventList();
     private String currentUser = "";
-
+    private Context context;
+    private boolean isOnline;
     /**
      * The type View holder.
      * Provide a reference to the views for each data item
@@ -136,6 +138,9 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
                 Intent intent = new Intent(v.getContext(), ViewMoodActivity.class);
                 v.getContext().startActivity(intent);
+                context = v.getContext();
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                isOnline = checker.isOnline(context);
             }
         });
 
@@ -165,8 +170,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
         if (moodEvent.getPicId() != null){
             //TODO: set image
-            Bitmap image = getImage(moodEvent);
-            holder.picImage.setImageBitmap(image);
+            if(isOnline ||currentUser.equals(moodEvent.getBelongsTo())) {
+                Bitmap image = getImage(moodEvent);
+                holder.picImage.setImageBitmap(image);
+            } else if(!isOnline){
+                holder.picImage.setImageResource(R.drawable.picture_text);
+            }
         } else {
             holder.picImage.setImageResource(R.drawable.picture_text);
         }
@@ -209,20 +218,23 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     }
 
     private Bitmap getImage(MoodEvent moodEvent){
-        //TODO getimage
-            String uniqueId = moodEvent.getPicId();
+        ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+        String uniqueId = moodEvent.getPicId();
 
+        if (isOnline) {
             ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
             getImageTask.execute(uniqueId);
-
-            ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
 
             try {
                 imageForElasticSearch = getImageTask.get();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (currentUser.equals(moodEvent.getBelongsTo())){
+            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+            imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+        }
 
-            return imageForElasticSearch.base64ToImage();
+        return imageForElasticSearch.base64ToImage();
     }
 }
