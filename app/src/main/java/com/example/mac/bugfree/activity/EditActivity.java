@@ -309,6 +309,8 @@ public class EditActivity extends CreateEditMoodActivity {
                     MoodEventList moodEventList = user.getMoodEventList();
                     moodEventList.deleteMoodEvent(edit_mood_event);
 
+                    //TODO: delete offline
+                    //if online/offline
                     if (edit_mood_event.getPicId() != null) {
                         ElasticsearchImageController.DeleteImageTask deleteImageTask =
                                 new ElasticsearchImageController.DeleteImageTask();

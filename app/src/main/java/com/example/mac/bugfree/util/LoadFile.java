@@ -35,15 +35,11 @@ public class LoadFile{
     private static final String FILENAME = "file.sav";
     private static final String FILENAME2 = "filter.sav";
 //    private static final String IMAGEFILENAME = "image.sav";
-    private static final String IMAGEONLINE = "ImageUploadList.sav";
-    private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
-    private static final String IMAGEDELETELIST = "ImageDeleteList.sav";
+
 
 
 
     private User user;
-    private String base64str;
-    private ArrayList<String> imageList;
 
     /**
      * Instantiates a new Load file.
@@ -104,57 +100,4 @@ public class LoadFile{
     }
 
 
-    public String loadBase64(Context context,String fileName){
-        try {
-            FileInputStream fis = context.openFileInput(fileName);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            Type type = new TypeToken<String>(){}.getType();
-            base64str = gson.fromJson(in, type); // deserializes json into Map
-            fis.close();
-            return base64str;
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (NullPointerException e) {
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * Receives parameter of current context and the mode of loading, to load the online arraylist,
-     * use "online",to load the upload list, use "upload", if want to have delete list, use "delete"
-     * @param context
-     * @param mode
-     * @return
-     */
-    public ArrayList<String> loadImageList(Context context,String mode){
-        try {
-            String filename;
-            if (mode.equals("upload")){
-                filename = IMAGEUPLOADLIST;
-            } else if (mode.equals("delete")){
-                filename = IMAGEDELETELIST;
-            } else if (mode.equals("online")){
-                filename = IMAGEONLINE;
-            } else{
-                return null;
-            }
-
-            FileInputStream fis = context.openFileInput(filename);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<String>>(){}.getType();
-            imageList = gson.fromJson(in, type); // deserializes json into ArrayList<String>
-            fis.close();
-            return imageList;
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (NullPointerException e) {
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
