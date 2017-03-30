@@ -140,6 +140,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                         break;
 
+                    case R.id.drawer_block:
+                        if (isOnline) {
+                            intent  = new Intent(MainActivity.this, BlockListActivity.class);
+                            startActivity(intent);
+                        }
+
+                        break;
+
                     case R.id.drawer_sign_out:
                         // current user will be removed
                         SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
@@ -242,6 +250,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "This Device is offline", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case R.id.add_block:
+                
 
             default:
         }
