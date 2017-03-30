@@ -158,7 +158,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             }
         });
 
-
+        pic_preview.setImageResource(R.drawable.umood);
         adapter1 = ArrayAdapter.createFromResource(this,R.array.mood_states_array,android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mood_state_spinner.setAdapter(adapter1);

@@ -95,7 +95,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
             Bitmap image = getImage(moodEvent);
             picImage.setImageBitmap(image);
         } else {
-            picImage.setImageResource(R.drawable.picture_text);
+            picImage.setImageResource(R.drawable.umood);
         }
         if (moodEvent.getLocation()!=null){
             location_text.setText(moodEvent.getLocation().toString());
