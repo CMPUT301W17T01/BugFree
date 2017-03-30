@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
@@ -41,6 +42,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_signup);
         setSupportActionBar(toolbar);
+
+        ImageView imageView = (ImageView) findViewById(R.id.title_image);
+        imageView.setImageResource(R.drawable.umood);
 
         Button signUpButton = (Button) findViewById(R.id.signup_button);
         signUpText = (EditText) findViewById(R.id.signup_edit);
