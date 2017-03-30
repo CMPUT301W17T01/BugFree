@@ -100,7 +100,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private String test;
     private EditText create_edit_reason;
     private ImageView pic_preview, home_tab, earth_tab;
-    private Spinner mood_state_spinner, social_situation_spinner;
     private CheckBox current_time_checkbox, currentLocationCheckbox;
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
@@ -126,8 +125,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         home_tab = (ImageView) findViewById(R.id.home_tab_add);
         earth_tab = (ImageView) findViewById(R.id.earth_tab_add);
-        social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
-        mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
+        Spinner social_situation_spinner= (Spinner)findViewById(R.id.social_situation);
+        Spinner mood_state_spinner= (Spinner)findViewById(R.id.mood_state_spinner);
         pic_preview = (ImageView)findViewById(R.id.pic_preview);
         current_time_checkbox = (CheckBox)findViewById(R.id.current_time);
         simpleDatePicker = (DatePicker)findViewById(R.id.datePicker);
@@ -226,7 +225,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 simpleDatePicker.setEnabled(!current_time_checkbox.isChecked());
-                simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
+                if(Build.VERSION.SDK_INT>=23)
+                    simpleTimePicker.setEnabled(!current_time_checkbox.isChecked());
             }
         });
 
@@ -260,6 +260,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 set_hour = simpleTimePicker.getHour();
                 set_minute = simpleTimePicker.getMinute();
+
             }
         });
         
@@ -306,7 +307,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     } catch (MoodStateNotAvailableException e) {
                         Log.i("Error", "(MoodState is Not Available");
                     }
-
 
                     setResult(RESULT_OK);
                     finish();
@@ -365,9 +365,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * pass the data in
-     * @param current_user
-     * @param mood_state
-     * @param social_situation
      * @param reason
      * set the mood event and push it to online server
      * @throws MoodStateNotAvailableException
@@ -375,8 +372,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch, GeoPoint currLocation)
             throws MoodStateNotAvailableException{
         User user = new User();
-
-
 
         // When the moodEvent has been created, check for internet connection.
         // If online, sync to Elastic search and save locally.
