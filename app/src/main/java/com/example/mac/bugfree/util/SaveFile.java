@@ -35,8 +35,8 @@ public class SaveFile{
     private static final String FILENAME = "file.sav";
 //    private static final String IMAGEFILENAME = "image.sav";
 //    private static final String IMAGEONLINE = "ImageOnlineList.sav";
-    private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
-    private static final String IMAGEDELETELIST = "ImageDeleteList.sav";
+//    private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
+//    private static final String IMAGEDELETELIST = "ImageDeleteList.sav";
 
     private String base64str;
     private ArrayList<String> imageList;

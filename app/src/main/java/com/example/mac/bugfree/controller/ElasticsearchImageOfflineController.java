@@ -3,6 +3,7 @@ package com.example.mac.bugfree.controller;
 import android.content.Context;
 
 import com.example.mac.bugfree.module.ImageForElasticSearch;
+import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.LoadFile;
@@ -19,27 +20,44 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Zhi Li on 2017/3/30.
  */
 
 public class ElasticsearchImageOfflineController {
-    private static final String IMAGEONLINE = "ImageUploadList.sav";
+    private static final String IMAGEONLINE = "ImageOnlineList.sav";
     private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
     private static final String IMAGEDELETELIST = "ImageDeleteList.sav";
     private User user;
     private String base64str;
     private ArrayList<String> imageList;
 
-    public void AddImageTask (){
-
+    public void AddImageTask (Context context,String imageBase64, String base64Id,String OriginId){
+//        if (OriginId!=null) {
+//            boolean contains =
+        updateOfflineArrayList(context, "update", base64Id, OriginId);
+//        }else{
+//            updateOfflineArrayList(context, "update",base64Id,OriginId);
+//        }
+        saveBase64(context,imageBase64, base64Id);
+//        if(contains)
     }
-    public void DeleteImageTask(){
-        
-    }
-    public void GetImageTask (){
 
+    /**
+     * Add the image to be deleted to the array list, need to delete the local file in the activity.
+     * @param context
+     * @param imageId
+     */
+    public void DeleteImageTask(Context context,String imageId){
+        updateOfflineArrayList(context, "delete", null, imageId);
+
+//        saveBase64(context,imageBase64, base64Id);
+    }
+    public ImageForElasticSearch GetImageTask (Context context,String imageId){
+        String base64 = loadBase64(context, imageId);
+        return new ImageForElasticSearch(base64,imageId);
     }
     /**
      *
@@ -71,15 +89,15 @@ public class ElasticsearchImageOfflineController {
 //                fos.close();
 
             // Arraylist, [strings of [image unique id]]] already in ElasticSearch
-//            FileOutputStream fos0 = context.openFileOutput(IMAGEONLINE, Context.MODE_PRIVATE);
-//            BufferedWriter out0= new BufferedWriter(new OutputStreamWriter(fos0));
+            FileOutputStream fos0 = context.openFileOutput(IMAGEONLINE, Context.MODE_PRIVATE);
+            BufferedWriter out0= new BufferedWriter(new OutputStreamWriter(fos0));
 
-//            ArrayList<String> alreadyUp = new ArrayList<String>();
+            ArrayList<String> alreadyUp = new ArrayList<String>();
             MoodEventList MEL = user.getMoodEventList();
             for (int i = 0; i < MEL.getCount(); i++ ){
                 String s = MEL.getMoodEvent(i).getPicId();
                 if (s!=null) {
-//                    alreadyUp.add(s);
+                    alreadyUp.add(s);
                     ElasticsearchImageController.GetImageTask  getImageTask = new ElasticsearchImageController.GetImageTask();
                     getImageTask.execute(s);
                     ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
@@ -92,43 +110,11 @@ public class ElasticsearchImageOfflineController {
                     }
                 }
             }
-//
-////
-////            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
-////            getUserTask.execute(currentUserName);
-////            User get = new User();
-////
-////            try {
-////                get = getUserTask.get();
-////            } catch (Exception e) {
-////                e.printStackTrace();
-////            }
-//
-//            ArrayList<String> picIdList = new ArrayList<>();
-//            MoodEventList moodEventList = user.getMoodEventList();
-//            for (MoodEvent moodEvent : moodEventList) {
-//                if (moodEvent.getPicId() != null){
-//                    picIdList.add(moodEvent.getPicId());
-//
-//                    ElasticsearchImageController.GetImageTask  getImageTask = new ElasticsearchImageController.GetImageTask();
-//                    getImageTask.execute(moodEvent.getPicId());
-//                    ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
-//                    try {
-//                        imageForElasticSearch = getImageTask.get();
-//                        String base64 = imageForElasticSearch.getImageBase64();
-//                        saveBase64(context, base64,s);;  // filename = moodevent.getId()
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
 
-
-
-//            Gson gson0 = new Gson();
-//            gson0.toJson(alreadyUp, out0);
-//            out0.flush();
-//            fos0.close();
+            Gson gson0 = new Gson();
+            gson0.toJson(alreadyUp, out0);
+            out0.flush();
+            fos0.close();
 
             // Arraylist, [strings of [image unique id]]] to be uploaded to the ElasticSearch
             FileOutputStream fos1 = context.openFileOutput(IMAGEUPLOADLIST, Context.MODE_PRIVATE);
@@ -181,30 +167,48 @@ public class ElasticsearchImageOfflineController {
     /**
      * Load the origin list and add/delete the ids in the array list appropriately
      * @param context
-     * @param mode
+//     * @param mode
      * @param imageIdToBeSave
      * @param imageIdToBeDelete
      */
-    public void updateOfflineArrayList(Context context, String mode, String imageIdToBeSave, String imageIdToBeDelete){
+    public boolean updateOfflineArrayList(Context context, String mode, String imageIdToBeSave, String imageIdToBeDelete){
         try {
 //            LoadFile load = new LoadFile();
-            imageList = loadImageList(context, mode);
-
+            ArrayList<String> updateList = loadImageList(context, "upload");
+            ArrayList<String> deleteList = loadImageList(context, "delete");
+            ArrayList<String> onlineList = loadImageList(context, "online");
+            boolean contains = Arrays.asList(onlineList).contains(imageIdToBeDelete);
             // Change accordingly
-            if (imageIdToBeDelete!= null) {
-                imageList.remove(imageIdToBeDelete);
-            }
-            if (imageIdToBeDelete!= null) {
-                imageList.add(imageIdToBeSave);
+            if (mode.equals("update")) {
+                if(imageIdToBeDelete != null && contains) {
+                    deleteList.add(imageIdToBeDelete);
+                }
+                updateList.add(imageIdToBeSave);
+            }else if (mode.equals("delete")) {
+                updateList.remove(imageIdToBeDelete);
+                if(contains) {
+                    deleteList.add(imageIdToBeDelete);
+                }
             }
 
             FileOutputStream fos = context.openFileOutput(IMAGEUPLOADLIST, Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
             Gson gson = new Gson();
-            gson.toJson(imageList, out);
+            gson.toJson(updateList, out);
             out.flush();
             fos.close();
+
+            FileOutputStream fos1 = context.openFileOutput(IMAGEDELETELIST, Context.MODE_PRIVATE);
+            BufferedWriter out1 = new BufferedWriter(new OutputStreamWriter(fos1));
+            Gson gson1 = new Gson();
+            gson1.toJson(deleteList, out1);
+            out1.flush();
+            fos.close();
+            if (contains ){
+                return true;
+            } else {
+                return false;
+            }
         } catch (FileNotFoundException e) {
             throw new RuntimeException();
         } catch (IOException e) {
@@ -245,9 +249,9 @@ public class ElasticsearchImageOfflineController {
             } else if (mode.equals("delete")){
                 filename = IMAGEDELETELIST;
             }
-//            else if (mode.equals("online")){
-//                filename = IMAGEONLINE;
-//            }
+            else if (mode.equals("online")){
+                filename = IMAGEONLINE;
+            }
             else{
                 return null;
             }

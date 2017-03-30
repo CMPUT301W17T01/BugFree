@@ -32,8 +32,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.module.MoodEvent;
@@ -460,6 +463,26 @@ public class MainActivity extends AppCompatActivity {
                         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                         addUserTask.execute(user);
                     }
+
+                    // Upload the newly created images and Delete the old base64 online
+                    ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+
+                    ElasticsearchImageController.AddImageTask addImageTask = new ElasticsearchImageController.AddImageTask();
+                    ElasticsearchImageController.DeleteImageTask deleteImageTask = new ElasticsearchImageController.DeleteImageTask();
+
+                    ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
+                    for (String Id :upList) {
+                        String base64 = elasticsearchImageOfflineController.loadBase64(context, Id);
+                        ImageForElasticSearch ifes = new ImageForElasticSearch(base64,Id);
+                        addImageTask.execute(ifes);
+                    }
+                    ArrayList<String> deleteList = elasticsearchImageOfflineController.loadImageList(context,"delete");
+                    for (String Id :deleteList){
+                        deleteImageTask.execute(Id);
+                    }
+
+                    //Clear the local upload,delete,online lists
+                    elasticsearchImageOfflineController.prepImageOffline(context,user);
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read local file.");
                 }
