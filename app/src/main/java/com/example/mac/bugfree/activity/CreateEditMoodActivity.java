@@ -109,9 +109,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
-    private double lon;
-    private double lat;
-
 
     /**
      * onCreate begins from here
@@ -352,7 +349,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if( location != null ) {
                     int latitude = (int) (location.getLatitude() * 1E6);
                     int longitude = (int) (location.getLongitude() * 1E6);
-                    currentLocation =  new GeoPoint(latitude, longitude);
+                    currentLocation = new GeoPoint(latitude, longitude);
                 }
             } catch (SecurityException e) {
                 e.printStackTrace();
@@ -575,13 +572,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            if(requestCode == REQ_CODE_CHILD) {
-                if (resultCode == RESULT_OK) {
-                    lat = data.getExtras().g;
-
+            //TODO
+            case REQ_CODE_CHILD:
+                if (resultCode == RESULT_OK){
+                    Double lat = data.getDoubleExtra("chosenLocationLat",0);
+                    Double lon = data.getDoubleExtra("chosenLocationLon",0);
+                    currentLocation = new GeoPoint(lat, lon);
                 }
-            }
-            break;
+                break;
             default:
                 break;
         }
@@ -688,7 +686,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        Intent child = new Intent(CreateEditMoodActivity.this,ChooseLocationOnMapActivity.class);
+        Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
 
         startActivityForResult(child, REQ_CODE_CHILD);
     }

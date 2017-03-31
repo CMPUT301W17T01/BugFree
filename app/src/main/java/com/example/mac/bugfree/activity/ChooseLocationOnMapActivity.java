@@ -121,11 +121,10 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
                 return true;
             case R.id.activity_choose_location_on_map:
 
-                Intent resultIntent = new Intent(getApplicationContext(),CreateEditMoodActivity.class);
-                resultIntent.putExtra("chosenLocationLat", lat);
-                resultIntent.putExtra("chosenLocationLon", lon);
-                setResult(resultCode,resultIntent);
-
+                Intent parent = new Intent(getApplicationContext(),CreateEditMoodActivity.class);
+                parent.putExtra("chosenLocationLat", lat);
+                parent.putExtra("chosenLocationLon", lon);
+                setResult(RESULT_OK,parent);
                 finish();
                 return true;
 
