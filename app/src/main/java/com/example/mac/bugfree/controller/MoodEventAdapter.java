@@ -182,6 +182,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                     Bitmap image = getImage(moodEvent);
                     holder.picImage.setImageBitmap(image);
                 } catch(Exception e){
+//                    holder.picImage.setImageResource(R.drawable.picture_text);
                     Log.i("bitmap_error","null");
                 }
             } else if(!isOnline){
@@ -240,6 +241,10 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 imageForElasticSearch = getImageTask.get();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            if (imageForElasticSearch ==null){
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
             }
         } else if (currentUser.equals(moodEvent.getBelongsTo())){
             ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();

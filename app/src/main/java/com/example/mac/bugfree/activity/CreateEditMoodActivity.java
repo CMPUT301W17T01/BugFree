@@ -422,10 +422,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             if (isOnline){
                 uploadImage(imageForElasticSearch, uniqueID);
                 ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
-                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,OriginID);
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,null);
             }else {
                 ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
-                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,OriginID);
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,null);
             }
         }
 

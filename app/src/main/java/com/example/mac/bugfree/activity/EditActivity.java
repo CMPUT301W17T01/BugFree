@@ -535,6 +535,11 @@ public class EditActivity extends CreateEditMoodActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (imageForElasticSearch ==null){
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+            }
+
         } else if (uniqueId!=null){
             ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
             imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);

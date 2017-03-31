@@ -181,7 +181,7 @@ public class ElasticsearchImageOfflineController {
             ArrayList<String> updateList = loadImageList(context, "upload");
             ArrayList<String> deleteList = loadImageList(context, "delete");
             ArrayList<String> onlineList = loadImageList(context, "online");
-            boolean contains = Arrays.asList(onlineList).contains(imageIdToBeDelete);
+            boolean contains = onlineList.contains(imageIdToBeDelete);
             // Change accordingly
             if (mode.equals("update")) {
                 if(imageIdToBeDelete != null && contains) {

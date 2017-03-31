@@ -279,6 +279,11 @@ public class ViewMoodActivity extends AppCompatActivity  {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            if (imageForElasticSearch ==null){
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+            }
         } else if (current_user.equals(moodEvent.getBelongsTo())){
             ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
             imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
