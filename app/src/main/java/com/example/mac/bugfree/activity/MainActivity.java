@@ -252,7 +252,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.add_block:
-                
+                context = getApplicationContext();
+                final boolean isOline = checker.isOnline(context);
+                if (isOline) {
+                    Toast.makeText(this, "You clicked add_block", Toast.LENGTH_SHORT).show();
+//                    followDialogue();
+                } else{
+                    Toast.makeText(this, "This Device is offline", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
 
             default:
         }
@@ -358,6 +367,38 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void blockDialogue() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Block List");
+        alertDialog.setMessage("Please enter the name of user who you want block");
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setIcon(R.drawable.ic_homebtn);
+
+        alertDialog.setPositiveButton("Done",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String blockName = input.getText().toString();
+                        addBlock(blockName);
+                    }
+                });
+
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        alertDialog.show();
+    }
+
     /**
      * To send the request of following
      * Add the user to other user's pending permission
@@ -401,6 +442,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    private void addBlock(String blockName) {
+        if (blockName.equals(currentUserName)) {
+            Toast.makeText(this, "You enter wrong username", Toast.LENGTH_SHORT).show();
+        }
+
+        else {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(currentUserName);
+            try {
+                User user = getUserTask.get();
+                ArrayList<String> blockList = user.getFollowerIDs();
+                blockList.add(blockName);
+                ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                addUserTask.execute(user);
+            } catch (Exception e) {
+                //Log.i("Error", "Failed to get the User out of the async object");
+            }
+
+        }
+
+    }
+
+
 
     /**
      * To check if the file "filter.sav" is exist
