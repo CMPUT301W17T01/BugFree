@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.module.MoodEvent;
@@ -256,6 +257,17 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
+            case R.id.add_block:
+                context = getApplicationContext();
+                final boolean isOline = checker.isOnline(context);
+                if (isOline) {
+                    Toast.makeText(this, "You clicked add_block", Toast.LENGTH_SHORT).show();
+                    blockDialogue();
+                } else{
+                    Toast.makeText(this, "This Device is offline", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
 
 
             default:
@@ -362,6 +374,38 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void blockDialogue() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Block List");
+        alertDialog.setMessage("Please enter the name of user who you want block");
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        input.setLayoutParams(lp);
+        alertDialog.setView(input);
+        alertDialog.setIcon(R.drawable.ic_homebtn);
+
+        alertDialog.setPositiveButton("Done",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String blockName = input.getText().toString();
+                        addBlock(blockName);
+                    }
+                });
+
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        alertDialog.show();
+    }
+
     /**
      * To send the request of following
      * Add the user to other user's pending permission
@@ -382,9 +426,12 @@ public class MainActivity extends AppCompatActivity {
                 if(user != null){
                     ArrayList<String> pendingList = user.getPendingPermission();
                     ArrayList<String> followerList = user.getFollowerIDs();
+                    ArrayList<String> blockList = user.getBlockList();
 
                     if ( followerList.contains(currentUserName)) {
                         Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                    } else if (blockList.contains(currentUserName)){
+                        Toast.makeText(this, "You have been blocked", Toast.LENGTH_SHORT).show();
                     } else {
                         if (pendingList.contains(currentUserName)) {
                             Toast.makeText(this, "You already in pending list", Toast.LENGTH_SHORT).show();
@@ -405,6 +452,57 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    private void addBlock(String blockName) {
+        if (blockName.equals(currentUserName)) {
+            Toast.makeText(this, "You enter wrong username", Toast.LENGTH_SHORT).show();
+        }
+
+        else {
+            ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+            getUserTask.execute(currentUserName);
+            try {
+                User user = getUserTask.get();
+                ArrayList<String> blockList = user.getBlockList();
+                ArrayList<String> followerList = user.getFollowerIDs();
+                UserNameList userNameList = new UserNameList();
+                ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+                getUserListTask.execute("name");
+                try{
+                    userNameList = getUserListTask.get();
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to get the User out of the async object");
+                }
+                ArrayList<String> unList = userNameList.getUserNameList();
+                ArrayList<String> followList = user.getFolloweeIDs();
+                ArrayList<String> notificationList = user.getPendingPermission();
+                if (blockList.contains(blockName)){
+                    Toast.makeText(this, "You already blocked this user", Toast.LENGTH_SHORT).show();
+                } else if (followerList.contains(blockName)){
+                    Toast.makeText(this, "This user is your follower", Toast.LENGTH_SHORT).show();
+                } else if (!unList.contains(blockName)){
+                    Toast.makeText(this, "This user does not exist", Toast.LENGTH_SHORT).show();
+                } else if (followList.contains(blockName)){
+                    Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                } else if (notificationList.contains(blockName)){
+                    Toast.makeText(this, "This user sent you a notification", Toast.LENGTH_SHORT).show();
+                } else {
+                    blockList.add(blockName);
+                    user.setBlockIDs(blockList);
+                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+                }
+            } catch (Exception e) {
+                //Log.i("Error", "Failed to get the User out of the async object");
+            }
+
+        }
+
+    }
+
+
 
     /**
      * To check if the file "filter.sav" is exist

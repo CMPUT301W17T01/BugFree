@@ -114,6 +114,10 @@ public class User {
         return blockIDs;
     }
 
+    public void setBlockIDs(ArrayList<String> blockIDs) {
+        this.blockIDs = blockIDs;
+    }
+
 
     /**
      * Gets mood event list.
