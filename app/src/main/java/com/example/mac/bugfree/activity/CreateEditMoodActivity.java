@@ -93,6 +93,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
+    public final static int REQ_CODE_CHILD = 233;
+
 
     private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
@@ -107,6 +109,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
+    private double lon;
+    private double lat;
 
 
     /**
@@ -571,6 +575,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            if(requestCode == REQ_CODE_CHILD) {
+                if (resultCode == RESULT_OK) {
+                    lat = data.getExtras().g;
+
+                }
+            }
+            break;
             default:
                 break;
         }
@@ -677,8 +688,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        Intent aa = new Intent(CreateEditMoodActivity.this,ChooseLocationOnMapActivity.class);
-        startActivity(aa);
+        Intent child = new Intent(CreateEditMoodActivity.this,ChooseLocationOnMapActivity.class);
+
+        startActivityForResult(child, REQ_CODE_CHILD);
     }
 
 

@@ -42,6 +42,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 import static com.example.mac.bugfree.R.id.map;
@@ -50,17 +51,18 @@ import static com.example.mac.bugfree.R.id.map;
  * Created by heyuehuang on 2017-03-29.
  */
 
-public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver {
+public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver,Serializable {
 
     private MapView mapView;
     GeoPoint currentPoint;
+    GeoPoint chosenLocation;
     GeoPoint startPoint;
     GeoPoint p;
     IGeoPoint  loc;
-    private String longitude;
-    private String latitude;
-    ItemizedIconOverlay<OverlayItem> myItemizedOverlay = null;
-
+    private double lon;
+    private double lat;
+    MapEventsOverlay mapEventsOverlay;
+    int resultCode = 233;
 
 
     @Override
@@ -90,7 +92,8 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mapView);
         mapView.getOverlays().add(myScaleBarOverlay);
 
-        addLocation();
+        mapEventsOverlay = new MapEventsOverlay(this, this);
+        mapView.getOverlays().add(0, mapEventsOverlay);
 
     }
 
@@ -113,11 +116,19 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         //handle presses on the action bar items
         switch (item.getItemId()) {
             // if the item in tool bar is selected
+            case R.id.action_clear_choose:
+                clearAllLocation();
+                return true;
             case R.id.activity_choose_location_on_map:
 
-                setResult(RESULT_OK);
+                Intent resultIntent = new Intent(getApplicationContext(),CreateEditMoodActivity.class);
+                resultIntent.putExtra("chosenLocationLat", lat);
+                resultIntent.putExtra("chosenLocationLon", lon);
+                setResult(resultCode,resultIntent);
+
                 finish();
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,16 +190,10 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
 //
 //        mapView.invalidate();
 //    }
-     private void addLocation(){
-         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(this, this);
-         mapView.getOverlays().add(0, mapEventsOverlay);
 
-     }
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         Toast.makeText(this, "Tap on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
 //        InfoWindow.closeAllInfoWindowsOn(mapView);
-        mapView.getOverlay().clear();
-        mapView.invalidate();
 
         return true;
     }
@@ -201,12 +206,18 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         circle.setStrokeWidth(2);
         mapView.getOverlays().add(circle);
         mapView.invalidate();
+        lat = p.getLatitudeE6()/1E6;
+        lon = p.getLongitudeE6()/1E6;
+        chosenLocation =  new GeoPoint(lat, lon);
+
 //        circle.setInfoWindow(new BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView));
 //        circle.setTitle("Centered on "+p.getLatitude()+","+p.getLongitude());
         Toast.makeText(this, "Long Press on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Final One ("+lat+","+lon+")", Toast.LENGTH_SHORT).show();
+
         return false;
     }
-    public GeoPoint getCurrentPosition() {
+    private GeoPoint getCurrentPosition() {
         try {
             CurrentLocation locationListener = new CurrentLocation();
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -222,5 +233,16 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         }
         return currentPoint;
     }
+
+    private void clearAllLocation(){
+        mapView.getOverlays().clear();
+        ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mapView);
+        mapView.getOverlays().add(myScaleBarOverlay);
+        mapEventsOverlay = new MapEventsOverlay(this, this);
+        mapView.getOverlays().add(0, mapEventsOverlay);
+
+        mapView.invalidate();
+    }
+
 
 }
