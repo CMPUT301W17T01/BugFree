@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.mac.bugfree.activity.ViewMoodActivity;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +35,8 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
 
     private MoodEventList mmoodEventArrayList = new MoodEventList();
     private String currentUser = "";
+    private Context context;
+    private boolean isOnline;
 
     /**
      * The type View holder.
@@ -99,9 +103,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
      * @param moodEventArrayList the mood event array list
      * @param currentUser        the current user
      */
-    public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser) {
+    public MoodEventAdapter(MoodEventList moodEventArrayList, String currentUser,Context context) {
         this.mmoodEventArrayList = moodEventArrayList;
         this.currentUser = currentUser;
+        this.context = context;
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        isOnline = checker.isOnline(context);
     }
 
 
@@ -133,9 +140,12 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 editor.putString("moodevent",json);
                 editor.putString("currentUser",json1);
                 editor.apply();
-
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                isOnline = checker.isOnline(context);
                 Intent intent = new Intent(v.getContext(), ViewMoodActivity.class);
                 v.getContext().startActivity(intent);
+//                context = v.getContext();
+
             }
         });
 
@@ -164,8 +174,20 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
         holder.usernameText.setText(moodEvent.getBelongsTo());
 
         if (moodEvent.getPicId() != null){
-            Bitmap image = getImage(moodEvent);
-            holder.picImage.setImageBitmap(image);
+            //TODO: set image
+
+            Log.i("pic id is not null",moodEvent.getPicId());
+            if(isOnline ||currentUser.equals(moodEvent.getBelongsTo())) {
+                try {
+                    Bitmap image = getImage(moodEvent);
+                    holder.picImage.setImageBitmap(image);
+                } catch(Exception e){
+//                    holder.picImage.setImageResource(R.drawable.picture_text);
+                    Log.i("bitmap_error","null");
+                }
+            } else if(!isOnline){
+                holder.picImage.setImageResource(R.drawable.picture_text);
+            }
         } else {
             holder.picImage.setImageResource(R.drawable.picture_text);
         }
@@ -208,19 +230,27 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
     }
 
     private Bitmap getImage(MoodEvent moodEvent){
-            String uniqueId = moodEvent.getPicId();
+        ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+        String uniqueId = moodEvent.getPicId();
 
+        if (isOnline) {
             ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
             getImageTask.execute(uniqueId);
-
-            ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
 
             try {
                 imageForElasticSearch = getImageTask.get();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (imageForElasticSearch ==null){
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+            }
+        } else if (currentUser.equals(moodEvent.getBelongsTo())){
+            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+            imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+        }
 
-            return imageForElasticSearch.base64ToImage();
+        return imageForElasticSearch.base64ToImage();
     }
 }

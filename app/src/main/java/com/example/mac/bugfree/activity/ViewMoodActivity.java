@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.MoodEventAdapter;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
@@ -27,6 +28,7 @@ import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.util.SaveFile;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 
 /**
@@ -92,11 +94,19 @@ public class ViewMoodActivity extends AppCompatActivity  {
         date_text.setText(time);
 
         if (moodEvent.getPicId() != null){
-            Bitmap image = getImage(moodEvent);
-            picImage.setImageBitmap(image);
+            try{
+            if(isOnline ||currentUserName.equals(moodEvent.getBelongsTo())) {
+                Bitmap image = getImage(moodEvent);
+                picImage.setImageBitmap(image);
+            }else if(!isOnline){
+                picImage.setImageResource(R.drawable.picture_text);
+            }}catch(Exception e){
+                Log.i("bitmap_error","null");
+            }
         } else {
             picImage.setImageResource(R.drawable.umood);
         }
+
         if (moodEvent.getLocation()!=null){
             location_text.setText(moodEvent.getLocation().toString());
         }
@@ -198,6 +208,22 @@ public class ViewMoodActivity extends AppCompatActivity  {
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
 
+        if (moodEvent.getPicId() != null) {
+            if (isOnline) {
+                ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                        new ElasticsearchImageController.DeleteImageTask();
+                deleteImageTask.execute(moodEvent.getPicId());
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            } else {
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            }
+            File file = context.getFileStreamPath(moodEvent.getPicId());
+            file.delete();
+
+        }
+
         if(isOnline) {
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(user);
@@ -233,16 +259,34 @@ public class ViewMoodActivity extends AppCompatActivity  {
         editor.apply();
     }
     private Bitmap getImage(MoodEvent moodEvent){
-        String uniqueId = moodEvent.getPicId();
-        ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
-        getImageTask.execute(uniqueId);
-
         ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
+        String uniqueId = moodEvent.getPicId();
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        String current_user = pref.getString("currentUser", "");
 
-        try {
-            imageForElasticSearch = getImageTask.get();
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (isOnline) {
+            ElasticsearchImageController.GetImageTask getImageTask = new ElasticsearchImageController.GetImageTask();
+            getImageTask.execute(uniqueId);
+
+            //imageForElasticSearch = new ImageForElasticSearch();
+
+            try {
+                imageForElasticSearch = getImageTask.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (imageForElasticSearch ==null){
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
+            }
+        } else if (current_user.equals(moodEvent.getBelongsTo())){
+            ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+            imageForElasticSearch = elasticsearchImageOfflineController.GetImageTask(context,uniqueId);
         }
 
         return imageForElasticSearch.base64ToImage();

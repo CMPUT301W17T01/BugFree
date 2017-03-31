@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
@@ -78,10 +79,13 @@ public class SignInActivity extends AppCompatActivity {
 
                     // Save the user just logged in in Json file
                     ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                    ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
                     getUserTask.execute(signInName);
                     try {
                         User user = getUserTask.get();
                         SaveFile s = new SaveFile(context, user);
+                        //Clear the local upload,delete,online lists
+                        elasticsearchImageOfflineController.prepImageOffline(context,user);
 
                     } catch (Exception e) {
                         Log.i("Error", "Failed to get the User out of the async object");

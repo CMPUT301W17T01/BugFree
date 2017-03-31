@@ -54,6 +54,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.Image;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
@@ -93,6 +94,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
+    public final static int REQ_CODE_CHILD = 233;
+
 
     private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
@@ -107,7 +110,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
-
 
     /**
      * onCreate begins from here
@@ -348,7 +350,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if( location != null ) {
                     int latitude = (int) (location.getLatitude() * 1E6);
                     int longitude = (int) (location.getLongitude() * 1E6);
-                    currentLocation =  new GeoPoint(latitude, longitude);
+                    currentLocation = new GeoPoint(latitude, longitude);
                 }
             } catch (SecurityException e) {
                 e.printStackTrace();
@@ -412,11 +414,20 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currLocation);
         }
 
-
+//TODO: save to image file
         if (imageForElasticSearch != null) {
             String uniqueID = realT.getTime().toString().replaceAll("\\s", "") + current_user;
+            uniqueID = uniqueID.replaceAll(":","");
+            String OriginID = moodEvent.getPicId();
             moodEvent.setPicId(uniqueID);
-            uploadImage(imageForElasticSearch, uniqueID);
+            if (isOnline){
+                uploadImage(imageForElasticSearch, uniqueID);
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,null);
+            }else {
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.AddImageTask(context,imageForElasticSearch.getImageBase64(),uniqueID,null);
+            }
         }
 
         MoodEventList moodEventList = user.getMoodEventList();
@@ -571,6 +582,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            //TODO
+            case REQ_CODE_CHILD:
+                if (resultCode == RESULT_OK){
+                    Double lat = data.getDoubleExtra("chosenLocationLat",0);
+                    Double lon = data.getDoubleExtra("chosenLocationLon",0);
+                    String mess = data.getStringExtra("flag");
+                    if (mess == null){
+                        currentLocation = new GeoPoint(lat, lon);
+                    } else {
+                        currentLocation = null;
+                    }
+                }
+                break;
             default:
                 break;
         }
@@ -677,11 +701,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        Intent aa = new Intent(CreateEditMoodActivity.this,ChooseLocationOnMapActivity.class);
-        startActivity(aa);
+        if(currentLocationCheckbox.isChecked()){
+            Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
+        } else {
+            Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
+            startActivityForResult(child, REQ_CODE_CHILD);
+        }
     }
-
-
 
 }
 
