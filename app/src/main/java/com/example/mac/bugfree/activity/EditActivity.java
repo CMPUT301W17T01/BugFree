@@ -118,6 +118,7 @@ public class EditActivity extends CreateEditMoodActivity {
             simpleTimePicker.setEnabled(false);
         }
 
+
         adapter1 = ArrayAdapter.createFromResource(this, R.array.mood_states_array, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mood_state_spinner.setAdapter(adapter1);
@@ -244,7 +245,7 @@ public class EditActivity extends CreateEditMoodActivity {
             Bitmap image = getImage(edit_mood_event);
             pic_preview.setImageBitmap(image);
         } else {
-            pic_preview.setImageResource(R.drawable.picture_text);
+            pic_preview.setImageResource(R.drawable.umood);
         }
 
     }

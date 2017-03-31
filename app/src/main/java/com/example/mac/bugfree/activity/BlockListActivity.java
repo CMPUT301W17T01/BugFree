@@ -2,6 +2,9 @@ package com.example.mac.bugfree.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -29,10 +32,13 @@ public class BlockListActivity extends FriendActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_block);
+        setSupportActionBar(toolbar);
+
         blockList = user.getBlockList();
 
         final ArrayAdapter<User> adapter = new blockListAdapter(this, blockList);
-        blockListView = (ListView) findViewById(R.id.notificationList);
+        blockListView = (ListView) findViewById(R.id.block_list_view);
         blockListView.setAdapter(adapter);
     }
 
@@ -67,6 +73,26 @@ public class BlockListActivity extends FriendActivity {
 
             return view;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.homebtn, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeBtn:
+                setResult(RESULT_OK);
+                finish();
+                break;
+
+            default:
+        }
+        return true;
     }
 
 }

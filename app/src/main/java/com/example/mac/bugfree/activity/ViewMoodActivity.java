@@ -104,7 +104,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
                 Log.i("bitmap_error","null");
             }
         } else {
-            picImage.setImageResource(R.drawable.picture_text);
+            picImage.setImageResource(R.drawable.umood);
         }
 
         if (moodEvent.getLocation()!=null){

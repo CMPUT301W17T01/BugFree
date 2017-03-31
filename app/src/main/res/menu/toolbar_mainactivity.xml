@@ -7,5 +7,10 @@
         android:icon="@drawable/add_follow"
         android:title="Add Follow"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/add_block"
+        android:icon="@drawable/add_follow"
+        android:title="Add Block"
+        app:showAsAction="never" />
 
 </menu>
