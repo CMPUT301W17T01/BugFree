@@ -587,7 +587,12 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK){
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
                     Double lon = data.getDoubleExtra("chosenLocationLon",0);
-                    currentLocation = new GeoPoint(lat, lon);
+                    String mess = data.getStringExtra("flag");
+                    if (mess == null){
+                        currentLocation = new GeoPoint(lat, lon);
+                    } else {
+                        currentLocation = null;
+                    }
                 }
                 break;
             default:
