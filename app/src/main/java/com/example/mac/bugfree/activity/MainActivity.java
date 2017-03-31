@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.example.mac.bugfree.module.MoodEvent;
@@ -145,9 +146,14 @@ public class MainActivity extends AppCompatActivity {
                             intent  = new Intent(MainActivity.this, BlockListActivity.class);
                             startActivity(intent);
                         }
-
                         break;
 
+                    case R.id.drawer_stat:
+                        if (isOnline) {
+                            intent  = new Intent(MainActivity.this, StatActivity.class);
+                            startActivity(intent);
+                        }
+                        break;
                     case R.id.drawer_sign_out:
                         // current user will be removed
                         SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
@@ -256,11 +262,12 @@ public class MainActivity extends AppCompatActivity {
                 final boolean isOline = checker.isOnline(context);
                 if (isOline) {
                     Toast.makeText(this, "You clicked add_block", Toast.LENGTH_SHORT).show();
-//                    followDialogue();
+                    blockDialogue();
                 } else{
                     Toast.makeText(this, "This Device is offline", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
 
 
             default:
@@ -419,9 +426,12 @@ public class MainActivity extends AppCompatActivity {
                 if(user != null){
                     ArrayList<String> pendingList = user.getPendingPermission();
                     ArrayList<String> followerList = user.getFollowerIDs();
+                    ArrayList<String> blockList = user.getBlockList();
 
                     if ( followerList.contains(currentUserName)) {
                         Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                    } else if (blockList.contains(currentUserName)){
+                        Toast.makeText(this, "You have been blocked", Toast.LENGTH_SHORT).show();
                     } else {
                         if (pendingList.contains(currentUserName)) {
                             Toast.makeText(this, "You already in pending list", Toast.LENGTH_SHORT).show();
@@ -455,10 +465,35 @@ public class MainActivity extends AppCompatActivity {
             getUserTask.execute(currentUserName);
             try {
                 User user = getUserTask.get();
-                ArrayList<String> blockList = user.getFollowerIDs();
-                blockList.add(blockName);
-                ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
-                addUserTask.execute(user);
+                ArrayList<String> blockList = user.getBlockList();
+                ArrayList<String> followerList = user.getFollowerIDs();
+                UserNameList userNameList = new UserNameList();
+                ElasticsearchUserListController.GetUserListTask getUserListTask = new ElasticsearchUserListController.GetUserListTask();
+                getUserListTask.execute("name");
+                try{
+                    userNameList = getUserListTask.get();
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to get the User out of the async object");
+                }
+                ArrayList<String> unList = userNameList.getUserNameList();
+                ArrayList<String> followList = user.getFolloweeIDs();
+                ArrayList<String> notificationList = user.getPendingPermission();
+                if (blockList.contains(blockName)){
+                    Toast.makeText(this, "You already blocked this user", Toast.LENGTH_SHORT).show();
+                } else if (followerList.contains(blockName)){
+                    Toast.makeText(this, "This user is your follower", Toast.LENGTH_SHORT).show();
+                } else if (!unList.contains(blockName)){
+                    Toast.makeText(this, "This user does not exist", Toast.LENGTH_SHORT).show();
+                } else if (followList.contains(blockName)){
+                    Toast.makeText(this, "You already followed this user", Toast.LENGTH_SHORT).show();
+                } else if (notificationList.contains(blockName)){
+                    Toast.makeText(this, "This user sent you a notification", Toast.LENGTH_SHORT).show();
+                } else {
+                    blockList.add(blockName);
+                    user.setBlockIDs(blockList);
+                    ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+                }
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
             }

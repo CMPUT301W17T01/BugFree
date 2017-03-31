@@ -5,8 +5,14 @@
     tools:context="com.example.mac.bugfree.activity.FilterActivity">
 
     <item
+        android:id="@+id/action_clear_choose"
+        android:icon="@drawable/ic_delete"
+        android:title="Clear Your Location"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/activity_choose_location_on_map"
         android:title="@string/activity_choose_location"
         android:icon="@drawable/ic_tick"
         app:showAsAction="always" />
+
 </menu>
