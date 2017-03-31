@@ -45,6 +45,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.example.mac.bugfree.R.id.current_location;
 import static com.example.mac.bugfree.R.id.map;
 
 /**
@@ -117,12 +118,19 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
                 clearAllLocation();
                 return true;
             case R.id.activity_choose_location_on_map:
-
-                Intent parent = new Intent();
-                parent.putExtra("chosenLocationLat", lat);
-                parent.putExtra("chosenLocationLon", lon);
-                setResult(RESULT_OK,parent);
-                finish();
+                if (chosenLocation != null){
+                    Intent parent = new Intent();
+                    parent.putExtra("chosenLocationLat", lat);
+                    parent.putExtra("chosenLocationLon", lon);
+                    setResult(RESULT_OK,parent);
+                    finish();
+                } else {
+                    Intent parent = new Intent();
+                    String mes = "isnull";
+                    parent.putExtra("flag", mes);
+                    setResult(RESULT_OK,parent);
+                    finish();
+                }
                 return true;
 
         }
@@ -177,7 +185,7 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         mapView.getOverlays().add(myScaleBarOverlay);
         mapEventsOverlay = new MapEventsOverlay(this, this);
         mapView.getOverlays().add(0, mapEventsOverlay);
-
+        chosenLocation = null;
         mapView.invalidate();
     }
 
