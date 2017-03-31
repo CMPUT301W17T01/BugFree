@@ -446,6 +446,14 @@ public class EditActivity extends CreateEditMoodActivity {
                     }
                 }
                 break;
+            //TODO
+            case REQ_CODE_CHILD:
+                if (resultCode == RESULT_OK){
+                    Double lat = data.getDoubleExtra("chosenLocationLat",0);
+                    Double lon = data.getDoubleExtra("chosenLocationLon",0);
+                    currentLocation = new GeoPoint(lat, lon);
+                }
+                break;
             default:
                 break;
         }
@@ -573,6 +581,14 @@ public class EditActivity extends CreateEditMoodActivity {
             currentLocation = null;
         }
 
+    }
+    public void chooseLocation(View v) {
+        if(currentLocationCheckbox.isChecked()){
+            Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
+        } else {
+            Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
+            startActivityForResult(child, REQ_CODE_CHILD);
+        }
     }
 
 }

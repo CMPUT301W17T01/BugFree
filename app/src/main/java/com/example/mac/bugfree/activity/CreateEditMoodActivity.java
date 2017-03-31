@@ -686,12 +686,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
-
-        startActivityForResult(child, REQ_CODE_CHILD);
+        if(currentLocationCheckbox.isChecked()){
+            Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
+        } else {
+            Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
+            startActivityForResult(child, REQ_CODE_CHILD);
+        }
     }
-
-
 
 }
 
