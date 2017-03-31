@@ -54,15 +54,12 @@ import static com.example.mac.bugfree.R.id.map;
 public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver,Serializable {
 
     private MapView mapView;
-    GeoPoint currentPoint;
-    GeoPoint chosenLocation;
-    GeoPoint startPoint;
-    GeoPoint p;
-    IGeoPoint  loc;
+    private GeoPoint currentPoint;
+    private GeoPoint chosenLocation;
+    private GeoPoint startPoint;
     private double lon;
     private double lat;
-    MapEventsOverlay mapEventsOverlay;
-    int resultCode = 233;
+    private MapEventsOverlay mapEventsOverlay;
 
 
     @Override
@@ -121,7 +118,7 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
                 return true;
             case R.id.activity_choose_location_on_map:
 
-                Intent parent = new Intent(getApplicationContext(),CreateEditMoodActivity.class);
+                Intent parent = new Intent();
                 parent.putExtra("chosenLocationLat", lat);
                 parent.putExtra("chosenLocationLon", lon);
                 setResult(RESULT_OK,parent);
@@ -131,64 +128,6 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        int actionType = ev.getAction();
-//        switch (actionType) {
-//            case MotionEvent.ACTION_UP:
-//                Projection projection = mapView.getProjection();
-//                loc = projection.fromPixels((int)ev.getX(), (int)ev.getY());
-//                longitude = Double.toString(((double)loc.getLongitudeE6())/1E6);
-//                latitude = Double.toString(((double)loc.getLatitudeE6())/1E6);
-//
-//                Toast toast = Toast.makeText(getApplicationContext(), "Longitude: "+ longitude +" Latitude: "+ latitude , Toast.LENGTH_LONG);
-//                toast.show();
-//
-//        }
-//        return super.dispatchTouchEvent(ev);
-//    }
-//
-
-//    public boolean onSingleTapConfirmed(MotionEvent e, MapView mapView) {
-//
-//        Projection proj = mapView.getProjection();
-//        p = (GeoPoint) proj.fromPixels((int) e.getX(), (int) e.getY());
-//        proj = mapView.getProjection();
-//        loc = (GeoPoint) proj.fromPixels((int) e.getX(), (int) e.getY());
-//        String longitude = Double
-//                .toString(((double) loc.getLongitudeE6()) / 1000000);
-//        String latitude = Double
-//                .toString(((double) loc.getLatitudeE6()) / 1000000);
-//        Toast toast = Toast.makeText(getApplicationContext(),
-//                "Longitude: "
-//                        + longitude + " Latitude: " + latitude, Toast.LENGTH_SHORT);
-//        toast.show();
-//        return true;
-//    }
-
-//    private void addLocation(double lat, double lng) {
-//        // ---Add a location marker---
-//
-//        p = new GeoPoint((int) (lat * 1E6), (int) (lng * 1E6));
-//
-//        Drawable marker = getResources().getDrawable(R.drawable.sad);
-//
-//        int markerWidth = marker.getIntrinsicWidth();
-//        int markerHeight = marker.getIntrinsicHeight();
-//
-//        marker.setBounds(0, markerHeight, markerWidth, 0);
-//
-//        ResourceProxy resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
-//
-//        myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
-//
-//        List<Overlay> listOfOverlays = mapView.getOverlays();
-//        listOfOverlays.clear();
-//        listOfOverlays.add(myItemizedOverlay);
-//
-//        mapView.invalidate();
-//    }
 
     @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
         Toast.makeText(this, "Tap on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
@@ -212,7 +151,6 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
 //        circle.setInfoWindow(new BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView));
 //        circle.setTitle("Centered on "+p.getLatitude()+","+p.getLongitude());
         Toast.makeText(this, "Long Press on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "Final One ("+lat+","+lon+")", Toast.LENGTH_SHORT).show();
 
         return false;
     }
@@ -242,6 +180,7 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
 
         mapView.invalidate();
     }
+
 
 
 }
