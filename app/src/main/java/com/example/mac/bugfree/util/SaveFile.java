@@ -2,7 +2,11 @@ package com.example.mac.bugfree.util;
 
 import android.content.Context;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchUserController;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
+import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.google.gson.Gson;
 
@@ -12,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This is a method class, the main purpose is to store the UserList passed in into a Json file.
@@ -27,20 +33,28 @@ import java.util.ArrayList;
  */
 public class SaveFile{
     private static final String FILENAME = "file.sav";
+//    private static final String IMAGEFILENAME = "image.sav";
+//    private static final String IMAGEONLINE = "ImageOnlineList.sav";
+//    private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
+//    private static final String IMAGEDELETELIST = "ImageDeleteList.sav";
 
-    /**
-     * Instantiates a new Save file.
-     *
-     * @param context the current context
-     * @param user    the current user
-     */
-    public SaveFile(Context context,User user) {
-        saveJson(context, user);
-    }
+    private String base64str;
+    private ArrayList<String> imageList;
 
     public SaveFile() {
 
     }
+/**
+    * Creates file.sav (Json file contains the user object)
+    *
+    * @param context the current context
+    * @param user    the current user
+ */
+    public SaveFile(Context context, User user) {
+        saveJson(context, user);
+    }
+
+
 
     /**
      * Save json.
@@ -59,10 +73,8 @@ public class SaveFile{
             out.flush();
             fos.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             throw new RuntimeException();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             throw new RuntimeException();
         }
     }
@@ -85,4 +97,5 @@ public class SaveFile{
             throw new RuntimeException();
         }
     }
+
 }

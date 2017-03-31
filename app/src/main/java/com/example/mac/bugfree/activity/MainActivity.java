@@ -32,8 +32,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mac.bugfree.controller.ElasticsearchImageController;
+import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.controller.ElasticsearchUserListController;
+import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.UserNameList;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
@@ -169,9 +172,35 @@ public class MainActivity extends AppCompatActivity {
                             File file = context.getFileStreamPath(FILENAME2);
                             file.delete();
                         }
+
                         File file = context.getFileStreamPath(FILENAME);
                         file.delete();
 
+                        ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                        ArrayList<String> onlineList = elasticsearchImageOfflineController.loadImageList(context,"online");
+                        ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upadte");
+                        ArrayList<String> deleteList = elasticsearchImageOfflineController.loadImageList(context,"delete");
+                        ArrayList<String> List = new ArrayList<String>();
+                        List.addAll(onlineList);
+                        List.addAll(onlineList);
+                        for(String id:deleteList){
+                            List.remove(id);
+                        }
+
+                        file = context.getFileStreamPath("ImageDeleteList.sav");
+                        file.delete();
+                        file = context.getFileStreamPath("ImageOnlineList.sav");
+                        file.delete();
+                        file = context.getFileStreamPath("ImageUploadList.sav");
+                        file.delete();
+
+                        for(String id:List){
+                            try {
+                                file = context.getFileStreamPath(id);
+                                file.delete();
+                            } catch (Exception e){
+                            }
+                        }
                         // change to SignInActivity
                         intent = new Intent(MainActivity.this, SignInActivity.class);
                         startActivity(intent);
@@ -333,8 +362,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+//        userOfflineUpdate();
+//        SystemClock.sleep(1000);
         // specify an adapter
-        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
+        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -540,8 +571,10 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+//        userOfflineUpdate();
+//        SystemClock.sleep(1000);
         // specify an adapter
-        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName);
+        RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -573,6 +606,33 @@ public class MainActivity extends AppCompatActivity {
                         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                         addUserTask.execute(user);
                     }
+
+                    // Upload the newly created images and Delete the old base64 online
+                    ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+
+                    ElasticsearchImageController.AddImageTask addImageTask;
+                    ElasticsearchImageController.DeleteImageTask deleteImageTask;
+
+                    ArrayList<String> deleteList = elasticsearchImageOfflineController.loadImageList(context,"delete");
+                    for (String Id :deleteList){
+                        deleteImageTask = new ElasticsearchImageController.DeleteImageTask();
+                        deleteImageTask.execute(Id);
+                        SystemClock.sleep(1000);
+                    }
+//                    SystemClock.sleep(3000);
+                    ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
+                    for (String Id :upList) {
+                        addImageTask = new ElasticsearchImageController.AddImageTask();
+                        String base64 = elasticsearchImageOfflineController.loadBase64(context, Id);
+                        ImageForElasticSearch ifes = new ImageForElasticSearch(base64,Id);
+                        addImageTask.execute(ifes);
+                        Log.i("upid",Id);
+//                        SystemClock.sleep(1000);
+                    }
+
+                    //Clear the local upload,delete,online lists
+                    elasticsearchImageOfflineController.prepImageOffline(context,user);
+
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read local file.");
                 }
