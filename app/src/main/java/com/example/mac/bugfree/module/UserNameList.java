@@ -14,6 +14,7 @@ public class UserNameList {
         this.userNameList = userNameArrayList;
     }
 
+
     public UserNameList () {
         this.userNameList = new ArrayList<String>();
     }
@@ -37,5 +38,6 @@ public class UserNameList {
     public int getCount() {
         return this.userNameList.size();
     }
+
 
 }

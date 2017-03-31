@@ -3,12 +3,16 @@ package com.example.mac.bugfree.util;
 import android.content.Context;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.User;
@@ -30,6 +34,10 @@ import com.google.gson.reflect.TypeToken;
 public class LoadFile{
     private static final String FILENAME = "file.sav";
     private static final String FILENAME2 = "filter.sav";
+//    private static final String IMAGEFILENAME = "image.sav";
+
+
+
 
     private User user;
 
@@ -90,4 +98,6 @@ public class LoadFile{
             return null;
         }
     }
+
+
 }

@@ -105,7 +105,7 @@ public class ElasticsearchImageController {
                 DocumentResult result = client.execute(delete);
                 if (result.isSucceeded()) {
                 } else {
-                    Log.i("Error", "Elasticsearch was not able to add the image.");
+                    Log.i("Error", "Elasticsearch was not able to delete the image.");
                 }
             } catch (Exception e) {
                 Log.i("Error", "The application failed to build and send the image");

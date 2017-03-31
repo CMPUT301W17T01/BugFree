@@ -108,13 +108,31 @@ public class MoodEventPopupClickListener implements PopupMenu.OnMenuItemClickLis
 
         moodEventList.deleteMoodEvent(moodEvent);
         user.setMoodEventList(moodEventList);
+        String id = moodEvent.getPicId();
+
+        SaveFile s = new SaveFile(context, user);
 
         if(isOnline) {
             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
             addUserTask.execute(user);
         }
+        if (moodEvent.getPicId() != null) {
+            if (isOnline) {
+                ElasticsearchImageController.DeleteImageTask deleteImageTask =
+                        new ElasticsearchImageController.DeleteImageTask();
+                deleteImageTask.execute(moodEvent.getPicId());
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            } else {
+                ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
+                elasticsearchImageOfflineController.DeleteImageTask(context,moodEvent.getPicId());
+            }
+            File file = context.getFileStreamPath(moodEvent.getPicId());
+            file.delete();
 
-        SaveFile s = new SaveFile(context, user);
+        }
+
+
 
 
         if (fileExists(context, FILENAME2)) {

@@ -17,6 +17,10 @@ public class ImageForElasticSearch {
         this.imageBase64 = base64;
     }
 
+    public ImageForElasticSearch(String base64, String id){
+        this.imageBase64 = base64;
+        this.uniqueId = id;
+    }
     public ImageForElasticSearch(){
 
     }
@@ -29,7 +33,7 @@ public class ImageForElasticSearch {
 
         return decodedByte;
     }
-
+//TODO
     public String getImageBase64() {
         return imageBase64;
     }
