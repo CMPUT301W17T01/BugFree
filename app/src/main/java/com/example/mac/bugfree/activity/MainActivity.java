@@ -145,9 +145,14 @@ public class MainActivity extends AppCompatActivity {
                             intent  = new Intent(MainActivity.this, BlockListActivity.class);
                             startActivity(intent);
                         }
-
                         break;
 
+                    case R.id.drawer_stat:
+                        if (isOnline) {
+                            intent  = new Intent(MainActivity.this, StatActivity.class);
+                            startActivity(intent);
+                        }
+                        break;
                     case R.id.drawer_sign_out:
                         // current user will be removed
                         SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
@@ -251,8 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
-            case R.id.add_block:
-                
+
 
             default:
         }
