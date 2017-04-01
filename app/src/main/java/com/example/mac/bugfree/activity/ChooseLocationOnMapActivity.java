@@ -34,23 +34,15 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
-import org.osmdroid.views.overlay.infowindow.InfoWindow;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-
-import java.io.Serializable;
 import java.util.List;
 
-import static com.example.mac.bugfree.R.id.current_location;
-import static com.example.mac.bugfree.R.id.map;
 
 /**
  * Created by heyuehuang on 2017-03-29.
  */
 
-public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver,Serializable {
+public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver {
 
     private MapView mapView;
     private GeoPoint currentPoint;
@@ -59,7 +51,6 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
     private double lon;
     private double lat;
     private MapEventsOverlay mapEventsOverlay;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +64,7 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mapView = (MapView) findViewById(map);
+        mapView = (MapView) findViewById(R.id.map_choose);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
         mapView.setBuiltInZoomControls(true);
