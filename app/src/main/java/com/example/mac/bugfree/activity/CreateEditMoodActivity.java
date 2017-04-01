@@ -110,6 +110,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
+//    private Location location;
 
     /**
      * onCreate begins from here
@@ -138,6 +139,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
         //registerForContextMenu(R.id.action_camera);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissionLocationRequest();
+        }
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
@@ -371,6 +376,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+
         } else {
             currentLocation = null;
         }
@@ -598,7 +604,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            //TODO
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
@@ -717,6 +722,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
+
         InternetConnectionChecker checker = new InternetConnectionChecker();
         Context context = getApplicationContext();
         final boolean isOnline = checker.isOnline(context);
