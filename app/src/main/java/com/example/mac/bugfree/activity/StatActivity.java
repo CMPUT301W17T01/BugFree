@@ -3,6 +3,7 @@ package com.example.mac.bugfree.activity;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,13 @@ import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.module.UserNameList;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 
@@ -21,10 +29,15 @@ public class StatActivity extends AppCompatActivity {
     private String current_user;
     private User user = new User();
     ArrayList<Integer> total_list = new ArrayList<Integer>();
+    BarChart barChart1;
+    BarChart barChart2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_block);
+        setSupportActionBar(toolbar);
 
         TextView stat_anger = (TextView)findViewById(R.id.stat_anger);
         TextView stat_confusion = (TextView)findViewById(R.id.stat_confusion);
@@ -43,6 +56,12 @@ public class StatActivity extends AppCompatActivity {
         TextView stat_sad_others = (TextView)findViewById(R.id.stat_sad_others);
         TextView stat_shame_others = (TextView)findViewById(R.id.stat_shame_others);
         TextView stat_surprise_others = (TextView)findViewById(R.id.stat_surprise_others);
+
+        barChart1 = (BarChart) findViewById(R.id.bargraph1);
+        barChart2 = (BarChart) findViewById(R.id.bargraph2);
+
+        ArrayList<BarEntry> barEntries1 = new ArrayList<>();
+        ArrayList<BarEntry> barEntries2 = new ArrayList<>();
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         current_user = pref.getString("currentUser", "");
@@ -93,6 +112,58 @@ public class StatActivity extends AppCompatActivity {
         stat_sad_others.setText(String.valueOf(total_list.get(5)));
         stat_shame_others.setText(String.valueOf(total_list.get(6)));
         stat_surprise_others.setText(String.valueOf(total_list.get(7)));
+
+        final String[] theMoods = new String[] {"Anger", "Conf", "Disgust", "Fear",
+                "Happy", "Sad", "Shame", "Surp"};
+
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return theMoods[(int) value];
+            }
+            public int getDecimalDigits() {  return 0; }
+        };
+
+        XAxis xAxis1 = barChart1.getXAxis();
+        XAxis xAxis2 = barChart2.getXAxis();
+        xAxis1.setGranularity(1f);
+        xAxis1.setValueFormatter(formatter);
+        xAxis2.setGranularity(1f);
+        xAxis2.setValueFormatter(formatter);
+
+        barEntries1.add(new BarEntry(0f,angers));
+        barEntries1.add(new BarEntry(1f,confusions));
+        barEntries1.add(new BarEntry(2f,disgusts));
+        barEntries1.add(new BarEntry(3f, fears));
+        barEntries1.add(new BarEntry(4f,happies));
+        barEntries1.add(new BarEntry(5f,sads));
+        barEntries1.add(new BarEntry(6f,shames));
+        barEntries1.add(new BarEntry(7f,surprises));
+        BarDataSet barDataSet1 = new BarDataSet(barEntries1,"Moods");
+
+        BarData theData1 = new BarData(barDataSet1);
+        theData1.setBarWidth(0.6f);
+        barChart1.setData(theData1);
+        barChart1.setFitBars(true);
+        barChart1.invalidate();
+
+        barEntries2.add(new BarEntry(0f, total_list.get(0)));
+        barEntries2.add(new BarEntry(1f, total_list.get(1)));
+        barEntries2.add(new BarEntry(2f, total_list.get(2)));
+        barEntries2.add(new BarEntry(3f, total_list.get(3)));
+        barEntries2.add(new BarEntry(4f, total_list.get(4)));
+        barEntries2.add(new BarEntry(5f, total_list.get(5)));
+        barEntries2.add(new BarEntry(6f, total_list.get(6)));
+        barEntries2.add(new BarEntry(7f, total_list.get(7)));
+        BarDataSet barDataSet2 = new BarDataSet(barEntries2,"Moods");
+
+        BarData theData2 = new BarData(barDataSet2);
+        theData2.setBarWidth(0.6f);
+        barChart2.setData(theData2);
+        barChart2.setFitBars(true);
+        barChart2.invalidate();
+
     }
 
     private int get_anger(MoodEventList moodEventList){
