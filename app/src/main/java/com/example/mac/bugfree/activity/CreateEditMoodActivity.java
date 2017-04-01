@@ -344,6 +344,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     } else {
                         takeAPhoto();
                     }
+                } else {
+                    takeAPhoto();
                 }
                 return true;
 
