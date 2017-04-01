@@ -136,7 +136,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
-        //registerForContextMenu(R.id.action_camera);
 
 
         if(current_time_checkbox.isChecked()){
@@ -361,10 +360,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     }
 
-    public boolean save_mood_list(String mood_state, String social_situation,String reason){
-        return true;
-    }
-
     /**
      * pass the data in
      * @param reason
@@ -408,8 +403,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setRealtime(realT);
         moodEvent.setDateOfRecord(dateOfRecord);
 
-        // Test for the location
-        //add_location();
         if (currLocation != null) {
             moodEvent.setLocation(currLocation);
         }
