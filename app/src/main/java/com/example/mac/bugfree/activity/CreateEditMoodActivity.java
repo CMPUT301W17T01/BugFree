@@ -706,14 +706,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        try {
-            CurrentLocation locationListener = new CurrentLocation();
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
+
         if(currentLocationCheckbox.isChecked()){
             Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
         } else {
