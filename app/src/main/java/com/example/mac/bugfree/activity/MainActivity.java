@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
 //TODO:can delete one sleep?
                 userOfflineUpdate();
-                SystemClock.sleep(1000);
+//                SystemClock.sleep(1000);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -611,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
         final boolean isOnline = checker.isOnline(context);
 
         SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-        hasBeenOffline = pref.getBoolean("hasBeenOffline",false);
+        hasBeenOffline = pref.getBoolean("hasBeenOffline",true);
         currentUserName = pref.getString("currentUser", "");
 
         if (!isOnline && !currentUserName.equals("")){
@@ -624,7 +624,7 @@ public class MainActivity extends AppCompatActivity {
                 file.delete();
             }
         }
-        if (isOnline) {
+        if (isOnline && hasBeenOffline) {
             //If has been offline and now is online, when signed in, load the local user and upload the local user
             if (!currentUserName.equals("")) {
                 try {
@@ -664,12 +664,13 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read local file.");
                 }
-            }
-            // Set has been offline to false
-            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-            editor.putBoolean("hasBeenOffline", false);
-            editor.apply();
+                // Set has been offline to false
+                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                editor.putBoolean("hasBeenOffline", false);
+                editor.apply();
 
+                SystemClock.sleep(1000);
+            }
         }
     }
     @Override
