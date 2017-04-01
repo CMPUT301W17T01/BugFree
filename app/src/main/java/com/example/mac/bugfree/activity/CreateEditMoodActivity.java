@@ -582,7 +582,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            //TODO
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);

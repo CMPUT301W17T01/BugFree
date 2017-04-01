@@ -70,7 +70,7 @@ public class MapActivity extends AppCompatActivity {
     GeoPoint loc;
 
     MyLocationNewOverlay myLocationOverlay = null;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=666;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=301;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

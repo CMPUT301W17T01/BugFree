@@ -21,8 +21,6 @@ import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.util.CurrentLocation;
 import com.example.mac.bugfree.util.SaveFile;
 
-//import org.osmdroid.DefaultResourceProxyImpl;
-//import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -189,7 +187,4 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         chosenLocation = null;
         mapView.invalidate();
     }
-
-
-
 }
