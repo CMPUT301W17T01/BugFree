@@ -145,8 +145,9 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
     }
     @Override public boolean longPressHelper(GeoPoint p) {
         //DO NOTHING FOR NOW:
+        clearAllLocation();
         Polygon circle = new Polygon(this);
-        circle.setPoints(Polygon.pointsAsCircle(p, 100.0));
+        circle.setPoints(Polygon.pointsAsCircle(p, 50.0));
         circle.setFillColor(0x12121212);
         circle.setStrokeColor(Color.RED);
         circle.setStrokeWidth(2);
