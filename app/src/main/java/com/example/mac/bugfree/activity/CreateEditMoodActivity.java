@@ -138,11 +138,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         current_time_checkbox.setChecked(true);
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permissionLocationRequest();
-        }
-
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
             simpleTimePicker.setEnabled(false);
