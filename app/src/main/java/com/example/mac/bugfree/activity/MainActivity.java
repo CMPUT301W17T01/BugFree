@@ -662,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
                     elasticsearchImageOfflineController.prepImageOffline(context,user);
 
                 } catch (Exception e){
-                    Log.i("Warning", "Failed to read local file.");
+                    Log.i("Warning", "Failed to read and upload local file.");
                 }
                 // Set has been offline to false
                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
