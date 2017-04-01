@@ -539,8 +539,6 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> notificationList = user.getPendingPermission();
                 if (blockList.contains(blockName)){
                     Toast.makeText(this, "You already blocked this user", Toast.LENGTH_SHORT).show();
-                } else if (followerList.contains(blockName)){
-                    Toast.makeText(this, "This user is your follower", Toast.LENGTH_SHORT).show();
                 } else if (!unList.contains(blockName)){
                     Toast.makeText(this, "This user does not exist", Toast.LENGTH_SHORT).show();
                 } else if (followList.contains(blockName)){
@@ -552,6 +550,7 @@ public class MainActivity extends AppCompatActivity {
                     user.setBlockIDs(blockList);
                     ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+
                 }
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
