@@ -230,6 +230,10 @@
                     android:layout_marginLeft="10dp" />
             </LinearLayout>
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/bargraph1"></com.github.mikephil.charting.charts.BarChart>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -432,6 +436,10 @@
                         android:textSize="18sp"
                         android:layout_marginLeft="10dp" />
                 </LinearLayout>
+                <com.github.mikephil.charting.charts.BarChart
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:id="@+id/bargraph2"></com.github.mikephil.charting.charts.BarChart>
             </LinearLayout>
         </LinearLayout>
 
