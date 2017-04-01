@@ -635,7 +635,7 @@ public class EditActivity extends CreateEditMoodActivity {
                 startActivityForResult(child, REQ_CODE_CHILD);
             }
         } else {
-            Toast.makeText(getApplicationContext(), "Location is not available when this device is offline.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Map is not available when this device is offline.", Toast.LENGTH_LONG).show();
         }
     }
 }
