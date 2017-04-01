@@ -256,6 +256,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (currentUserName.equals("")) {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        } else {
+            drawer_name.setText(currentUserName);
+            context = getApplicationContext();
+            userOfflineUpdate();
+            SystemClock.sleep(1000);
+            if (fileExists(context, FILENAME2)) {
+                loadFromFilterFile(context);
+            } else {
+                loadList(currentUserName);
+            }
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -617,7 +639,7 @@ public class MainActivity extends AppCompatActivity {
                     for (String Id :deleteList){
                         deleteImageTask = new ElasticsearchImageController.DeleteImageTask();
                         deleteImageTask.execute(Id);
-                        SystemClock.sleep(1000);
+//                        SystemClock.sleep(1000);
                     }
 //                    SystemClock.sleep(3000);
                     ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
