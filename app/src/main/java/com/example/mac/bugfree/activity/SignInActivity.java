@@ -81,9 +81,16 @@ public class SignInActivity extends AppCompatActivity {
                     ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
                     ElasticsearchImageOfflineController elasticsearchImageOfflineController = new ElasticsearchImageOfflineController();
                     getUserTask.execute(signInName);
+
                     try {
                         User user = getUserTask.get();
                         SaveFile s = new SaveFile(context, user);
+
+                        // Set has been offline to false
+                        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                        editor.putBoolean("hasBeenOffline", false);
+                        editor.apply();
+
                         //Clear the local upload,delete,online lists
                         elasticsearchImageOfflineController.prepImageOffline(context,user);
 

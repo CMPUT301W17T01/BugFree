@@ -110,6 +110,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
+//    private Location location;
 
     /**
      * onCreate begins from here
@@ -136,8 +137,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
-        //registerForContextMenu(R.id.action_camera);
-
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
@@ -155,8 +154,15 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         earth_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                finish();
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                Context context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                if(isOnline) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else{
+                    Toast.makeText(getApplicationContext(), "Map is not available when this device is offline.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -235,10 +241,19 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         currentLocationCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                    permissionLocationRequest();
+                InternetConnectionChecker checker = new InternetConnectionChecker();
+                Context context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                if(!isOnline) {
+                    currentLocationCheckbox.setChecked(false);
+                    Toast.makeText(getApplicationContext(), "Location is not available when this device is offline.", Toast.LENGTH_LONG).show();
                 }
+                if(isOnline) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        permissionLocationRequest();
+                    }
+                }
+
                 add_location();
             }
         });
@@ -324,6 +339,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     } else {
                         takeAPhoto();
                     }
+                } else {
+                    takeAPhoto();
                 }
                 return true;
 
@@ -355,14 +372,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+
         } else {
             currentLocation = null;
         }
 
-    }
-
-    public boolean save_mood_list(String mood_state, String social_situation,String reason){
-        return true;
     }
 
     /**
@@ -408,8 +422,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         moodEvent.setRealtime(realT);
         moodEvent.setDateOfRecord(dateOfRecord);
 
-        // Test for the location
-        //add_location();
         if (currLocation != null) {
             moodEvent.setLocation(currLocation);
         }
@@ -583,7 +595,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            //TODO
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
@@ -702,11 +713,20 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        if(currentLocationCheckbox.isChecked()){
-            Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
-        } else {
-            Intent child = new Intent(getApplicationContext(),ChooseLocationOnMapActivity.class);
-            startActivityForResult(child, REQ_CODE_CHILD);
+
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+
+        if(isOnline) {
+            if (currentLocationCheckbox.isChecked()) {
+                Toast.makeText(getApplicationContext(), "Sorry, You have already chosen CURRENT LOCATION.", Toast.LENGTH_LONG).show();
+            } else {
+                Intent child = new Intent(getApplicationContext(), ChooseLocationOnMapActivity.class);
+                startActivityForResult(child, REQ_CODE_CHILD);
+            }
+        } else{
+            Toast.makeText(getApplicationContext(), "Map is not available when this device is offline.", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 
 import java.util.ArrayList;
 
@@ -47,9 +48,12 @@ public class FriendActivity extends AppCompatActivity {
     private ArrayList<String> followerList;
     private ArrayList<String> notificationList;
     private ArrayList<String> anotherfollowList;
+    private ArrayList<String> anotherfollowerList;
     private ListView followListView;
     private ListView followerListView;
     private ListView notificationListView;
+//    private Context context;
+    private SaveFile savefile;
 
     public String currentUserName;
     public User user = new User();
@@ -95,9 +99,9 @@ public class FriendActivity extends AppCompatActivity {
         notificationList = user.getPendingPermission();
 
 
-        final ArrayAdapter<User> adapter1= new FollowListAdapter(this, followList);
-        final ArrayAdapter<User> adapter2 = new FollowerListAdapter(this, followerList);
-        final ArrayAdapter<User> adapter3 = new NotificationListAdapter(this, notificationList);
+        final ArrayAdapter<User> adapter1= new FollowListAdapter(getApplicationContext(), followList);
+        final ArrayAdapter<User> adapter2 = new FollowerListAdapter(getApplicationContext(), followerList);
+        final ArrayAdapter<User> adapter3 = new NotificationListAdapter(getApplicationContext(), notificationList);
 
 
 
@@ -153,6 +157,8 @@ public class FriendActivity extends AppCompatActivity {
             tv.setTextSize(13);
         }
 
+
+
     }
 
     /**
@@ -196,17 +202,57 @@ public class FriendActivity extends AppCompatActivity {
      */
 
     private class FollowListAdapter extends ArrayAdapter<User> {
+        private Context context;
         public FollowListAdapter(Context context, ArrayList followList) {
             super(context, R.layout.list_friend_item, followList);
+            this.context = context;
+
         }
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(final int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
 
-            String singleFollowee = followList.get(position).toString();
+            final String singleFollowee = followList.get(position).toString();
             TextView friendName = (TextView) view.findViewById(R.id.friendID);
             friendName.setText(singleFollowee);
+
+            Button removeBtn = (Button) view.findViewById(R.id.removeBtn);
+            removeBtn.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v) {
+                    followList.remove(position);
+                    ElasticsearchUserController.AddUserTask addUserTask =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask.execute(user);
+
+                    savefile = new SaveFile(context,user);
+
+                    ArrayAdapter<User> adapter = new FollowListAdapter(FriendActivity.this,
+                            followList);
+                    followListView.setAdapter(adapter);
+
+                    User anotherUser = new User(singleFollowee);
+
+                    ElasticsearchUserController.GetUserTask getUserTask =
+                            new ElasticsearchUserController.GetUserTask();
+                    getUserTask.execute(singleFollowee);
+                    try{
+                        anotherUser = getUserTask.get();
+                    } catch (Exception e) {
+                        Log.i("Error", "Failed to get the User out of the async object");
+                    }
+
+                    anotherfollowerList = anotherUser.getFollowerIDs();
+                    anotherfollowerList.remove(currentUserName);
+
+                    ElasticsearchUserController.AddUserTask addUserTask2 =
+                            new ElasticsearchUserController.AddUserTask();
+                    addUserTask2.execute(anotherUser);
+
+                    Toast.makeText(getApplicationContext(), singleFollowee+
+                            " has been removed", Toast.LENGTH_SHORT).show();
+                }
+            });
 
         return view;
         }
@@ -220,15 +266,15 @@ public class FriendActivity extends AppCompatActivity {
 
     private class FollowerListAdapter extends ArrayAdapter<User> {
         public FollowerListAdapter(Context context, ArrayList followerList) {
-            super(context, R.layout.list_friend_item, followerList);
+            super(context, R.layout.list_follower_item, followerList);
         }
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(final int position, View view, ViewGroup parent) {
             if (view == null)
-                view = getLayoutInflater().inflate(R.layout.list_friend_item, parent, false);
+                view = getLayoutInflater().inflate(R.layout.list_follower_item, parent, false);
 
             String singleFollower = followerList.get(position).toString();
-            TextView friendName = (TextView) view.findViewById(R.id.friendID);
+            TextView friendName = (TextView) view.findViewById(R.id.followerID);
             friendName.setText(singleFollower);
             return view;
         }
@@ -248,8 +294,10 @@ public class FriendActivity extends AppCompatActivity {
      */
 
     private class NotificationListAdapter extends ArrayAdapter<User> {
+        private Context context;
         public NotificationListAdapter(Context context, ArrayList notificationList) {
             super(context, R.layout.list_notification_item, notificationList);
+            this.context = context;
         }
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
@@ -273,6 +321,9 @@ public class FriendActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+
+                    savefile = new SaveFile(context,user);
+
 
                     User anotherUser = new User(singleNotification);
 
@@ -310,6 +361,8 @@ public class FriendActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+
+                    savefile = new SaveFile(context,user);
 
                     Toast.makeText(getApplicationContext(), singleNotification+
                             " has been declined", Toast.LENGTH_SHORT).show();

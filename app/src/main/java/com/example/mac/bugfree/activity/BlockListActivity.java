@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class BlockListActivity extends FriendActivity {
     private ArrayList<String> blockList;
     private ListView blockListView;
-
+    private SaveFile savefile;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +44,10 @@ public class BlockListActivity extends FriendActivity {
     }
 
     private class blockListAdapter extends ArrayAdapter<User> {
+        private Context context;
         public blockListAdapter(Context context, ArrayList blockList) {
             super(context, R.layout.list_block_item, blockList);
+            this.context = context;
         }
 
         @Override
@@ -59,12 +62,15 @@ public class BlockListActivity extends FriendActivity {
                 @Override
                 public void onClick(View v) {
                     blockList.remove(position);
-                    ArrayAdapter<User> adapter = new blockListAdapter(BlockListActivity.this,
-                            blockList);
-                    blockListView.setAdapter(adapter);
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
+                    ArrayAdapter<User> adapter = new blockListAdapter(BlockListActivity.this,
+                            blockList);
+                    blockListView.setAdapter(adapter);
+
+                    //savefile = new SaveFile(context,user);
+
 
                     Toast.makeText(getApplicationContext(), singleblock+
                             " has been removed", Toast.LENGTH_SHORT).show();
