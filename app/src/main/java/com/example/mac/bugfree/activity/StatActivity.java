@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,6 +167,28 @@ public class StatActivity extends AppCompatActivity {
         barChart2.invalidate();
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.homebtn, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeBtn:
+                setResult(RESULT_OK);
+                finish();
+                break;
+
+            default:
+        }
+        return true;
+    }
+
 
     private int get_anger(MoodEventList moodEventList){
         int x, count=0;
