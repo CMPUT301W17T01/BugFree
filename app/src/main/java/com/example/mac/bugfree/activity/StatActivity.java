@@ -256,10 +256,9 @@ public class StatActivity extends AppCompatActivity {
     }
 
     private void totalCount(ArrayList unlist){
-        int i=0;
+        int i;
         int angers_total=0, confusions_total=0,disgusts_total=0,fears_total=0,
                 happies_total=0, sads_total=0, shames_total=0, surprises_total=0;
-
         for (i=0;i<unlist.size();i++) {
             String total_user = unlist.get(i).toString();
             ElasticsearchUserController.GetUserTask getUserTask =
