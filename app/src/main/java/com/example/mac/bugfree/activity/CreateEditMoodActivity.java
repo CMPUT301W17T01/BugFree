@@ -722,7 +722,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
-        
+
         InternetConnectionChecker checker = new InternetConnectionChecker();
         Context context = getApplicationContext();
         final boolean isOnline = checker.isOnline(context);
