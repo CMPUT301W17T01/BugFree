@@ -110,6 +110,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
+//    private Location location;
 
     /**
      * onCreate begins from here
@@ -138,6 +139,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
         //registerForContextMenu(R.id.action_camera);
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissionLocationRequest();
+        }
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
@@ -355,6 +360,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
+
         } else {
             currentLocation = null;
         }
@@ -582,7 +588,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
-            //TODO
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
@@ -701,6 +706,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
     public void chooseLocation(View v) {
+        try {
+            CurrentLocation locationListener = new CurrentLocation();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
         if(currentLocationCheckbox.isChecked()){
             Toast.makeText(getApplicationContext(),"Sorry, You have already chosen CURRENT LOCATION.",Toast.LENGTH_LONG).show();
         } else {
