@@ -6,6 +6,7 @@ import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.LoadFile;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,15 +37,16 @@ public class ElasticsearchImageOfflineController {
 
 
     public void AddImageTask (Context context,String imageBase64, String base64Id,String OriginId){
-//        if (OriginId!=null) {
-//            boolean contains =
-//        LoadFile load = new LoadFile();
-        updateOfflineArrayList(context, "update", base64Id, OriginId);
-//        }else{
-//            updateOfflineArrayList(context, "update",base64Id,OriginId);
-//        }
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
+        if (isOnline){
+            updateOfflineArrayList(context, "online", base64Id, null);
+        } else {
+            updateOfflineArrayList(context, "update", base64Id, OriginId);
+        }
+
         saveBase64(context,imageBase64, base64Id);
-//        if(contains)
+
     }
 
     /**
@@ -53,11 +55,14 @@ public class ElasticsearchImageOfflineController {
      * @param imageId
      */
     public void DeleteImageTask(Context context,String imageId){
-        updateOfflineArrayList(context, "delete", null, imageId);
-//        LoadFile load = new LoadFile();
-//        User user = load.loadUser(context);
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        final boolean isOnline = checker.isOnline(context);
 
-//        saveBase64(context,imageBase64, base64Id);
+        if(!isOnline) {
+            updateOfflineArrayList(context, "delete", null, imageId);
+        } else {
+            updateOfflineArrayList(context, "online", null, imageId);
+        }
     }
     public ImageForElasticSearch GetImageTask (Context context,String imageId){
         String base64 = loadBase64(context, imageId);
@@ -193,6 +198,18 @@ public class ElasticsearchImageOfflineController {
                 if(contains) {
                     deleteList.add(imageIdToBeDelete);
                 }
+            } else if (mode.equals("online")){
+                if (imageIdToBeSave != null) {
+                    onlineList.add(imageIdToBeSave);
+                } else if (imageIdToBeDelete != null){
+                    onlineList.remove(imageIdToBeDelete);
+                }
+                FileOutputStream fos = context.openFileOutput(IMAGEONLINE, Context.MODE_PRIVATE);
+                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+                Gson gson = new Gson();
+                gson.toJson(onlineList, out);
+                out.flush();
+                fos.close();
             }
 
             FileOutputStream fos = context.openFileOutput(IMAGEUPLOADLIST, Context.MODE_PRIVATE);

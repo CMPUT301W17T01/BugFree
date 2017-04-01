@@ -113,9 +113,15 @@ public class MainActivity extends AppCompatActivity {
         earth_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                if(isOnline) {
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                } else{
+                    Toast.makeText(getApplicationContext(), "Map is not available when this device is offline.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -214,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+//TODO:can delete one sleep?
                 userOfflineUpdate();
-                SystemClock.sleep(1000);
+//                SystemClock.sleep(1000);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -237,6 +243,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        currentUserName = pref.getString("currentUser", "");
+
+        if (currentUserName.equals("")) {
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+        } else {
+            drawer_name.setText(currentUserName);
+            context = getApplicationContext();
+            userOfflineUpdate();
+            SystemClock.sleep(1000);
+            if (fileExists(context, FILENAME2)) {
+                loadFromFilterFile(context);
+            } else {
+                loadList(currentUserName);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
 
@@ -582,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
         final boolean isOnline = checker.isOnline(context);
 
         SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-        hasBeenOffline = pref.getBoolean("hasBeenOffline",false);
+        hasBeenOffline = pref.getBoolean("hasBeenOffline",true);
         currentUserName = pref.getString("currentUser", "");
 
         if (!isOnline && !currentUserName.equals("")){
@@ -595,7 +623,7 @@ public class MainActivity extends AppCompatActivity {
                 file.delete();
             }
         }
-        if (isOnline) {
+        if (isOnline && hasBeenOffline) {
             //If has been offline and now is online, when signed in, load the local user and upload the local user
             if (!currentUserName.equals("")) {
                 try {
@@ -616,7 +644,7 @@ public class MainActivity extends AppCompatActivity {
                     for (String Id :deleteList){
                         deleteImageTask = new ElasticsearchImageController.DeleteImageTask();
                         deleteImageTask.execute(Id);
-                        SystemClock.sleep(1000);
+//                        SystemClock.sleep(1000);
                     }
 //                    SystemClock.sleep(3000);
                     ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
@@ -633,14 +661,15 @@ public class MainActivity extends AppCompatActivity {
                     elasticsearchImageOfflineController.prepImageOffline(context,user);
 
                 } catch (Exception e){
-                    Log.i("Warning", "Failed to read local file.");
+                    Log.i("Warning", "Failed to read and upload local file.");
                 }
-            }
-            // Set has been offline to false
-            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-            editor.putBoolean("hasBeenOffline", false);
-            editor.apply();
+                // Set has been offline to false
+                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                editor.putBoolean("hasBeenOffline", false);
+                editor.apply();
 
+                SystemClock.sleep(1000);
+            }
         }
     }
     @Override
