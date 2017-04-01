@@ -518,6 +518,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     "com.example.mac.bugfree.fileprovider", folder);
         }
         else {
+
             imageFileUri = Uri.fromFile(folder);
         }
 
