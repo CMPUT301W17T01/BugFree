@@ -113,9 +113,15 @@ public class MainActivity extends AppCompatActivity {
         earth_tab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
+                context = getApplicationContext();
+                final boolean isOnline = checker.isOnline(context);
+                if(isOnline) {
+                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                } else{
+                    Toast.makeText(getApplicationContext(), "Location is not available when this device is offline.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
