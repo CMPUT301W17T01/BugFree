@@ -92,6 +92,12 @@ public class FilterActivity extends AppCompatActivity {
     private Calendar dateOfMood;
     private String stateOfMood;
     private String keyOfReason;
+
+    /**
+     * Get mood list after filter array list.
+     *
+     * @return the array list
+     */
     public ArrayList<MoodEvent> getMoodListAfterFilter(){
         return moodListAfterFilter;
     }
@@ -257,6 +263,7 @@ public class FilterActivity extends AppCompatActivity {
         tab2.setIndicator("Following");
         tab2.setContent(R.id.following);
         tabHost.addTab(tab2);
+        // display the previous options
         displayPrevious();
 
     }
@@ -286,13 +293,14 @@ public class FilterActivity extends AppCompatActivity {
                 }
                 // if there is only one option is selected, then save the mood event list in the file
                 if(flag == 1){
-                    //saveInFile();
                     SaveFile saveFile = new SaveFile();
                     saveFile.saveArrayList(getApplicationContext(), moodListAfterFilter, FILENAME);
+                    // save the options which the user chosen
                     saveOption();
                 }
                 // if no option is selected, then delete the file.
                 if (flag == 0){
+                    // save the option
                     saveOption();
                     deleteFile("filter.sav");
                 }
@@ -375,6 +383,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Filter current user's all mood events.
      */
@@ -384,6 +393,7 @@ public class FilterActivity extends AppCompatActivity {
             moodListAfterFilter.add(moodListBeforeFilterMy.getMoodEvent(i));
         }
     }
+
     /**
      * Filter current user's following people's mood events by most recent week.
      */
@@ -398,6 +408,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Filter current user's following people's all mood events.
      */
@@ -407,6 +418,7 @@ public class FilterActivity extends AppCompatActivity {
             moodListAfterFilter.add(moodListBeforeFilterFo.getMoodEvent(i));
         }
     }
+
     /**
      * Filter current user's mood events by a specific mood state.
      *
@@ -423,6 +435,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Filter current user's following people's mood events by a specific mood state.
      *
@@ -439,6 +452,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Filter current user's mood events by a specific key of reason.
      *
@@ -455,6 +469,7 @@ public class FilterActivity extends AppCompatActivity {
             }
         }
     }
+
     /**
      * Filter current user's following people's mood events by a specific key of reason.
      *
@@ -510,7 +525,9 @@ public class FilterActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Save the option which the user chosen before.
+     **/
     private void saveOption() {
         SharedPreferences filterSetting = getSharedPreferences("filterSetting",0);
         SharedPreferences.Editor editor = filterSetting.edit();
@@ -525,6 +542,10 @@ public class FilterActivity extends AppCompatActivity {
 
         editor.commit();
     }
+
+    /**
+     * Display the option which the user chosen before.
+     **/
     private void displayPrevious() {
         SharedPreferences filterSetting = getSharedPreferences("filterSetting",0);
         myMostRecentWeekCheckbox.setChecked(filterSetting.getBoolean("myMostRecent",false));

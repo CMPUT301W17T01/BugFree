@@ -133,13 +133,20 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         return super.onOptionsItemSelected(item);
     }
 
-    // tap on the map
-    @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
+    /**
+     *  When the user tap on the map, do the following
+     */
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p) {
         Toast.makeText(this, "Tap on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
         return true;
     }
-    // long pressed on the map
-    @Override public boolean longPressHelper(GeoPoint p) {
+
+    /**
+     * When the user long presses on the map, add a circle on the map
+     */
+    @Override
+    public boolean longPressHelper(GeoPoint p) {
         // clear the previous choice
         clearAllLocation();
         // draw a circle when
@@ -160,7 +167,11 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         return false;
     }
 
-    // get the user's current location by gps, and return it in order to set center on it.
+    /**
+     * Get the user's current location by gps.
+     *
+     * @return currentPoint: The current position which get from GPS
+     */
     private GeoPoint getCurrentPosition() {
         try {
             // get gps
@@ -180,7 +191,9 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         return currentPoint;
     }
 
-    // clear all overlay , and empty previous current location
+    /**
+     * Clear all overlay, and empty previous stored current location
+     */
     private void clearAllLocation(){
         // clear all overlay
         mapView.getOverlays().clear();
