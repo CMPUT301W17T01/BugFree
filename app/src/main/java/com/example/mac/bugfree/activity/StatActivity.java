@@ -27,12 +27,28 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 
+/**
+ * This activity provides statistic information to the user.
+ * It shows the number of each mood states of the user or
+ * the total. It also shows two graphs for user or total.
+ *
+ * some resource: https://github.com/PhilJay/MPAndroidChart
+ * @author Mengyang Chen & Yipeng Zhou
+ */
+
 public class StatActivity extends AppCompatActivity {
     private String current_user;
     private User user = new User();
     ArrayList<Integer> total_list = new ArrayList<Integer>();
     BarChart barChart1;
     BarChart barChart2;
+
+    /** Called when the activity is first created.
+     * It creates 16 text views and 2 graph views for showing
+     * the numbers and graphs.
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +184,14 @@ public class StatActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Call when the activity is first created.
+     * Create a home button on the action bar of the activity
+     * which allows user to click on it and return to the
+     * main activity.
+     * @param menu
+     * @return
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,6 +199,11 @@ public class StatActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Set the action of the home button.
+     * @param item
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -189,6 +218,14 @@ public class StatActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     *
+     * get the count for current user or other selected users for each mood events type
+     *
+     * @param moodEventList the moodevent list
+     * @return count
+     */
 
     private int get_anger(MoodEventList moodEventList){
         int x, count=0;
@@ -279,11 +316,16 @@ public class StatActivity extends AppCompatActivity {
         return count;
     }
 
+    /**
+     * Calculate the total count for each mood events
+     * store them as an integer array lis
+     *
+     * @param unlist username list
+     */
     private void totalCount(ArrayList unlist){
-        int i=0;
+        int i;
         int angers_total=0, confusions_total=0,disgusts_total=0,fears_total=0,
                 happies_total=0, sads_total=0, shames_total=0, surprises_total=0;
-
         for (i=0;i<unlist.size();i++) {
             String total_user = unlist.get(i).toString();
             ElasticsearchUserController.GetUserTask getUserTask =

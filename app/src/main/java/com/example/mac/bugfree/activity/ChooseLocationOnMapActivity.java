@@ -12,36 +12,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.util.CurrentLocation;
-import com.example.mac.bugfree.util.SaveFile;
 
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 
-import java.util.List;
-
-
 /**
- * Created by heyuehuang on 2017-03-29.
+ * This class is aim to choose a location on map and return the location to Edit UI and Create UI.
+ * <br> In this class, user interaction and file manipulation is performed.
+ *
+ * @author Heyue Huang 2017-03-29
+ * @version 1.4.2
+ * @since 1.0
  */
-
 public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver {
 
     private MapView mapView;
@@ -57,28 +49,30 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         super.onCreate(savedInstanceState);
         Context context = getApplicationContext();
 
-        // important! set your agent to prevent getting banned from the osm servers
+        // set the agent to prevent getting banned from the osm servers
         org.osmdroid.config.Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         setContentView(R.layout.activity_choose_location_on_map);
 
+        // add Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // add map
         mapView = (MapView) findViewById(R.id.map_choose);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
-
+        // add zoom in and out button
         mapView.setBuiltInZoomControls(true);
         mapView.setMultiTouchControls(true);
-
+        // set center
         IMapController mapController = mapView.getController();
         mapController.setZoom(18);
         startPoint = getCurrentPosition();
         mapController.setCenter(startPoint);
-
-        //Add Scale Bar
+        //add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mapView);
         mapView.getOverlays().add(myScaleBarOverlay);
 
+        //add the circle overlay to map
         mapEventsOverlay = new MapEventsOverlay(this, this);
         mapView.getOverlays().add(0, mapEventsOverlay);
 
@@ -104,15 +98,19 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         switch (item.getItemId()) {
             // if the item in tool bar is selected
             case R.id.action_clear_choose:
+                // clear the map
                 clearAllLocation();
                 return true;
             case R.id.activity_choose_location_on_map:
+                // if a circle is placed
                 if (chosenLocation != null){
+                    // pass its lat and lon to the destined intent
                     Intent parent = new Intent();
                     parent.putExtra("chosenLocationLat", lat);
                     parent.putExtra("chosenLocationLon", lon);
                     setResult(RESULT_OK,parent);
                     finish();
+                    // else, return nothing but a flag
                 } else {
                     Intent parent = new Intent();
                     String mes = "isnull";
@@ -126,15 +124,23 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         return super.onOptionsItemSelected(item);
     }
 
-    @Override public boolean singleTapConfirmedHelper(GeoPoint p) {
+    /**
+     *  When the user tap on the map, do the following
+     */
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p) {
         Toast.makeText(this, "Tap on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
-//        InfoWindow.closeAllInfoWindowsOn(mapView);
-
         return true;
     }
-    @Override public boolean longPressHelper(GeoPoint p) {
-        //DO NOTHING FOR NOW:
+
+    /**
+     * When the user long presses on the map, add a circle on the map
+     */
+    @Override
+    public boolean longPressHelper(GeoPoint p) {
+        // clear the previous choice
         clearAllLocation();
+        // draw a circle when
         Polygon circle = new Polygon(this);
         circle.setPoints(Polygon.pointsAsCircle(p, 50.0));
         circle.setFillColor(0x12121212);
@@ -142,22 +148,29 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         circle.setStrokeWidth(2);
         mapView.getOverlays().add(circle);
         mapView.invalidate();
+        // add the location to chosenLocation
         lat = p.getLatitudeE6()/1E6;
         lon = p.getLongitudeE6()/1E6;
         chosenLocation =  new GeoPoint(lat, lon);
 
-//        circle.setInfoWindow(new BasicInfoWindow(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView));
-//        circle.setTitle("Centered on "+p.getLatitude()+","+p.getLongitude());
-        Toast.makeText(this, "Long Press on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Successfully choose ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
 
         return false;
     }
+
+    /**
+     * Get the user's current location by gps.
+     *
+     * @return currentPoint: The current position which get from GPS
+     */
     private GeoPoint getCurrentPosition() {
         try {
+            // get gps
             CurrentLocation locationListener = new CurrentLocation();
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            // if not null then set current point
             if (location != null) {
                 int latitude = (int) (location.getLatitude() * 1E6);
                 int longitude = (int) (location.getLongitude() * 1E6);
@@ -169,12 +182,18 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
         return currentPoint;
     }
 
+    /**
+     * Clear all overlay, and empty previous stored current location
+     */
     private void clearAllLocation(){
+        // clear all overlay
         mapView.getOverlays().clear();
+        // add back scale and circle base
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mapView);
         mapView.getOverlays().add(myScaleBarOverlay);
         mapEventsOverlay = new MapEventsOverlay(this, this);
         mapView.getOverlays().add(0, mapEventsOverlay);
+        // empty the chosenLocation
         chosenLocation = null;
         mapView.invalidate();
     }

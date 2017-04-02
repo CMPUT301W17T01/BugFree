@@ -236,8 +236,8 @@ public class EditActivity extends CreateEditMoodActivity {
 
     /**
      * local functions that allow users to load the mood events
+     * @param edit_mood_event edit mood event pull from elastic search
      */
-
     public void load_moodEvent(MoodEvent edit_mood_event) {
 
         edit_mood_state = edit_mood_event.getMoodState();
@@ -267,7 +267,7 @@ public class EditActivity extends CreateEditMoodActivity {
 
     }
 
-    //http://stackoverflow.com/questions/8769368/how-to-set-position-in-spinner
+    //taken from http://stackoverflow.com/questions/8769368/how-to-set-position-in-spinner
     private int getIndex(Spinner spinner, String myString) {
 
         int index = 0;
@@ -469,12 +469,18 @@ public class EditActivity extends CreateEditMoodActivity {
                     }
                 }
                 break;
-            //TODO
+            // when go back to this intent
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
+                    // get the point
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
                     Double lon = data.getDoubleExtra("chosenLocationLon",0);
-                    currentLocation = new GeoPoint(lat, lon);
+                    String mess = data.getStringExtra("flag");
+                    if (mess == null){
+                        currentLocation = new GeoPoint(lat, lon);
+                    } else {
+                        currentLocation = null;
+                    }
                 }
                 break;
             default:
@@ -574,6 +580,9 @@ public class EditActivity extends CreateEditMoodActivity {
         startActivityForResult(intent, CHOOSE_PHOTO);
     }
 
+    /**
+     * Grand the gps permission
+     */
     private void permissionLocationRequest() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -602,6 +611,9 @@ public class EditActivity extends CreateEditMoodActivity {
                 .show();
     }
 
+    /**
+     * Using GPS to add current location.
+     */
     public void add_location() {
         if (currentLocationCheckbox.isChecked()) {
             try {
@@ -622,6 +634,13 @@ public class EditActivity extends CreateEditMoodActivity {
         }
 
     }
+
+    /**
+     * When the Location TextView is chosen, if it is online then change to the map,
+     * if it is offline then send the warning message
+     *
+     * @param v the view
+     */
     public void chooseLocation(View v) {
         InternetConnectionChecker checker = new InternetConnectionChecker();
         Context context = getApplicationContext();

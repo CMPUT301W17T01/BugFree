@@ -92,29 +92,55 @@ import static java.util.Date.parse;
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    /**
+     * The constant TAKE_PHOTO.
+     */
     public static final int TAKE_PHOTO = 1;
+    /**
+     * The constant CHOOSE_PHOTO.
+     */
     public static final int CHOOSE_PHOTO = 2;
+    /**
+     * The constant REQ_CODE_CHILD.
+     */
     public final static int REQ_CODE_CHILD = 233;
 
 
     private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
-    public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
+    /**
+     * The Set year.
+     */
+    public  int set_year = 0, /**
+     * The Set month.
+     */
+    set_month = 0, /**
+     * The Set day.
+     */
+    set_day = 0, /**
+     * The Set hour.
+     */
+    set_hour, /**
+     * The Set minute.
+     */
+    set_minute;
     private String test;
     private EditText create_edit_reason;
     private ImageView pic_preview, home_tab, earth_tab;
     private CheckBox current_time_checkbox, currentLocationCheckbox;
+    /**
+     * The Date of record.
+     */
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
-//    private Location location;
 
     /**
      * onCreate begins from here
-     * set the spinners, pickers and EditText, store them whenever changed
+     * set the spinners, pickers and EditText, store them locally whenever something type in or spinner item been selected
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +163,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         simpleTimePicker.setIs24HourView(true);
         current_time_checkbox.setChecked(true);
         currentLocationCheckbox = (CheckBox) findViewById(R.id.current_location);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            permissionLocationRequest();
-        }
 
         if(current_time_checkbox.isChecked()){
             simpleDatePicker.setEnabled(false);
@@ -277,6 +298,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
             }
         });
+        /**
+         * API need to be greater than or equal to 23 to use the getHour() and getMinute()
+         */
         simpleTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -344,6 +368,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     } else {
                         takeAPhoto();
                     }
+                } else {
+                    takeAPhoto();
                 }
                 return true;
 
@@ -360,6 +386,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Using GPS to add current location.
+     */
     public void add_location(){
         if (currentLocationCheckbox.isChecked()) {
             try {
@@ -375,18 +404,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
-
         } else {
             currentLocation = null;
         }
-
     }
 
     /**
      * pass the data in
-     * @param reason
-     * set the mood event and push it to online server
-     * @throws MoodStateNotAvailableException
+     *
+     * @param current_user          the current user
+     * @param mood_state            the mood state
+     * @param social_situation      the social situation
+     * @param reason                set the mood event and push it to online server
+     * @param imageForElasticSearch the image for elastic search
+     * @param currLocation          the curr location
+     * @throws MoodStateNotAvailableException the mood state not available exception
      */
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch, GeoPoint currLocation)
             throws MoodStateNotAvailableException{
@@ -429,7 +461,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             moodEvent.setLocation(currLocation);
         }
 
-//TODO: save to image file
         if (imageForElasticSearch != null) {
             String uniqueID = realT.getTime().toString().replaceAll("\\s", "") + current_user;
             uniqueID = uniqueID.replaceAll(":","");
@@ -464,7 +495,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * This class allow the user to get the real time
-     * @return time
+     *
+     * @return time gregorian calendar
      */
     public GregorianCalendar real_time(){
         GregorianCalendar time;
@@ -517,6 +549,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Enter the camera to take photo
+     */
     private void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
@@ -533,6 +568,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     "com.example.mac.bugfree.fileprovider", folder);
         }
         else {
+
             imageFileUri = Uri.fromFile(folder);
         }
 
@@ -597,8 +633,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            // when go back to this intent
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
+                    // get the point
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
                     Double lon = data.getDoubleExtra("chosenLocationLon",0);
                     String mess = data.getStringExtra("flag");
@@ -643,6 +681,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         displayImage(imagePath);
     }
 
+    /**
+     * get the image path of album or camera
+     *
+     * @param uri uri
+     * @param selection selected position
+     * @return path
+     */
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
@@ -655,6 +700,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return path;
     }
 
+    /**
+     * Get the image path and set the picture preview as selected images
+     * @param imagePath imagepath
+     */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
@@ -667,6 +716,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * allow users to open the album and select photos from gallery
+     */
     private void openAlbum(){
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
@@ -679,6 +731,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    /**
+     * Grand the gps permission
+     */
     private void permissionLocationRequest() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -707,6 +762,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * set the image and push it to online server
+     * @param ifes
+     * @param uniqueId
+     */
     private void uploadImage (ImageForElasticSearch ifes, String uniqueId){
         ifes.setUniqueId(uniqueId);
 
@@ -714,8 +774,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         addImageTask.execute(ifes);
     }
 
+    /**
+     * When the Location TextView is chosen, if it is online then change to the map,
+     * if it is offline then send the warning message
+     *
+     * @param v the view
+     */
     public void chooseLocation(View v) {
-
         InternetConnectionChecker checker = new InternetConnectionChecker();
         Context context = getApplicationContext();
         final boolean isOnline = checker.isOnline(context);

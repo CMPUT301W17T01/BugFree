@@ -10,16 +10,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
- *
- * Created by yipengzhou on 2017/3/23.
+ * This class stores all image related info. It convert a image into
+ * byte array and check the size of the image. If the size is too
+ * bit, then resize it and convert it into base 64 format. It can also
+ * convert a base64 format image back to image.
+ * @author Yipeng Zhou
  */
 
 public class Image {
 
-    /**
-     * I haven't added any return value and parameter of function, you have to add or change after
-     * AND maybe some function is public
-     */
 
     private Bitmap bm;
     private byte[] imageByteArray;
@@ -37,9 +36,6 @@ public class Image {
     }
 
     private void checkImageSize(Bitmap bm) {
-        // TODO: check the image size if too large, resize it then transfer into base64
-        // TODO: if not too large, transfer into base64
-        // TODO: you can transfer image into byteArray first then check size
         imageByteArray = changeImageIntoByteArray(bm);
         imageByteCount = imageByteArray.length;
         if (imageByteCount >= 65536) {
@@ -52,19 +48,16 @@ public class Image {
     }
 
     private byte[] changeImageIntoByteArray(Bitmap bitmap) {
-        // TODO: maybe you need to change image into ByteArray
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
 
     private void imageToBase64(Bitmap bm){
-        // TODO: change image or any other type of image into Base64
         imageBase64 = Base64.encodeToString(changeImageIntoByteArray(bm), Base64.NO_WRAP);
     }
 
     public Bitmap base64ToImage() {
-        // TODO: change base64 String into image and store it
         byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0,
                 decodedString.length);
@@ -73,13 +66,8 @@ public class Image {
     }
 
     private void resizeImage(Bitmap bitmap) {
-        // TODO: resize the image
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
-    }
-
-    private void storeImage() {
-        // TODO: store the image which you have transferred from base64
     }
 
     public String getImageBase64() {
