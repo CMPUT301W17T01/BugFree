@@ -684,8 +684,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     /**
      * get the image path of album or camera
      *
-     * @param uri
-     * @param selection
+     * @param uri uri
+     * @param selection selected position
      * @return path
      */
     private String getImagePath(Uri uri, String selection) {
@@ -702,7 +702,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * Get the image path and set the picture preview as selected images
-     * @param imagePath
+     * @param imagePath imagepath
      */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
@@ -764,7 +764,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * set the image and push it to online server
-     *
+     * @param ifes
+     * @param uniqueId
      */
     private void uploadImage (ImageForElasticSearch ifes, String uniqueId){
         ifes.setUniqueId(uniqueId);

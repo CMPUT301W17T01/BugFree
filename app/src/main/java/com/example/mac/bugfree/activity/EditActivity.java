@@ -236,8 +236,8 @@ public class EditActivity extends CreateEditMoodActivity {
 
     /**
      * local functions that allow users to load the mood events
+     * @param edit_mood_event edit mood event pull from elastic search
      */
-
     public void load_moodEvent(MoodEvent edit_mood_event) {
 
         edit_mood_state = edit_mood_event.getMoodState();
@@ -267,7 +267,7 @@ public class EditActivity extends CreateEditMoodActivity {
 
     }
 
-    //http://stackoverflow.com/questions/8769368/how-to-set-position-in-spinner
+    //taken from http://stackoverflow.com/questions/8769368/how-to-set-position-in-spinner
     private int getIndex(Spinner spinner, String myString) {
 
         int index = 0;
