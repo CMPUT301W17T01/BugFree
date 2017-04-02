@@ -92,7 +92,6 @@ public class BlockListActivity extends FriendActivity {
 
                     //savefile = new SaveFile(context,user);
 
-
                     Toast.makeText(getApplicationContext(), singleblock+
                             " has been removed", Toast.LENGTH_SHORT).show();
                 }
