@@ -67,15 +67,5 @@ public class SaveLoadFileTest extends ActivityInstrumentationTestCase2 {
         User user = load.loadUser(context);
         assertEquals(usr,user);
     }
-// This function is not available yet
-//    public void testDeleteUser(){
-//        Context context = this.getInstrumentation().getTargetContext().getApplicationContext();
-//        delete = new DeleteFile();
-//        assertTrue(delete.DeleteUserFile(context));
-//    }
-    //Test if a MoodEventList file can be properly saved
-//    public void testSaveMoodEvent(){
-//
-//    }
 
 }

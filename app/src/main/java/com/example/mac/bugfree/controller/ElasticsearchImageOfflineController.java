@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by Zhi Li on 2017/3/30.
+ * This class stores file from elastic search and stores user's image to local file when
+ * corresponding method is called.
+ * @author Zhi Li
  */
-
 public class ElasticsearchImageOfflineController {
     private static final String IMAGEONLINE = "ImageOnlineList.sav";
     private static final String IMAGEUPLOADLIST = "ImageUploadList.sav";
@@ -36,6 +37,15 @@ public class ElasticsearchImageOfflineController {
     private ArrayList<String> imageList;
 
 
+    /**
+     * Add image task (local). The image id will be add to uploadArrayList
+     * and the base64String will be store to local file.
+     *
+     * @param context     the context
+     * @param imageBase64 the image base 64
+     * @param base64Id    the base 64 id
+     * @param OriginId    the origin id
+     */
     public void AddImageTask (Context context,String imageBase64, String base64Id,String OriginId){
         InternetConnectionChecker checker = new InternetConnectionChecker();
         final boolean isOnline = checker.isOnline(context);
@@ -51,8 +61,9 @@ public class ElasticsearchImageOfflineController {
 
     /**
      * Add the image to be deleted to the array list, need to delete the local file in the activity.
-     * @param context
-     * @param imageId
+     *
+     * @param context the context
+     * @param imageId the image id
      */
     public void DeleteImageTask(Context context,String imageId){
         InternetConnectionChecker checker = new InternetConnectionChecker();
@@ -64,39 +75,34 @@ public class ElasticsearchImageOfflineController {
             updateOfflineArrayList(context, "online", null, imageId);
         }
     }
+
+    /**
+     * Get image for elastic search from local file by id.
+     *
+     * @param context the context
+     * @param imageId the image id
+     * @return the image for elastic search
+     */
     public ImageForElasticSearch GetImageTask (Context context,String imageId){
         String base64 = loadBase64(context, imageId);
         return new ImageForElasticSearch(base64,imageId);
     }
+
     /**
+     * This method is for newly signed in user, it creates all the empty file for offline function for image
+     * This image offline function is for the current user's image only.
+     * Being called once after valid signin and at online.
+     * There are three files to be created:
+     * 1. Several image file (file stores base64String, file name is the unique id)
+     * 2. ImageOriginList.sav (Contains the [arraylist of [strings of [image unique id]]] user Originally have in the ElasticSearch)
+     * 3. ImageUploadList.sav (Contains the [arraylist of [strings of [image unique id]]] to be uploaded to the ElasticSearch)
+     * 4. ImageDeleteList.sav (Contains the [arraylist of [strings of [image unique id]]] to be deleted from the ElasticSearch)
      *
-     *  This method is for newly signed in user, it creates all the empty file for offline function for image
-     *  This image offline function is for the current user's image only.
-     *  Being called once after valid signin and at online.
-     *  There are three files to be created:
-     *  1. image.sav (file stores a dictionary contains image unique id and the image base64 String,
-     *                  both already exist in elastic search and image need to be upload to/delete from ElasticSearch.)
-     *  2. ImageOriginList.sav (Contains the [arraylist of [strings of [image unique id]]] user Originally have in the ElasticSearch)
-     *  3. ImageUploadList.sav (Contains the [arraylist of [strings of [image unique id]]] to be uploaded to the ElasticSearch)
-     *  4. ImageDeleteList.sav (Contains the [arraylist of [strings of [image unique id]]] to be deleted from the ElasticSearch)
-     * @param context
-     * @param user
+     * @param context the context
+     * @param user    the user
      */
     public void prepImageOffline(Context context, User user){
         try {
-            // Base64 dictionary file
-//                FileOutputStream fos = context.openFileOutput(IMAGEFILENAME, Context.MODE_PRIVATE);
-//                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-//
-//                Map<String, String> map = new HashMap<String, String>();
-//                map.put("base64", "something");
-////                System.out.println(map.get("dog"));
-////                map.remove("base64");
-//                Gson gson = new Gson();
-//                gson.toJson(map, out);
-//                out.flush();
-//                fos.close();
-
             // Arraylist, [strings of [image unique id]]] already in ElasticSearch
             FileOutputStream fos0 = context.openFileOutput(IMAGEONLINE, Context.MODE_PRIVATE);
             BufferedWriter out0= new BufferedWriter(new OutputStreamWriter(fos0));
@@ -152,16 +158,20 @@ public class ElasticsearchImageOfflineController {
     }
 
     /**
+     * Clear the local arraylists
+     */
+
+    /**
      * Save the base64String to file name by the uniqueID
-     * @param context
-     * @param imageBase64
-     * @param base64Id
+     *
+     * @param context     the context
+     * @param imageBase64 the image base 64 String
+     * @param base64Id    the base 64 id
      */
     public void saveBase64(Context context, String imageBase64, String base64Id){
         try {
             FileOutputStream fos = context.openFileOutput(base64Id, Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
             Gson gson = new Gson();
             gson.toJson(imageBase64, out);
             out.flush();
@@ -175,14 +185,15 @@ public class ElasticsearchImageOfflineController {
 
     /**
      * Load the origin list and add/delete the ids in the array list appropriately
-     * @param context
-//     * @param mode
-     * @param imageIdToBeSave
-     * @param imageIdToBeDelete
+     *
+     * @param context           the context
+     * @param mode              the mode
+     * @param imageIdToBeSave   the image id to be save
+     * @param imageIdToBeDelete the image id to be delete
+     * @return the boolean
      */
     public boolean updateOfflineArrayList(Context context, String mode, String imageIdToBeSave, String imageIdToBeDelete){
         try {
-//            LoadFile load = new LoadFile();
             ArrayList<String> updateList = loadImageList(context, "upload");
             ArrayList<String> deleteList = loadImageList(context, "delete");
             ArrayList<String> onlineList = loadImageList(context, "online");
@@ -237,6 +248,13 @@ public class ElasticsearchImageOfflineController {
         }
     }
 
+    /**
+     * Load base 64 string.
+     *
+     * @param context  the context
+     * @param fileName the String image file name
+     * @return the string
+     */
     public String loadBase64(Context context, String fileName){
         try {
             FileInputStream fis = context.openFileInput(fileName);
@@ -258,9 +276,10 @@ public class ElasticsearchImageOfflineController {
     /**
      * Receives parameter of current context and the mode of loading, to load the online arraylist,
      * use "online",to load the upload list, use "upload", if want to have delete list, use "delete"
-     * @param context
-     * @param mode
-     * @return
+     *
+     * @param context the context
+     * @param mode    the mode ("upload", "delete", "online")
+     * @return array list
      */
     public ArrayList<String> loadImageList(Context context, String mode){
         try {
@@ -269,14 +288,11 @@ public class ElasticsearchImageOfflineController {
                 filename = IMAGEUPLOADLIST;
             } else if (mode.equals("delete")){
                 filename = IMAGEDELETELIST;
-            }
-            else if (mode.equals("online")){
+            } else if (mode.equals("online")){
                 filename = IMAGEONLINE;
-            }
-            else{
+            } else{
                 return null;
             }
-
             FileInputStream fis = context.openFileInput(filename);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
