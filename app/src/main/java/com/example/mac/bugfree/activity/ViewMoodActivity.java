@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
-import com.example.mac.bugfree.controller.MoodEventAdapter;
 import com.example.mac.bugfree.module.ImageForElasticSearch;
 import com.example.mac.bugfree.module.MoodEvent;
 import com.example.mac.bugfree.module.MoodEventList;
@@ -36,7 +35,6 @@ import java.text.SimpleDateFormat;
  *
  * @author Mengyang Chen
  */
-
 public class ViewMoodActivity extends AppCompatActivity  {
 
     private MoodEvent moodEvent;
@@ -182,8 +180,8 @@ public class ViewMoodActivity extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
+
     /**
-     *
      * local functions that allow users to load, edit, delete the mood events
      */
 
