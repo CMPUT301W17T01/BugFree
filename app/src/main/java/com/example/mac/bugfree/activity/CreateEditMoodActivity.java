@@ -92,18 +92,45 @@ import static java.util.Date.parse;
 public class CreateEditMoodActivity extends AppCompatActivity {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    /**
+     * The constant TAKE_PHOTO.
+     */
     public static final int TAKE_PHOTO = 1;
+    /**
+     * The constant CHOOSE_PHOTO.
+     */
     public static final int CHOOSE_PHOTO = 2;
+    /**
+     * The constant REQ_CODE_CHILD.
+     */
     public final static int REQ_CODE_CHILD = 233;
 
 
     private String current_user, mood_state , social_situation, reason, imagepath;
     private Date date = null;
-    public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
+    /**
+     * The Set year.
+     */
+    public  int set_year = 0, /**
+     * The Set month.
+     */
+    set_month = 0, /**
+     * The Set day.
+     */
+    set_day = 0, /**
+     * The Set hour.
+     */
+    set_hour, /**
+     * The Set minute.
+     */
+    set_minute;
     private String test;
     private EditText create_edit_reason;
     private ImageView pic_preview, home_tab, earth_tab;
     private CheckBox current_time_checkbox, currentLocationCheckbox;
+    /**
+     * The Date of record.
+     */
     public GregorianCalendar dateOfRecord;
     private DatePicker simpleDatePicker;
     private TimePicker simpleTimePicker;
@@ -359,6 +386,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Using GPS to add current location.
+     */
     public void add_location(){
         if (currentLocationCheckbox.isChecked()) {
             try {
@@ -374,18 +404,21 @@ public class CreateEditMoodActivity extends AppCompatActivity {
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
-
         } else {
             currentLocation = null;
         }
-
     }
 
     /**
      * pass the data in
-     * @param reason
-     * set the mood event and push it to online server
-     * @throws MoodStateNotAvailableException
+     *
+     * @param current_user          the current user
+     * @param mood_state            the mood state
+     * @param social_situation      the social situation
+     * @param reason                set the mood event and push it to online server
+     * @param imageForElasticSearch the image for elastic search
+     * @param currLocation          the curr location
+     * @throws MoodStateNotAvailableException the mood state not available exception
      */
     public void setMoodEvent(String current_user, String mood_state, String social_situation, String reason, ImageForElasticSearch imageForElasticSearch, GeoPoint currLocation)
             throws MoodStateNotAvailableException{
@@ -462,7 +495,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * This class allow the user to get the real time
-     * @return time
+     *
+     * @return time gregorian calendar
      */
     public GregorianCalendar real_time(){
         GregorianCalendar time;
@@ -599,8 +633,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            // when go back to this intent
             case REQ_CODE_CHILD:
                 if (resultCode == RESULT_OK){
+                    // get the point
                     Double lat = data.getDoubleExtra("chosenLocationLat",0);
                     Double lon = data.getDoubleExtra("chosenLocationLon",0);
                     String mess = data.getStringExtra("flag");
@@ -695,6 +731,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    /**
+     * Grand the gps permission
+     */
     private void permissionLocationRequest() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -734,8 +773,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         addImageTask.execute(ifes);
     }
 
+    /**
+     * When the Location TextView is chosen, if it is online then change to the map,
+     * if it is offline then send the warning message
+     *
+     * @param v the view
+     */
     public void chooseLocation(View v) {
-
         InternetConnectionChecker checker = new InternetConnectionChecker();
         Context context = getApplicationContext();
         final boolean isOnline = checker.isOnline(context);

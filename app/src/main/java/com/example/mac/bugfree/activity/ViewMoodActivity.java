@@ -36,7 +36,6 @@ import java.text.SimpleDateFormat;
  *
  * @author Mengyang Chen
  */
-
 public class ViewMoodActivity extends AppCompatActivity  {
 
     private MoodEvent moodEvent;
@@ -182,8 +181,8 @@ public class ViewMoodActivity extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
+
     /**
-     *
      * local functions that allow users to load, edit, delete the mood events
      */
 
@@ -286,6 +285,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
         editor.putString("moodevent",json);
         editor.apply();
     }
+
     private Bitmap getImage(MoodEvent moodEvent){
         ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
         String uniqueId = moodEvent.getPicId();
