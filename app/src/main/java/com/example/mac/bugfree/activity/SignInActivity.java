@@ -20,12 +20,6 @@ import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.InternetConnectionChecker;
 import com.example.mac.bugfree.util.SaveFile;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import static com.google.common.collect.ComparisonChain.start;
-
 /**
  * This is the Sign Up view class of the project, <br> In this class, user interaction and Elastic Query action are performed
  *<p>User input of user name is check by Elastic search, no duplicate is allowed.
@@ -86,12 +80,8 @@ public class SignInActivity extends AppCompatActivity {
                         User user = getUserTask.get();
                         SaveFile s = new SaveFile(context, user);
 
-                        // Set has been offline to false
-                        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                        editor.putBoolean("hasBeenOffline", false);
-                        editor.apply();
-
-                        //Clear the local upload,delete,online lists
+                        // Clear the local upload,delete,online lists,
+                        // stores images to local file for offline use.
                         elasticsearchImageOfflineController.prepImageOffline(context,user);
 
                     } catch (Exception e) {

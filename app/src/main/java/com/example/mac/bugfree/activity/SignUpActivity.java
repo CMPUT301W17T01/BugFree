@@ -113,6 +113,11 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Add the user just signed up to the user name list, this list is for statistics.
+     * @param usrName
+     * @return
+     */
     private boolean updateUserNameList(String usrName) {
         UserNameList userNameList = new UserNameList();
 

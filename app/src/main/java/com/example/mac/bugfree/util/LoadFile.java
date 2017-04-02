@@ -35,10 +35,6 @@ public class LoadFile{
     private static final String FILENAME = "file.sav";
     private static final String FILENAME2 = "filter.sav";
 //    private static final String IMAGEFILENAME = "image.sav";
-
-
-
-
     private User user;
 
     /**
@@ -80,24 +76,18 @@ public class LoadFile{
      */
     public ArrayList<MoodEvent> loadFilteredMoodEventList(Context context) {
         ArrayList<MoodEvent> moodEventList;
-
         try {
             FileInputStream fis = context.openFileInput(FILENAME2);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
             Gson gson = new Gson();
-
             moodEventList = gson.fromJson(in, new TypeToken<ArrayList<MoodEvent>>(){}.getType());
-
             fis.close();
-            return moodEventList;
 
+            return moodEventList;
         } catch (FileNotFoundException e) {
             return null;
         } catch (IOException e) {
             return null;
         }
     }
-
-
 }
