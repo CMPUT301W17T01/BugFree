@@ -189,8 +189,8 @@ public class StatActivity extends AppCompatActivity {
      * Create a home button on the action bar of the activity
      * which allows user to click on it and return to the
      * main activity.
-     * @param menu
-     * @return
+     * @param menu: menu
+     * @return true
      */
 
     @Override
@@ -201,8 +201,8 @@ public class StatActivity extends AppCompatActivity {
 
     /**
      * Set the action of the home button.
-     * @param item
-     * @return
+     * @param item: item
+     * @return true
      */
 
     @Override

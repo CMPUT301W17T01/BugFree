@@ -43,15 +43,12 @@
             android:name=".activity.FilterActivity"
             android:label="@string/title_activity_filter">
 
-            <!-- <intent-filter> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".activity.FriendActivity" />
         <activity android:name=".activity.BlockListActivity" />
         <activity android:name=".activity.ViewMoodActivity" />
         <activity android:name=".activity.EditActivity" />
-        <activity android:name=".activity.StatActivity"></activity>
+        <activity android:name=".activity.StatActivity" />
     </application>
 
 </manifest>
