@@ -38,22 +38,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
-                <!--<ImageView-->
-                <!--android:src="@drawable/ic_add_pic"-->
-                <!--android:id="@+id/add_picture"-->
-                <!--android:adjustViewBounds="true"-->
-                <!--android:maxWidth="50dp"-->
-                <!--android:maxHeight="50dp"-->
-                <!--android:scaleType="fitCenter"-->
-                <!--android:layout_weight="0.16"-->
-                <!--android:layout_width="60dp"-->
-                <!--android:layout_height="60dp" />-->
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    app:srcCompat="@drawable/picture_text"
+                    android:layout_width="match_parent"
                     android:id="@+id/pic_preview"
-                    android:layout_height="100dp" />
+                    android:layout_height="120dp"
+                    android:layout_weight="0.50"
+                    android:layout_gravity="center_horizontal"
+                    android:clickable="true" />
 
             </LinearLayout>
             <LinearLayout

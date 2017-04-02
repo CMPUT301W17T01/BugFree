@@ -62,9 +62,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
         TextView socialSituation = (TextView) findViewById(R.id.socialSituation_textView);
         TextView reason = (TextView) findViewById(R.id.reason_textView);
         TextView date_text = (TextView) findViewById(R.id.date_textView);
-        TextView location_text =(TextView) findViewById(R.id.text4_location);
+        TextView location_text =(TextView) findViewById(R.id.Location_textView);
         ImageView picImage = (ImageView) findViewById(R.id.imageView);
-        //image.setImageResource(R.drawable.picture_text);
+        ImageView emoji = (ImageView) findViewById(R.id.imageView2);
 
         Context context = getApplicationContext();
         InternetConnectionChecker checker = new InternetConnectionChecker();
@@ -80,6 +80,30 @@ public class ViewMoodActivity extends AppCompatActivity  {
         }
 
         moodState.setText(moodEvent.getMoodState());
+        if(moodEvent.getMoodState().equals("Anger")){
+            emoji.setImageResource(R.drawable.anger);
+        }
+        if(moodEvent.getMoodState().equals("Confusion")){
+            emoji.setImageResource(R.drawable.confusion);
+        }
+        if(moodEvent.getMoodState().equals("Disgust")){
+            emoji.setImageResource(R.drawable.disgust);
+        }
+        if(moodEvent.getMoodState().equals("Fear")){
+            emoji.setImageResource(R.drawable.fear);
+        }
+        if(moodEvent.getMoodState().equals("Happy")){
+            emoji.setImageResource(R.drawable.happy);
+        }
+        if(moodEvent.getMoodState().equals("Sad")){
+            emoji.setImageResource(R.drawable.sad);
+        }
+        if(moodEvent.getMoodState().equals("Shame")){
+            emoji.setImageResource(R.drawable.shame);
+        }
+        if(moodEvent.getMoodState().equals("Surprise")){
+            emoji.setImageResource(R.drawable.surprise);
+        }
         if(moodEvent.getSocialSituation()!=null){
             socialSituation.setText(moodEvent.getSocialSituation());
         }
@@ -173,7 +197,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
 
     }
 
-
+    /**
+     *If users click on delete, delte this mood event online
+     */
     private void deleteMoodEvent() {
 
         User user = new User();
@@ -236,7 +262,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
         }
 
     }
-
+    /**
+     *If users click on edit, jump to the EditActivity
+     */
     private void editMoodEvent() {
         User user = new User();
         //TODO: use of user?

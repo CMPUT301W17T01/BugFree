@@ -217,6 +217,15 @@ public class StatActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     *
+     * get the count for current user or other selected users for each mood events type
+     *
+     * @param moodEventList
+     * @return count
+     */
+
     private int get_anger(MoodEventList moodEventList){
         int x, count=0;
 
@@ -306,11 +315,16 @@ public class StatActivity extends AppCompatActivity {
         return count;
     }
 
+    /**
+     * Calculate the total count for each mood events
+     * store them as an integer array lis
+     *
+     * @param unlist
+     */
     private void totalCount(ArrayList unlist){
-        int i=0;
+        int i;
         int angers_total=0, confusions_total=0,disgusts_total=0,fears_total=0,
                 happies_total=0, sads_total=0, shames_total=0, surprises_total=0;
-
         for (i=0;i<unlist.size();i++) {
             String total_user = unlist.get(i).toString();
             ElasticsearchUserController.GetUserTask getUserTask =
