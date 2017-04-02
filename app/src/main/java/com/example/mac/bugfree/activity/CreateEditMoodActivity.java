@@ -110,11 +110,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     private Uri imageFileUri;
     private GeoPoint currentLocation;
     private ImageForElasticSearch imageForElasticSearch = null;
-//    private Location location;
 
     /**
      * onCreate begins from here
-     * set the spinners, pickers and EditText, store them whenever changed
+     * set the spinners, pickers and EditText, store them locally whenever something type in or spinner item been selected
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -530,6 +529,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     "com.example.mac.bugfree.fileprovider", folder);
         }
         else {
+
             imageFileUri = Uri.fromFile(folder);
         }
 
