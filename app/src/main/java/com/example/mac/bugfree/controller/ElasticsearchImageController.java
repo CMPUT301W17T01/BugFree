@@ -27,38 +27,6 @@ import io.searchbox.core.Index;
 public class ElasticsearchImageController {
     private static JestDroidClient client;
 
-//    /**
-//     * The function which add image to elastic search
-//     */
-//    public static class AddImageTask extends AsyncTask<ImageForElasticSearch, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(ImageForElasticSearch... images) {
-//            verifySettings();
-//
-//            String uniqueID = "";
-//
-//            for (ImageForElasticSearch image : images) {
-//                Index index = new Index.Builder(image).index("cmput301w17t01").type("image").build();
-//
-//                try {
-//                    // where is the client
-//                    DocumentResult result = client.execute(index);
-//                    if (result.isSucceeded()) {
-//                        uniqueID = result.getId();
-//                    } else {
-//                        Log.i("Error", "Elasticsearch was not able to add the image.");
-//                    }
-//                } catch (Exception e) {
-//                    Log.i("Error", "The application failed to build and send the image");
-//                }
-//
-//            }
-//            return uniqueID;
-//        }
-//    }
-
-
     /**
      * The function which add image to elastic search when create image offline
      */
@@ -80,6 +48,7 @@ public class ElasticsearchImageController {
                         Log.i("Error", "Elasticsearch was not able to add the image.");
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Log.i("Error", "The application failed to build and send the image");
                 }
             }

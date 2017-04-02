@@ -41,7 +41,6 @@ public class ElasticsearchUserController {
             for (User user : users) {
                 Index index = new Index.Builder(user).index("cmput301w17t01").type("user").id(user.getUsr()).build();
 
-
                 try {
                     // where is the client
                     DocumentResult result = client.execute(index);
@@ -51,6 +50,7 @@ public class ElasticsearchUserController {
                         Log.i("Error", "Elasticsearch was not able to add the user.");
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     Log.i("Error", "The application failed to build and send the user");
                 }
 
