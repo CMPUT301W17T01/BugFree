@@ -318,6 +318,8 @@ public class FriendActivity extends AppCompatActivity {
                             notificationList);
                     notificationListView.setAdapter(adapter);
 
+
+
                     ElasticsearchUserController.AddUserTask addUserTask =
                             new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
