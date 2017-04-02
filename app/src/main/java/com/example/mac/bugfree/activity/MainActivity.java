@@ -220,9 +220,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//TODO:can delete one sleep?
                 userOfflineUpdate();
-//                SystemClock.sleep(1000);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -253,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
             drawer_name.setText(currentUserName);
             context = getApplicationContext();
             userOfflineUpdate();
-            SystemClock.sleep(1000);
+//            SystemClock.sleep(1000);
             if (fileExists(context, FILENAME2)) {
                 loadFromFilterFile(context);
             } else {
@@ -262,27 +260,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-        currentUserName = pref.getString("currentUser", "");
-
-        if (currentUserName.equals("")) {
-            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-            startActivity(intent);
-        } else {
-            drawer_name.setText(currentUserName);
-            context = getApplicationContext();
-            userOfflineUpdate();
-            SystemClock.sleep(1000);
-            if (fileExists(context, FILENAME2)) {
-                loadFromFilterFile(context);
-            } else {
-                loadList(currentUserName);
-            }
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+//        currentUserName = pref.getString("currentUser", "");
+//
+//        if (currentUserName.equals("")) {
+//            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+//            startActivity(intent);
+//        } else {
+//            drawer_name.setText(currentUserName);
+//            context = getApplicationContext();
+//            userOfflineUpdate();
+//            SystemClock.sleep(1000);
+//            if (fileExists(context, FILENAME2)) {
+//                loadFromFilterFile(context);
+//            } else {
+//                loadList(currentUserName);
+//            }
+//        }
+//    }
 
 
     @Override
@@ -607,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void userOfflineUpdate(){
         context = getApplicationContext();
-        final boolean isOnline = checker.isOnline(context);
+        boolean isOnline = checker.isOnline(context);
 
         SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
         hasBeenOffline = pref.getBoolean("hasBeenOffline",true);
@@ -623,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
                 file.delete();
             }
         }
-        if (isOnline && hasBeenOffline) {
+        if (true) {
             //If has been offline and now is online, when signed in, load the local user and upload the local user
             if (!currentUserName.equals("")) {
                 try {
@@ -649,26 +647,32 @@ public class MainActivity extends AppCompatActivity {
 //                    SystemClock.sleep(3000);
                     ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
                     for (String Id :upList) {
-                        addImageTask = new ElasticsearchImageController.AddImageTask();
                         String base64 = elasticsearchImageOfflineController.loadBase64(context, Id);
                         ImageForElasticSearch ifes = new ImageForElasticSearch(base64,Id);
+                        addImageTask = new ElasticsearchImageController.AddImageTask();
                         addImageTask.execute(ifes);
                         Log.i("upid",Id);
 //                        SystemClock.sleep(1000);
                     }
 
-                    //Clear the local upload,delete,online lists
-                    elasticsearchImageOfflineController.prepImageOffline(context,user);
+                    context = getApplicationContext();
+                    isOnline = checker.isOnline(context);
+
+                    if(isOnline) {
+                        //Clear the local upload,delete,online lists
+                        elasticsearchImageOfflineController.prepImageOffline(context, user);
+                        Log.d("Finish", "Finish");
+                    }
 
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read and upload local file.");
                 }
-                // Set has been offline to false
-                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                editor.putBoolean("hasBeenOffline", false);
-                editor.apply();
-
-                SystemClock.sleep(1000);
+//                // Set has been offline to false
+//                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+//                editor.putBoolean("hasBeenOffline", false);
+//                editor.apply();
+//
+//                SystemClock.sleep(1000);
             }
         }
     }

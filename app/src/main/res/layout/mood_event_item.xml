@@ -62,8 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/mood_event_pic"
-            android:src="@drawable/picture_text"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/picture_text" />
 
         <TextView
             android:layout_width="match_parent"
