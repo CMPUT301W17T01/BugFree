@@ -2,30 +2,21 @@ package com.example.mac.bugfree.activity;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.audiofx.BassBoost;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,49 +31,59 @@ import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.util.LoadFile;
 
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
-
-
-
 import static android.widget.Toast.LENGTH_LONG;
 
+/**
+ * This class is aim to choose a location on map and return the location to Edit UI and Create UI.
+ * <br> In this class, user interaction and file manipulation is performed.
+ *
+ * @author Heyue Huang & Xinlei Chen
+ * @version 2.8.7
+ * @since 1.0
+ */
 public class MapActivity extends AppCompatActivity {
     private static final String FILENAME2 = "filter.sav";
 
     private MapView mOpenMapView;
+    /**
+     * The Current point.
+     */
     GeoPoint currentPoint;
+    /**
+     * The Start point.
+     */
     GeoPoint startPoint;
-    //private String currentUserName;
-    GeoPoint p;
-    GeoPoint loc;
-
+    /**
+     * The My location overlay.
+     */
     MyLocationNewOverlay myLocationOverlay = null;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=301;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 301;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Context context = getApplicationContext();
-        // important! set your agent to prevent getting banned from the osm servers
+
+        // set the agent to prevent getting banned from the osm servers
         org.osmdroid.config.Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         setContentView(R.layout.activity_map);
 
+        // add Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // add Tab
         ImageView add_tab = (ImageView) findViewById(R.id.add_tab_map);
         add_tab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +102,13 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
+        // add map
         mOpenMapView = (MapView) findViewById(R.id.map);
         mOpenMapView.setTileSource(TileSourceFactory.MAPNIK);
-
+        // add zoom in and out button
         mOpenMapView.setBuiltInZoomControls(true);
         mOpenMapView.setMultiTouchControls(true);
-
+        // set center
         IMapController mapController = mOpenMapView.getController();
         mapController.setZoom(14);
         startPoint = new GeoPoint(53.56, -113.50);
@@ -115,43 +117,38 @@ public class MapActivity extends AppCompatActivity {
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
-
+        //the dialog for checking the permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                // Should we show an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(MapActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-
+                // Show an explanation
+                if (ActivityCompat.shouldShowRequestPermissionRationale(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // explanation
                 } else {
-
                     // No explanation needed, we can request the permission.
-
                     ActivityCompat.requestPermissions(MapActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
                 }
             }else {
                 Toast.makeText(getApplicationContext(), "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
             }
         }
+        // add my location and all moods
         addMyLocationPin();
         addMoodEventPin();
-
     }
+
     public void onResume() {
         super.onResume();
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-
     }
+
+    /**
+     * Check if there is a permission for the location
+     * @param requestCode: the request code
+     * @param permissions: the permission int
+     * @param grantResults: the grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -168,13 +165,13 @@ public class MapActivity extends AppCompatActivity {
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
 
+    /**
+     * Add a yellow person to show my current location
+     */
     public void addMyLocationPin() {
         //Add MyLocationOverlay
         this.myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getApplicationContext()) , mOpenMapView);
@@ -182,15 +179,26 @@ public class MapActivity extends AppCompatActivity {
         mOpenMapView.getOverlays().add(this.myLocationOverlay);
     }
 
+    /**
+     * If there is no filter mood event list, show all participants' most recent mood in the map,
+     * otherwise, show the filtered mood events.
+     */
     public void addMoodEventPin() {
         if (fileExists(getApplicationContext(), FILENAME2)) {
             loadFromFilterFile(getApplicationContext());
         } else {
-            // TODO: add all participate's moodEvent in 5km
+            // load all participants' moods
             loadAllParticipant();
         }
     }
 
+    /**
+     * check if the file is exits
+     *
+     * @param context: Application context
+     * @param filename: the file name
+     * @return: boolean
+     */
     private boolean fileExists(Context context, String filename) {
         File file = context.getFileStreamPath(filename);
         if (file == null || !file.exists()) {
@@ -199,6 +207,11 @@ public class MapActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Load the filtered moods from filter.sav, add all moods to overlay and display them
+     *
+     * @param context: Application Context
+     */
     private void loadFromFilterFile(Context context) {
         LoadFile loadFile = new LoadFile();
         ArrayList<MoodEvent> moodEventArrayList = new ArrayList<>();
@@ -241,6 +254,10 @@ public class MapActivity extends AppCompatActivity {
         mOpenMapView.getOverlays().add(mOverlay);
     }
 
+    /**
+     * Load all participants' moods, check if it is in the 5km, add all satisfied
+     * moods to overlay and display them.
+     */
     private void loadAllParticipant() {
         UserNameList userList = new UserNameList();
         MoodEventList moodEventList = new MoodEventList();
@@ -278,7 +295,6 @@ public class MapActivity extends AppCompatActivity {
                 if (distanceBetweenPoints(geoPoint) <= 5){
                     items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
                 }
-//                items.add(new OverlayItem(moodEvent.getBelongsTo(), moodEvent.getMoodState(), geoPoint));
             }
         }
 
@@ -289,7 +305,7 @@ public class MapActivity extends AppCompatActivity {
                         //do something
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
                                         + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
-                                Toast.LENGTH_LONG).show();
+                                LENGTH_LONG).show();
                         return true;
                     }
                     @Override
@@ -302,6 +318,12 @@ public class MapActivity extends AppCompatActivity {
         mOpenMapView.getOverlays().add(mOverlay);
     }
 
+    /**
+     * Calculate distance between the mood's location and the current location.
+     *
+     * @param moodPoint: the mood point
+     * @return the double: the distance in km
+     */
     public double distanceBetweenPoints(GeoPoint moodPoint) {
         try {
             CurrentLocation locationListener = new CurrentLocation();
@@ -327,7 +349,4 @@ public class MapActivity extends AppCompatActivity {
         double distance = currentLocation.distanceTo(moodLocation);
         return distance/1000;
     }
-
-
-
 }
