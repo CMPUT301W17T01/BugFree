@@ -731,6 +731,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    /**
+     * Grand the gps permission
+     */
     private void permissionLocationRequest() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
