@@ -33,6 +33,7 @@ import java.util.ArrayList;
  * the total. It also shows two graphs for user or total.
  *
  * some resource: https://github.com/PhilJay/MPAndroidChart
+ * @author Mengyang Chen & Yipeng Zhou
  */
 
 public class StatActivity extends AppCompatActivity {
@@ -222,7 +223,7 @@ public class StatActivity extends AppCompatActivity {
      *
      * get the count for current user or other selected users for each mood events type
      *
-     * @param moodEventList
+     * @param moodEventList the moodevent list
      * @return count
      */
 
@@ -319,7 +320,7 @@ public class StatActivity extends AppCompatActivity {
      * Calculate the total count for each mood events
      * store them as an integer array lis
      *
-     * @param unlist
+     * @param unlist username list
      */
     private void totalCount(ArrayList unlist){
         int i;

@@ -298,6 +298,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
             }
         });
+        /**
+         * API need to be greater than or equal to 23 to use the getHour() and getMinute()
+         */
         simpleTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
@@ -546,6 +549,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Enter the camera to take photo
+     */
     private void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
@@ -675,6 +681,13 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         displayImage(imagePath);
     }
 
+    /**
+     * get the image path of album or camera
+     *
+     * @param uri
+     * @param selection
+     * @return path
+     */
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
@@ -687,6 +700,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         return path;
     }
 
+    /**
+     * Get the image path and set the picture preview as selected images
+     * @param imagePath
+     */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
@@ -699,6 +716,9 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * allow users to open the album and select photos from gallery
+     */
     private void openAlbum(){
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
@@ -739,6 +759,10 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * set the image and push it to online server
+     *
+     */
     private void uploadImage (ImageForElasticSearch ifes, String uniqueId){
         ifes.setUniqueId(uniqueId);
 
