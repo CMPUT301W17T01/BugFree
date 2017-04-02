@@ -189,6 +189,13 @@ public class StatActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     *
+     * get the count for current user or other selected users for each mood events type
+     *
+     * @param moodEventList
+     * @return count
+     */
 
     private int get_anger(MoodEventList moodEventList){
         int x, count=0;
@@ -279,6 +286,12 @@ public class StatActivity extends AppCompatActivity {
         return count;
     }
 
+    /**
+     * Calculate the total count for each mood events
+     * store them as an integer array lis
+     *
+     * @param unlist
+     */
     private void totalCount(ArrayList unlist){
         int i;
         int angers_total=0, confusions_total=0,disgusts_total=0,fears_total=0,

@@ -65,7 +65,6 @@ public class ViewMoodActivity extends AppCompatActivity  {
         TextView location_text =(TextView) findViewById(R.id.Location_textView);
         ImageView picImage = (ImageView) findViewById(R.id.imageView);
         ImageView emoji = (ImageView) findViewById(R.id.imageView2);
-        //image.setImageResource(R.drawable.picture_text);
 
         Context context = getApplicationContext();
         InternetConnectionChecker checker = new InternetConnectionChecker();
@@ -198,7 +197,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
 
     }
 
-
+    /**
+     *If users click on delete, delte this mood event online
+     */
     private void deleteMoodEvent() {
 
         User user = new User();
@@ -261,7 +262,9 @@ public class ViewMoodActivity extends AppCompatActivity  {
         }
 
     }
-
+    /**
+     *If users click on edit, jump to the EditActivity
+     */
     private void editMoodEvent() {
         User user = new User();
         //TODO: use of user?
