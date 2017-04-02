@@ -27,12 +27,27 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
 
+/**
+ * This activity provides statistic information to the user.
+ * It shows the number of each mood states of the user or
+ * the total. It also shows two graphs for user or total.
+ *
+ * some resource: https://github.com/PhilJay/MPAndroidChart
+ */
+
 public class StatActivity extends AppCompatActivity {
     private String current_user;
     private User user = new User();
     ArrayList<Integer> total_list = new ArrayList<Integer>();
     BarChart barChart1;
     BarChart barChart2;
+
+    /** Called when the activity is first created.
+     * It creates 16 text views and 2 graph views for showing
+     * the numbers and graphs.
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,6 +183,14 @@ public class StatActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Call when the activity is first created.
+     * Create a home button on the action bar of the activity
+     * which allows user to click on it and return to the
+     * main activity.
+     * @param menu
+     * @return
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -175,6 +198,11 @@ public class StatActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Set the action of the home button.
+     * @param item
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,7 +216,6 @@ public class StatActivity extends AppCompatActivity {
         }
         return true;
     }
-
 
     private int get_anger(MoodEventList moodEventList){
         int x, count=0;
