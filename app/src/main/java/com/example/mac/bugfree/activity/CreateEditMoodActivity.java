@@ -11,10 +11,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -23,13 +21,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,14 +38,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.mac.bugfree.BuildConfig;
 import com.example.mac.bugfree.controller.ElasticsearchImageController;
 import com.example.mac.bugfree.controller.ElasticsearchImageOfflineController;
 import com.example.mac.bugfree.controller.ElasticsearchUserController;
@@ -79,10 +69,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static com.example.mac.bugfree.R.id.expanded_menu;
-import static com.example.mac.bugfree.R.id.image;
 import static com.example.mac.bugfree.R.id.timePicker;
-import static java.util.Date.parse;
 
 /**
  * This class allow users to create a new mood event
@@ -97,7 +84,7 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     public final static int REQ_CODE_CHILD = 233;
 
 
-    private String current_user, mood_state , social_situation, reason, imagepath;
+    private String current_user, mood_state , social_situation, reason;
     private Date date = null;
     public  int set_year = 0, set_month = 0, set_day = 0, set_hour, set_minute;
     private String test;
@@ -431,7 +418,6 @@ public class CreateEditMoodActivity extends AppCompatActivity {
         if (imageForElasticSearch != null) {
             String uniqueID = realT.getTime().toString().replaceAll("\\s", "") + current_user;
             uniqueID = uniqueID.replaceAll(":","");
-            String OriginID = moodEvent.getPicId();
             moodEvent.setPicId(uniqueID);
             if (isOnline){
                 uploadImage(imageForElasticSearch, uniqueID);
@@ -725,8 +711,8 @@ public class CreateEditMoodActivity extends AppCompatActivity {
 
     /**
      * set the image and push it to online server
-     * @param ifes
-     * @param uniqueId
+     * @param ifes: ifes
+     * @param uniqueId: unique picture id
      */
     private void uploadImage (ImageForElasticSearch ifes, String uniqueId){
         ifes.setUniqueId(uniqueId);

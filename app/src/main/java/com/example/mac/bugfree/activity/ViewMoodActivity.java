@@ -46,7 +46,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
      * OnCreate starts from here
      * firstly call load_moodEvent() to get the moodevent that user want to see  everytime
      * Then set the text
-     * @param savedInstanceState
+     * @param savedInstanceState: savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,7 +263,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
 
     }
     /**
-     *If users click on edit, jump to the EditActivity
+     * If users click on edit, jump to the EditActivity
      */
     private void editMoodEvent() {
         User user = new User();
@@ -286,6 +286,12 @@ public class ViewMoodActivity extends AppCompatActivity  {
         editor.putString("moodevent",json);
         editor.apply();
     }
+
+    /**
+     *
+     * @param moodEvent mood event from elastic search
+     * @return imageForElasticSearch.base64ToImage()
+     */
     private Bitmap getImage(MoodEvent moodEvent){
         ImageForElasticSearch imageForElasticSearch = new ImageForElasticSearch();
         String uniqueId = moodEvent.getPicId();

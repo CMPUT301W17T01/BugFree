@@ -389,7 +389,9 @@ public class EditActivity extends CreateEditMoodActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Enter the camera to take photo
+     */
     public void takeAPhoto() {
 
         File folder = new File(getExternalCacheDir(), "output_img.jpg");
@@ -510,7 +512,13 @@ public class EditActivity extends CreateEditMoodActivity {
         String imagePath = getImagePath(uri, null);
         displayImage(imagePath);
     }
-
+    /**
+     * get the image path of album or camera
+     *
+     * @param uri uri
+     * @param selection selected position
+     * @return path
+     */
     private String getImagePath(Uri uri, String selection) {
         String path = null;
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
@@ -523,6 +531,10 @@ public class EditActivity extends CreateEditMoodActivity {
         return path;
     }
 
+    /**
+     * Get the image path and set the picture preview as selected images
+     * @param imagePath imagepath
+     */
     private void displayImage(String imagePath) {
         if (imagePath != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
@@ -566,7 +578,9 @@ public class EditActivity extends CreateEditMoodActivity {
 
         return imageForElasticSearch.base64ToImage();
     }
-
+    /**
+     * allow users to open the album and select photos from gallery
+     */
 
     public void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
