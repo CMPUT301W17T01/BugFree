@@ -189,7 +189,7 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                 holder.picImage.setImageResource(R.drawable.picture_text);
             }
         } else {
-            holder.picImage.setImageResource(R.drawable.picture_text);
+            holder.picImage.setImageResource(R.drawable.umood);
         }
 
         holder.reasonText.setText(moodEvent.getTriggerText());
