@@ -70,6 +70,10 @@ public class MapActivity extends AppCompatActivity {
     MyLocationNewOverlay myLocationOverlay = null;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 301;
 
+    public MapView getmOpenMapView(){
+        return mOpenMapView;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +172,6 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Add a yellow person to show my current location
      */
@@ -235,10 +238,9 @@ public class MapActivity extends AppCompatActivity {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        //do something
-
+                        //Print the location's position
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
-                                        + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
+                                        + item.getPoint().getLatitude() + " : " + item.getPoint().getLongitude(),
                                 LENGTH_LONG).show();
                         return true;
                     }
@@ -302,9 +304,9 @@ public class MapActivity extends AppCompatActivity {
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        //do something
+                        //Print the location's position
                         Toast.makeText(MapActivity.this, item.getTitle() + "\n"
-                                        + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(),
+                                        + item.getPoint().getLatitude() + " : " + item.getPoint().getLongitude(),
                                 LENGTH_LONG).show();
                         return true;
                     }
