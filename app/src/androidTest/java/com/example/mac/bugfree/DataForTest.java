@@ -12,6 +12,8 @@ import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.module.User;
 import com.example.mac.bugfree.module.UserNameList;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -86,6 +88,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             GregorianCalendar dateOfRecord6 = new GregorianCalendar(2016, 2, 1, 13, 12,30);
             GregorianCalendar dateOfRecord7 = new GregorianCalendar(2017, 2, 2, 13, 12,30);
 
+            GeoPoint location0 = new GeoPoint(37.488, -123.8444);
+            GeoPoint location1 = new GeoPoint(53.5, -113.5);
+
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
                 MoodEvent mood1 = new MoodEvent(md1, usr0.getUsr());
@@ -102,6 +107,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood = new MoodEvent(md2, usr0.getUsr());
                 mood.setDateOfRecord(dateOfRecord2);
                 mood.setRealtime(dateOfRecord2);
+                mood.setLocation(location0);
                 mood.setTriggerText("Surstromming");
                 MEL.addMoodEvent(mood);
 
@@ -114,6 +120,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood = new MoodEvent(md4, usr0.getUsr());
                 mood.setDateOfRecord(dateOfRecord4);
                 mood.setRealtime(dateOfRecord4);
+                mood.setLocation(location1);
                 mood.setTriggerText("Full mark");
                 MEL.addMoodEvent(mood);
 
@@ -160,15 +167,20 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2016, 2, 27, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 2, 28, 13, 12);
 
+            location0 = new GeoPoint(66.588, -122.8444);
+            location1 = new GeoPoint(53.55, -113.534);
+
             try {
                 MoodEvent mood = new MoodEvent(md1, usr1.getUsr());
                 MoodEvent mood1 = new MoodEvent(md2, usr1.getUsr());
                 mood.setTriggerText("Hello1");
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
+                mood.setLocation(location0);
                 mood1.setDateOfRecord(dateOfRecord1);
                 mood.setRealtime(dateOfRecord);
                 mood1.setRealtime(dateOfRecord1);
+                mood1.setLocation(location1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -196,15 +208,20 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2017, 3, 7, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 3, 8, 13, 12);
 
+            location0 = new GeoPoint(49.3, -124);
+            location1 = new GeoPoint(53.5678, -113.599);
+
             try {
                 MoodEvent mood = new MoodEvent(md2, usr2.getUsr());
                 MoodEvent mood1 = new MoodEvent(md3, usr2.getUsr());
                 mood.setTriggerText("Hello2");
                 mood.setSocialSituation(ss2);
                 mood.setDateOfRecord(dateOfRecord);
+                mood.setLocation(location0);
                 mood1.setDateOfRecord(dateOfRecord1);
                 mood.setRealtime(dateOfRecord);
                 mood1.setRealtime(dateOfRecord1);
+                mood1.setLocation(location1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -376,15 +393,20 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2017, 3, 10, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 2, 18, 13, 12);
 
+            location0 = new GeoPoint(54.875, -114.5671);
+            location1 = new GeoPoint(53.5347, -113.666);
+
             try {
                 MoodEvent mood = new MoodEvent(md7, usr7.getUsr());
                 MoodEvent mood1 = new MoodEvent(md0, usr7.getUsr());
                 mood.setTriggerText("Hello7");
                 mood.setSocialSituation(ss3);
                 mood.setDateOfRecord(dateOfRecord);
+                mood.setLocation(location0);
                 mood1.setDateOfRecord(dateOfRecord1);
                 mood.setRealtime(dateOfRecord);
                 mood1.setRealtime(dateOfRecord1);
+                mood1.setLocation(location1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {
@@ -447,15 +469,21 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             MEL = new MoodEventList();
             dateOfRecord = new GregorianCalendar(2017, 3, 6, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 2, 14, 13, 12);
+
+            location0 = new GeoPoint(56.789, -114.577);
+            location1 = new GeoPoint(53.599, -113.784);
+
             try {
                 MoodEvent mood = new MoodEvent(md1, usr9.getUsr());
                 MoodEvent mood1 = new MoodEvent(md2, usr9.getUsr());
                 mood.setTriggerText("Hello9");
                 mood.setSocialSituation(ss1);
                 mood.setDateOfRecord(dateOfRecord);
+                mood.setLocation(location0);
                 mood1.setDateOfRecord(dateOfRecord1);
                 mood.setRealtime(dateOfRecord);
                 mood1.setRealtime(dateOfRecord1);
+                mood1.setLocation(location1);
                 MEL.addMoodEvent(mood);
                 MEL.addMoodEvent(mood1);
             } catch (Exception e) {

@@ -45,6 +45,7 @@ import com.example.mac.bugfree.controller.MoodEventAdapter;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -497,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
                             user.setPendingPermissions(pendingList);
                             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                             addUserTask.execute(user);
+
                         }
                     }
 
@@ -549,6 +551,8 @@ public class MainActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
 
+                    //TODO add to local file
+                    SaveFile savefile = new SaveFile(context,user);
                 }
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
@@ -603,18 +607,21 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    /**
+     * This method checks internet connectivity first, when there is no internet connection and someone has logged in,
+     * it clears the filtered file to allow user only see him/herself's moodevent.
+     * When the device is online, it uploads the local user and all the local new image file to elastic search,
+     * deletes the image from elastic search if user has deleted some online image while offline
+     * and clears the pending image to be uploaded.
+     */
     private void userOfflineUpdate(){
         context = getApplicationContext();
         boolean isOnline = checker.isOnline(context);
 
         SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-        hasBeenOffline = pref.getBoolean("hasBeenOffline",true);
         currentUserName = pref.getString("currentUser", "");
 
         if (!isOnline && !currentUserName.equals("")){
-            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-            editor.putBoolean("hasBeenOffline", true);
-            editor.apply();
             // filterFile will be removed
             if (fileExists(context, FILENAME2)) {
                 File file = context.getFileStreamPath(FILENAME2);
@@ -627,6 +634,45 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     LoadFile load = new LoadFile();
                     User user = load.loadUser(context);
+                    try {
+                        ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                        getUserTask.execute(currentUserName);
+                        User user1 = getUserTask.get();
+                        if(user1 != null) {
+                            ArrayList<String> followeeList = user1.getFolloweeIDs();
+                            ArrayList<String> followerList = user1.getFollowerIDs();
+                            ArrayList<String> blockList = user1.getBlockList();
+                            ArrayList<String> pendingList = user1.getPendingPermission();
+                            for (String Id: followeeList) {
+                                Log.i("followeelist", Id);
+                            }
+                            for (String Id: followerList) {
+                                Log.i("followerList", Id);
+                            }
+                            for (String Id: blockList) {
+                                Log.i("blockList", Id);
+                            }
+                            for (String Id: pendingList) {
+                                Log.i("pendingList", Id);
+                            }
+                            ArrayList<String> a = user.getBlockList();
+                            ArrayList<String> b = user.getFolloweeIDs();
+                            ArrayList<String> c = user.getFollowerIDs();
+                            ArrayList<String> d = user.getPendingPermission();
+
+                             a = blockList;
+                             b = followeeList;
+                             c = followerList;
+                             d = pendingList;
+
+                            Context context = getApplicationContext();
+                            SaveFile s = new SaveFile(context, user);
+
+                        }
+                    } catch (Exception e){
+                        Log.i("Offline","Cannot reset Friend arraylist");
+                    }
+
                     if (user != null) {
                         ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                         addUserTask.execute(user);
@@ -642,9 +688,7 @@ public class MainActivity extends AppCompatActivity {
                     for (String Id :deleteList){
                         deleteImageTask = new ElasticsearchImageController.DeleteImageTask();
                         deleteImageTask.execute(Id);
-//                        SystemClock.sleep(1000);
                     }
-//                    SystemClock.sleep(3000);
                     ArrayList<String> upList = elasticsearchImageOfflineController.loadImageList(context,"upload");
                     for (String Id :upList) {
                         String base64 = elasticsearchImageOfflineController.loadBase64(context, Id);
@@ -652,7 +696,6 @@ public class MainActivity extends AppCompatActivity {
                         addImageTask = new ElasticsearchImageController.AddImageTask();
                         addImageTask.execute(ifes);
                         Log.i("upid",Id);
-//                        SystemClock.sleep(1000);
                     }
 
                     context = getApplicationContext();
@@ -667,12 +710,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Log.i("Warning", "Failed to read and upload local file.");
                 }
-//                // Set has been offline to false
-//                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-//                editor.putBoolean("hasBeenOffline", false);
-//                editor.apply();
-//
-//                SystemClock.sleep(1000);
             }
         }
     }
