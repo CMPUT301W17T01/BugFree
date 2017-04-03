@@ -37,15 +37,9 @@ public class MapActivityUnitTest extends ActivityInstrumentationTestCase2<MapAct
     public void testDisplayMood(){
 
         solo.assertCurrentActivity("Wrong Activity", MapActivity.class);
-        boolean is;
         MapView mapView = getActivity().getmOpenMapView();
-        mapView.getOverlay();
-        if(mapView.getOverlay() != null){
-            is = true;
-        } else {
-            is = false;
-        }
-        assertTrue(is);
+        assertTrue(mapView.getOverlay() != null);
+
     }
 
 }
