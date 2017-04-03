@@ -303,7 +303,6 @@ public class FriendActivity extends AppCompatActivity {
                     Context context = getApplicationContext();
                     SaveFile s = new SaveFile(context, user1);
 
-
                 }
             });
 
@@ -347,11 +346,11 @@ public class FriendActivity extends AppCompatActivity {
             Context context = getApplicationContext();
             SaveFile s = new SaveFile(context, user1);
 
-            if (followerList.size()!=0) {
-                String singleFollower = followerList.get(position).toString();
-                TextView friendName = (TextView) view.findViewById(R.id.followerID);
-                friendName.setText(singleFollower);
-            }
+
+            final String singleFollower = followerList.get(position).toString();
+            final TextView friendName = (TextView) view.findViewById(R.id.followerID);
+            friendName.setText(singleFollower);
+
             return view;
 
         }
