@@ -130,6 +130,7 @@ public class ChooseLocationOnMapActivity extends MapActivity implements MapEvent
         return super.onOptionsItemSelected(item);
     }
 
+    // Taken from https://github.com/MKergall/osmbonuspack/wiki/Tutorial_2
     /**
      *  When the user tap on the map, do the following
      */
@@ -138,6 +139,8 @@ public class ChooseLocationOnMapActivity extends MapActivity implements MapEvent
         Toast.makeText(this, "Tap on ("+p.getLatitude()+","+p.getLongitude()+")", Toast.LENGTH_SHORT).show();
         return true;
     }
+
+    // Taken from https://github.com/MKergall/osmbonuspack/wiki/Tutorial_2
 
     /**
      * When the user long presses on the map, add a circle on the map

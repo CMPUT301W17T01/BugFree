@@ -147,6 +147,7 @@ public class MapActivity extends AppCompatActivity {
         org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
 
+    // Taken From https://developer.android.com/reference/android/support/v4/app/ActivityCompat.OnRequestPermissionsResultCallback.html
     /**
      * Check if there is a permission for the location
      * @param requestCode: the request code
@@ -171,7 +172,7 @@ public class MapActivity extends AppCompatActivity {
             }
         }
     }
-
+    // Taken from http://android-er.blogspot.ca/search?q=OpenStreetMap
     /**
      * Add a yellow person to show my current location
      */
