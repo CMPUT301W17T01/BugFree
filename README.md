@@ -2,16 +2,15 @@
 
 CMPUT 301 Project
 
-# Minimal API
-android API 25
-
-
 # Author
 * [Zhi Li](https://github.com/lily06)
 * [Mengyang Chen](https://github.com/YMChen95)
 * [Xinlei Chen](https://github.com/Raymundo1)
 * [Heyue Huang](https://github.com/JohnDoeMask)
 * [Yipeng Zhou](https://github.com/PilotNorman)
+
+# Minimal API
+android API 25
 
 # Demo Video
 [Youtube]()
