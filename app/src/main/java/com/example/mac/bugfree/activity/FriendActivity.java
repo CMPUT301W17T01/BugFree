@@ -98,8 +98,6 @@ public class FriendActivity extends AppCompatActivity {
         followList = user.getFolloweeIDs();
         notificationList = user.getPendingPermission();
 
-//        Toast.makeText(getApplicationContext(),
-//                "oncreate", Toast.LENGTH_SHORT).show();
         final ArrayAdapter<User> adapter1= new FollowListAdapter(getApplicationContext(), followList);
         final ArrayAdapter<User> adapter2 = new FollowerListAdapter(getApplicationContext(), followerList);
         final ArrayAdapter<User> adapter3 = new NotificationListAdapter(getApplicationContext(), notificationList);
@@ -120,30 +118,6 @@ public class FriendActivity extends AppCompatActivity {
                         findViewById(android.R.id.title); //for Selected Tab
                 tv.setTextColor(Color.parseColor("#ffffff"));
                 tv.setTextSize(13);
-
-                //                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//                currentUserName = pref.getString("currentUser", "");
-//
-//                String query = currentUserName;
-//                ElasticsearchUserController.GetUserTask getUserTask2 =
-//                        new ElasticsearchUserController.GetUserTask();
-//                getUserTask2.execute(currentUserName);
-//                User user1 = new User();
-//
-//                try{
-//                    user1 = getUserTask2.get();
-//                } catch (Exception e) {
-//                    Log.i("Error", "Failed to get the User out of the async object");
-//                }
-//
-//                followerList = user1.getFollowerIDs();
-//                followList = user1.getFolloweeIDs();
-//                notificationList = user1.getPendingPermission();
-//
-//                Context context = getApplicationContext();
-//                SaveFile s = new SaveFile(context, user);
-
-
 
                 switch (tabHost.getCurrentTab()){
                     case 0:
@@ -281,10 +255,6 @@ public class FriendActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), singleFollowee+
                             " has been removed", Toast.LENGTH_SHORT).show();
 
-                    //                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//                currentUserName = pref.getString("currentUser", "");
-//
-//                String query = currentUserName;
                     ElasticsearchUserController.GetUserTask getUserTask2 =
                             new ElasticsearchUserController.GetUserTask();
                     getUserTask2.execute(currentUserName);
@@ -324,10 +294,7 @@ public class FriendActivity extends AppCompatActivity {
         public View getView(final int position, View view, ViewGroup parent) {
             if (view == null)
                 view = getLayoutInflater().inflate(R.layout.list_follower_item, parent, false);
-            //                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//                currentUserName = pref.getString("currentUser", "");
-//
-//                String query = currentUserName;
+
             ElasticsearchUserController.GetUserTask getUserTask2 =
                     new ElasticsearchUserController.GetUserTask();
             getUserTask2.execute(currentUserName);
@@ -426,10 +393,6 @@ public class FriendActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), singleNotification +
                             " has been accepted", Toast.LENGTH_SHORT).show();
 
-                    //                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//                currentUserName = pref.getString("currentUser", "");
-//
-//                String query = currentUserName;
                     ElasticsearchUserController.GetUserTask getUserTask2 =
                             new ElasticsearchUserController.GetUserTask();
                     getUserTask2.execute(currentUserName);
