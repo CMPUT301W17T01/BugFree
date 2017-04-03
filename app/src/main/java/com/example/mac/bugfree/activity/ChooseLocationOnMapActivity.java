@@ -34,7 +34,7 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
  * @version 1.4.2
  * @since 1.0
  */
-public class ChooseLocationOnMapActivity extends AppCompatActivity implements MapEventsReceiver {
+public class ChooseLocationOnMapActivity extends MapActivity implements MapEventsReceiver {
 
     private MapView mapView;
     private GeoPoint currentPoint;
@@ -43,6 +43,12 @@ public class ChooseLocationOnMapActivity extends AppCompatActivity implements Ma
     private double lon;
     private double lat;
     private MapEventsOverlay mapEventsOverlay;
+    public GeoPoint getChosenLocation(){
+        return chosenLocation;
+    }
+    public GeoPoint getCurrentPoint(){
+        return currentPoint;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

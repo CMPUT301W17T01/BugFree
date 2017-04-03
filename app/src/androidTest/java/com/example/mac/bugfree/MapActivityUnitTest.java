@@ -3,14 +3,20 @@ package com.example.mac.bugfree;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 
 import com.example.mac.bugfree.activity.FilterActivity;
 import com.example.mac.bugfree.activity.MapActivity;
+import com.example.mac.bugfree.module.MoodEvent;
 import com.robotium.solo.Solo;
 
 import org.junit.Test;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
 
+import java.util.ArrayList;
+
+import static com.example.mac.bugfree.R.id.map;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 /**
@@ -28,12 +34,18 @@ public class MapActivityUnitTest extends ActivityInstrumentationTestCase2<MapAct
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-//    public void testDistanceBetweenTwoPoint(){
-//        solo.assertCurrentActivity("Wrong Activity", MapActivity.class);
-//        GeoPoint gp = new GeoPoint();
-//
-//    }
+    public void testDisplayMood(){
 
-
+        solo.assertCurrentActivity("Wrong Activity", MapActivity.class);
+        boolean is;
+        MapView mapView = getActivity().getmOpenMapView();
+        mapView.getOverlay();
+        if(mapView.getOverlay() != null){
+            is = true;
+        } else {
+            is = false;
+        }
+        assertTrue(is);
+    }
 
 }
