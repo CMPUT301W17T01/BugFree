@@ -45,6 +45,7 @@ import com.example.mac.bugfree.controller.MoodEventAdapter;
 import com.example.mac.bugfree.module.MoodEventList;
 import com.example.mac.bugfree.R;
 import com.example.mac.bugfree.module.User;
+import com.example.mac.bugfree.util.SaveFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -497,6 +498,7 @@ public class MainActivity extends AppCompatActivity {
                             user.setPendingPermissions(pendingList);
                             ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                             addUserTask.execute(user);
+
                         }
                     }
 
@@ -549,6 +551,8 @@ public class MainActivity extends AppCompatActivity {
                     ElasticsearchUserController.AddUserTask addUserTask = new ElasticsearchUserController.AddUserTask();
                     addUserTask.execute(user);
 
+                    //TODO add to local file
+                    SaveFile savefile = new SaveFile(context,user);
                 }
             } catch (Exception e) {
                 //Log.i("Error", "Failed to get the User out of the async object");
@@ -632,15 +636,39 @@ public class MainActivity extends AppCompatActivity {
                     User user = load.loadUser(context);
                     try {
                         ElasticsearchUserController.GetUserTask getUserTask = new ElasticsearchUserController.GetUserTask();
+                        getUserTask.execute(currentUserName);
                         User user1 = getUserTask.get();
-                        ArrayList<String> followeeList = user1.getFolloweeIDs();
-                        ArrayList<String> followerList = user1.getFollowerIDs();
-                        ArrayList<String> blockList = user1.getBlockList();
-                        ArrayList<String> pendingList = user1.getPendingPermission();
-                        user.setBlockIDs(blockList);
-                        user.setFolloweeIDs(followeeList);
-                        user.setFollowerIDs(followerList);
-                        user.setPendingPermissions(pendingList);
+                        if(user1 != null) {
+                            ArrayList<String> followeeList = user1.getFolloweeIDs();
+                            ArrayList<String> followerList = user1.getFollowerIDs();
+                            ArrayList<String> blockList = user1.getBlockList();
+                            ArrayList<String> pendingList = user1.getPendingPermission();
+                            for (String Id: followeeList) {
+                                Log.i("followeelist", Id);
+                            }
+                            for (String Id: followerList) {
+                                Log.i("followerList", Id);
+                            }
+                            for (String Id: blockList) {
+                                Log.i("blockList", Id);
+                            }
+                            for (String Id: pendingList) {
+                                Log.i("pendingList", Id);
+                            }
+                            ArrayList<String> a = user.getBlockList();
+                            ArrayList<String> b = user.getFolloweeIDs();
+                            ArrayList<String> c = user.getFollowerIDs();
+                            ArrayList<String> d = user.getPendingPermission();
+
+                             a = blockList;
+                             b = followeeList;
+                             c = followerList;
+                             d = pendingList;
+
+                            Context context = getApplicationContext();
+                            SaveFile s = new SaveFile(context, user);
+
+                        }
                     } catch (Exception e){
                         Log.i("Offline","Cannot reset Friend arraylist");
                     }

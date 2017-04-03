@@ -75,6 +75,13 @@ public class User {
     }
 
     /**
+     * add to the original list
+     */
+    public void setFolloweeIDList(ArrayList<String> followeeIDs) {
+        this.followeeIDs = (followeeIDs);
+    }
+
+    /**
      * Gets follower array
      *
      * @return the follower array
