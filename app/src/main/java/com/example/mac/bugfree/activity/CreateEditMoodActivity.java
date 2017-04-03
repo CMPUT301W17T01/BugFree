@@ -274,11 +274,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                     currentLocationCheckbox.setChecked(false);
                     Toast.makeText(getApplicationContext(), "Location is not available when this device is offline.", Toast.LENGTH_LONG).show();
                 }
-                if(isOnline) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        permissionLocationRequest();
-                    }
-                }
+//                if(isOnline) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        permissionLocationRequest();
+//                    }
+//                }
 
                 add_location();
             }
@@ -729,6 +729,14 @@ public class CreateEditMoodActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        InternetConnectionChecker checker = new InternetConnectionChecker();
+        Context context = getApplicationContext();
+        final boolean isOnline = checker.isOnline(context);
+        if(isOnline) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                permissionLocationRequest();
+            }
+        }
     }
 
     /**
