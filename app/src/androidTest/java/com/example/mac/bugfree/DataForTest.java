@@ -82,14 +82,14 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             GregorianCalendar dateOfRecord = new GregorianCalendar(2016, 1, 27, 13, 12,30);
             GregorianCalendar dateOfRecord1 = new GregorianCalendar(2017, 1, 28, 13, 12,30);
             GregorianCalendar dateOfRecord2 = new GregorianCalendar(2016, 2, 27, 13, 12,30);
-            GregorianCalendar dateOfRecord3 = new GregorianCalendar(2017, 2, 28, 13, 12,30);
-            GregorianCalendar dateOfRecord4 = new GregorianCalendar(2016, 1, 1, 13, 12,30);
+            GregorianCalendar dateOfRecord3 = new GregorianCalendar(2016, 1, 1, 13, 12,30);
+            GregorianCalendar dateOfRecord4 = new GregorianCalendar(2017, 2, 28, 13, 12,30);
             GregorianCalendar dateOfRecord5 = new GregorianCalendar(2017, 1, 2, 13, 12,30);
             GregorianCalendar dateOfRecord6 = new GregorianCalendar(2016, 2, 1, 13, 12,30);
             GregorianCalendar dateOfRecord7 = new GregorianCalendar(2017, 2, 2, 13, 12,30);
 
-            GeoPoint location0 = new GeoPoint(37.488, -123.8444);
-            GeoPoint location1 = new GeoPoint(53.5, -113.5);
+            GeoPoint location0 = new GeoPoint(53.520815, -113.525678);
+            GeoPoint location1 = new GeoPoint(53.5188, -113.4942);
 
             try {
                 MoodEvent mood = new MoodEvent(md0, usr0.getUsr());
@@ -107,7 +107,7 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood = new MoodEvent(md2, usr0.getUsr());
                 mood.setDateOfRecord(dateOfRecord2);
                 mood.setRealtime(dateOfRecord2);
-                mood.setLocation(location0);
+                mood.setLocation(location1);
                 mood.setTriggerText("Surstromming");
                 MEL.addMoodEvent(mood);
 
@@ -120,8 +120,9 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
                 mood = new MoodEvent(md4, usr0.getUsr());
                 mood.setDateOfRecord(dateOfRecord4);
                 mood.setRealtime(dateOfRecord4);
-                mood.setLocation(location1);
-                mood.setTriggerText("Full mark");
+                mood.setLocation(location0);
+                mood.setTriggerText("Dinner with friends");
+                mood.setSocialSituation(ss3);
                 MEL.addMoodEvent(mood);
 
                 mood = new MoodEvent(md5, usr0.getUsr());
@@ -167,8 +168,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2016, 2, 27, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 2, 28, 13, 12);
 
-            location0 = new GeoPoint(66.588, -122.8444);
-            location1 = new GeoPoint(53.55, -113.534);
+            location0 = new GeoPoint(53.5623, -113.504);
+            location1 = new GeoPoint(53.5196, -113.4973);
 
             try {
                 MoodEvent mood = new MoodEvent(md1, usr1.getUsr());
@@ -208,8 +209,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2017, 3, 7, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 3, 8, 13, 12);
 
-            location0 = new GeoPoint(49.3, -124);
-            location1 = new GeoPoint(53.5678, -113.599);
+            location0 = new GeoPoint(53.5299, -113.4441);
+            location1 = new GeoPoint(53.5052, -113.533058);
 
             try {
                 MoodEvent mood = new MoodEvent(md2, usr2.getUsr());
@@ -393,8 +394,8 @@ public class DataForTest extends ActivityInstrumentationTestCase2 {
             dateOfRecord = new GregorianCalendar(2017, 3, 10, 13, 12);
             dateOfRecord1 = new GregorianCalendar(2017, 2, 18, 13, 12);
 
-            location0 = new GeoPoint(54.875, -114.5671);
-            location1 = new GeoPoint(53.5347, -113.666);
+            location0 = new GeoPoint(53.55907, -113.580780);
+            location1 = new GeoPoint(53.5455076, -113.5045);
 
             try {
                 MoodEvent mood = new MoodEvent(md7, usr7.getUsr());
