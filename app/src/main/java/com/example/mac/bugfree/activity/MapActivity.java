@@ -121,9 +121,20 @@ public class MapActivity extends AppCompatActivity {
         //Add Scale Bar
         ScaleBarOverlay myScaleBarOverlay = new ScaleBarOverlay(mOpenMapView);
         mOpenMapView.getOverlays().add(myScaleBarOverlay);
+    }
+
+
+    public void onResume() {
+        super.onResume();
+        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         //the dialog for checking the permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // Show an explanation
                 if (ActivityCompat.shouldShowRequestPermissionRationale(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                     // explanation
@@ -132,21 +143,21 @@ public class MapActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(MapActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
                 }
             }else {
                 Toast.makeText(getApplicationContext(), "Permission (already) Granted!", Toast.LENGTH_SHORT).show();
+                addMyLocationPin();
+                addMoodEventPin();
             }
         }
-        // add my location and all moods
-        addMyLocationPin();
-        addMoodEventPin();
+
+//        addMyLocationPin();
+//        addMoodEventPin();
     }
 
-    public void onResume() {
-        super.onResume();
-        org.osmdroid.config.Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-    }
 
+    // Taken From https://developer.android.com/reference/android/support/v4/app/ActivityCompat.OnRequestPermissionsResultCallback.html
     /**
      * Check if there is a permission for the location
      * @param requestCode: the request code
@@ -161,17 +172,18 @@ public class MapActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getApplicationContext(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    // add my location and all moods
+                    addMyLocationPin();
+                    addMoodEventPin();
 
                 } else {
-
                     Toast.makeText(getApplicationContext(), "Permission Denied!", Toast.LENGTH_SHORT).show();
-
                 }
                 return;
             }
         }
     }
-
+    // Taken from http://android-er.blogspot.ca/search?q=OpenStreetMap
     /**
      * Add a yellow person to show my current location
      */
@@ -351,4 +363,6 @@ public class MapActivity extends AppCompatActivity {
         double distance = currentLocation.distanceTo(moodLocation);
         return distance/1000;
     }
+
+
 }
