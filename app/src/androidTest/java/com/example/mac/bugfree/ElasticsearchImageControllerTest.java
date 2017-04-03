@@ -23,6 +23,8 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mac on 2017-03-25.
+ * @Author: Xinlei Chen
+ * After you run this test ,you have to run DataForTest again
  */
 
 @RunWith(AndroidJUnit4.class)
