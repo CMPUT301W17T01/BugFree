@@ -69,13 +69,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String FILENAME = "file.sav";
 
     private DrawerLayout mDrawerLayout;
-    //private MoodEventList moodEventArrayList = new MoodEventList();
     private String currentUserName;
     private Context context;
     private TextView drawer_name;
     private SwipeRefreshLayout swipeRefreshLayout;
     private InternetConnectionChecker checker = new InternetConnectionChecker();
-    private boolean hasBeenOffline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +85,10 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
 
-        //ImageButton like_button = (ImageButton) findViewById(R.id.likeButton);
-
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         drawer_name = (TextView) header.findViewById(R.id.drawer_user_name);
-        //drawer_name.setText(currentUserName);
+
 
         ActionBar actionBar = getSupportActionBar();
         if( actionBar != null) {
@@ -242,6 +238,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.closeDrawers();
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
         currentUserName = pref.getString("currentUser", "");
 
@@ -252,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
             drawer_name.setText(currentUserName);
             context = getApplicationContext();
             userOfflineUpdate();
-//            SystemClock.sleep(1000);
             if (fileExists(context, FILENAME2)) {
                 loadFromFilterFile(context);
             } else {
@@ -260,29 +257,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-//        currentUserName = pref.getString("currentUser", "");
-//
-//        if (currentUserName.equals("")) {
-//            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-//            startActivity(intent);
-//        } else {
-//            drawer_name.setText(currentUserName);
-//            context = getApplicationContext();
-//            userOfflineUpdate();
-//            SystemClock.sleep(1000);
-//            if (fileExists(context, FILENAME2)) {
-//                loadFromFilterFile(context);
-//            } else {
-//                loadList(currentUserName);
-//            }
-//        }
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -389,8 +363,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        userOfflineUpdate();
-//        SystemClock.sleep(1000);
         // specify an adapter
         RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
@@ -470,7 +442,6 @@ public class MainActivity extends AppCompatActivity {
      * @param followName
      */
     private void addFollow(String followName) {
-        // if followName = currentUserName
         if (followName.equals(currentUserName)) {
             Toast.makeText(this, "You enter wrong username", Toast.LENGTH_SHORT).show();
         }
@@ -600,8 +571,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-//        userOfflineUpdate();
-//        SystemClock.sleep(1000);
         // specify an adapter
         RecyclerView.Adapter mAdapter = new MoodEventAdapter(moodEventList, currentUserName,getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
@@ -644,33 +613,10 @@ public class MainActivity extends AppCompatActivity {
                             ArrayList<String> blockList = user1.getBlockList();
                             ArrayList<String> pendingList = user1.getPendingPermission();
 
-                            ArrayList<String> a = user.getBlockList();
-                            ArrayList<String> b = user.getFolloweeIDs();
-                            ArrayList<String> c = user.getFollowerIDs();
-                            ArrayList<String> d = user.getPendingPermission();
-
-//                             a = blockList;
-//                             b = followeeList;
-//                             c = followerList;
-//                             d = pendingList;
-
-                            user.setBlockIDs(a);
-                            user.setFolloweeIDList(b);
-                            user.setFollowerIDList(c);
-                            user.setPendingPermissions(d);
-
-                            for (String Id: followeeList) {
-                                Log.i("followeelist", Id);
-                            }
-                            for (String Id: followerList) {
-                                Log.i("followerList", Id);
-                            }
-                            for (String Id: blockList) {
-                                Log.i("blockList", Id);
-                            }
-                            for (String Id: pendingList) {
-                                Log.i("pendingList", Id);
-                            }
+                            user.setBlockIDs(blockList);
+                            user.setFolloweeIDList(followeeList);
+                            user.setFollowerIDList(followerList);
+                            user.setPendingPermissions(pendingList);
 
                             Context context = getApplicationContext();
                             SaveFile s = new SaveFile(context, user);
