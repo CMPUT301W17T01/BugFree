@@ -121,7 +121,7 @@ public class ViewMoodActivity extends AppCompatActivity  {
                 Bitmap image = getImage(moodEvent);
                 picImage.setImageBitmap(image);
             }else if(!isOnline){
-                picImage.setImageResource(R.drawable.picture_text);
+                picImage.setImageResource(R.drawable.umood);
             }}catch(Exception e){
                 Log.i("bitmap_error","null");
             }

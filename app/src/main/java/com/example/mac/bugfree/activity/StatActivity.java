@@ -39,7 +39,7 @@ import java.util.ArrayList;
 public class StatActivity extends AppCompatActivity {
     private String current_user;
     private User user = new User();
-    ArrayList<Integer> total_list = new ArrayList<Integer>();
+    private ArrayList<Integer> total_list = new ArrayList<Integer>();
     BarChart barChart1;
     BarChart barChart2;
 

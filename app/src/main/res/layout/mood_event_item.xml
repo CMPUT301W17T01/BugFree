@@ -62,7 +62,9 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/mood_event_pic"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/umood" />
+
 
         <TextView
             android:layout_width="match_parent"

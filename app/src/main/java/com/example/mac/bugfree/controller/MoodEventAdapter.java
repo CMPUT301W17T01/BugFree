@@ -182,11 +182,10 @@ public class MoodEventAdapter extends RecyclerView.Adapter<MoodEventAdapter.View
                     Bitmap image = getImage(moodEvent);
                     holder.picImage.setImageBitmap(image);
                 } catch(Exception e){
-//                    holder.picImage.setImageResource(R.drawable.picture_text);
                     Log.i("bitmap_error","null");
                 }
             } else if(!isOnline){
-                holder.picImage.setImageResource(R.drawable.picture_text);
+                holder.picImage.setImageResource(R.drawable.umood);
             }
         } else {
             holder.picImage.setImageResource(R.drawable.umood);
