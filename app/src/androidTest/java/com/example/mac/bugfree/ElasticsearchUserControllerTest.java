@@ -25,6 +25,8 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Created by mac on 2017-03-05.
+ * @Author: Xinlei Chen
+ * After you run this test ,you have to run DataForTest again
  */
 
 @RunWith(AndroidJUnit4.class)
