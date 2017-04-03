@@ -643,6 +643,22 @@ public class MainActivity extends AppCompatActivity {
                             ArrayList<String> followerList = user1.getFollowerIDs();
                             ArrayList<String> blockList = user1.getBlockList();
                             ArrayList<String> pendingList = user1.getPendingPermission();
+
+                            ArrayList<String> a = user.getBlockList();
+                            ArrayList<String> b = user.getFolloweeIDs();
+                            ArrayList<String> c = user.getFollowerIDs();
+                            ArrayList<String> d = user.getPendingPermission();
+
+//                             a = blockList;
+//                             b = followeeList;
+//                             c = followerList;
+//                             d = pendingList;
+
+                            user.setBlockIDs(a);
+                            user.setFolloweeIDList(b);
+                            user.setFollowerIDList(c);
+                            user.setPendingPermissions(d);
+
                             for (String Id: followeeList) {
                                 Log.i("followeelist", Id);
                             }
@@ -655,15 +671,6 @@ public class MainActivity extends AppCompatActivity {
                             for (String Id: pendingList) {
                                 Log.i("pendingList", Id);
                             }
-                            ArrayList<String> a = user.getBlockList();
-                            ArrayList<String> b = user.getFolloweeIDs();
-                            ArrayList<String> c = user.getFollowerIDs();
-                            ArrayList<String> d = user.getPendingPermission();
-
-                             a = blockList;
-                             b = followeeList;
-                             c = followerList;
-                             d = pendingList;
 
                             Context context = getApplicationContext();
                             SaveFile s = new SaveFile(context, user);

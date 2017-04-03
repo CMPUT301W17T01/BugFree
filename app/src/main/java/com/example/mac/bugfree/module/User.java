@@ -57,7 +57,7 @@ public class User {
     }
 
     /**
-     * Gets followee array.
+     * Gets followee array. (add to original)
      *
      * @return the followee array
      */
@@ -66,7 +66,7 @@ public class User {
     }
 
     /**
-     * Sets followee array
+     * Sets followee array (add to original)
      *
      * @param followeeIDs the followee array
      */
@@ -75,10 +75,14 @@ public class User {
     }
 
     /**
-     * add to the original list
+     * set to the original list
      */
     public void setFolloweeIDList(ArrayList<String> followeeIDs) {
         this.followeeIDs = (followeeIDs);
+    }
+
+    public void setFollowerIDList(ArrayList<String> followerIDs){
+        this.followerIDs = (followerIDs);
     }
 
     /**
