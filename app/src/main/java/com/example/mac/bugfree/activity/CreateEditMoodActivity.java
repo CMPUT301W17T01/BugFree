@@ -264,10 +264,11 @@ public class CreateEditMoodActivity extends AppCompatActivity {
                 if(isOnline) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         permissionLocationRequest();
+                        add_location();
                     }
                 }
 
-                add_location();
+
             }
         });
 
