@@ -46,9 +46,9 @@ public class ChooseLocationOnMapActivity extends MapActivity implements MapEvent
     public GeoPoint getChosenLocation(){
         return chosenLocation;
     }
-//    public GeoPoint getCurrentPoint(){
-//        return currentPoint;
-//    }
+    public GeoPoint getCurrentPoint(){
+        return currentPoint;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

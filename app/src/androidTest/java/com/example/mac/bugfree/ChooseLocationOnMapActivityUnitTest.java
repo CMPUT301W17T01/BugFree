@@ -16,6 +16,7 @@ import org.osmdroid.views.MapView;
 
 /**
  * Created by heyuehuang on 2017-04-02.
+ * When you want to use this test, you have to allow the location permission first, otherwise you will failed
  */
 
 public class ChooseLocationOnMapActivityUnitTest extends ActivityInstrumentationTestCase2<ChooseLocationOnMapActivity> {

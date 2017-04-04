@@ -1,1 +1,6 @@
 com.example.mac.bugfree
+com.example.mac.bugfree.activity
+com.example.mac.bugfree.controller
+com.example.mac.bugfree.exception
+com.example.mac.bugfree.module
+com.example.mac.bugfree.util
